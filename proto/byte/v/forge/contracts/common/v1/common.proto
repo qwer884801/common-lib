@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package byte.v.forge.contracts.common.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "ByteVForge.Contracts.Common.V1";
+option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1;commonv1";
+option java_multiple_files = true;
+option java_outer_classname = "CommonProto";
+option java_package = "com.bytevforge.contracts.common.v1";
+option php_namespace = "ByteVForge\\Contracts\\Common\\V1";
+
+message EventContext {
+  string event_id = 1;
+  string event_name = 2;
+  string event_version = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+  string source_service = 5;
+  string correlation_id = 6;
+  string trace_id = 7;
+  string idempotency_key = 8;
+}

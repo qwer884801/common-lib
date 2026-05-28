@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package byte.v.forge.contracts.common.v1;
+
+import "byte/v/forge/contracts/common/v1/common.proto";
+
+option csharp_namespace = "ByteVForge.Contracts.Common.V1";
+option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1;commonv1";
+option java_multiple_files = true;
+option java_outer_classname = "EventbusProto";
+option java_package = "com.bytevforge.contracts.common.v1";
+option php_namespace = "ByteVForge\\Contracts\\Common\\V1";
+
+message EventEnvelope {
+  EventContext context = 1;
+  string subject = 2;
+  string proto_type = 3;
+  bytes payload = 4;
+  string content_type = 5;
+  map<string, string> attributes = 6;
+}
+
+message EventPublishAck {
+  string stream = 1;
+  uint64 sequence = 2;
+  bool duplicate = 3;
+}
+
+message DeadLetterEvent {
+  EventContext context = 1;
+  string original_subject = 2;
+  string original_event_id = 3;
+  string original_event_name = 4;
+  string original_event_version = 5;
+  string original_source_service = 6;
+  string consumer_durable = 7;
+  int32 delivery_attempt = 8;
+  string error_code = 9;
+  string error_message = 10;
+  string correlation_id = 11;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@byte-v-forge/common-ui",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css",
+    "./components/ui/*": "./src/components/ui/*.tsx",
+    "./proto/*": "./src/proto/*.ts"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.100.11",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.562.0",
+    "radix-ui": "^1.4.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-hook-form": "^7.76.0",
+    "tailwind-merge": "^3.6.0"
+  },
+  "scripts": {
+    "proto": "../scripts/generate-web-proto.sh"
+  },
+  "devDependencies": {
+    "ts-proto": "^2.11.8"
+  }
+}

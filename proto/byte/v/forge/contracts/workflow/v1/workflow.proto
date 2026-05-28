@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package byte.v.forge.contracts.workflow.v1;
+
+option csharp_namespace = "ByteVForge.Contracts.Workflow.V1";
+option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/workflow/v1;workflowv1";
+option java_multiple_files = true;
+option java_outer_classname = "WorkflowProto";
+option java_package = "com.bytevforge.contracts.workflow.v1";
+option php_namespace = "ByteVForge\\Contracts\\Workflow\\V1";
+
+enum WorkflowRuntimeStatus {
+  WORKFLOW_RUNTIME_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_RUNTIME_AVAILABLE = 1;
+  WORKFLOW_RUNTIME_DEGRADED = 2;
+  WORKFLOW_RUNTIME_UNCONFIGURED = 3;
+  WORKFLOW_RUNTIME_UNAVAILABLE = 4;
+}
+
+message WorkflowRuntimeSummary {
+  WorkflowRuntimeStatus engine_status = 1;
+  string engine_message = 2;
+  WorkflowRuntimeStatus api_status = 3;
+  string api_message = 4;
+  bool api_configured = 5;
+  string editor_url = 6;
+  repeated WorkflowDefinition workflows = 7;
+  repeated WorkflowExecution executions = 8;
+  int64 checked_at_unix = 9;
+}
+
+message WorkflowDefinition {
+  string id = 1;
+  string name = 2;
+  bool active = 3;
+  string updated_at = 4;
+  repeated string tags = 5;
+}
+
+message WorkflowExecution {
+  string id = 1;
+  string workflow_id = 2;
+  string workflow_name = 3;
+  string status = 4;
+  string mode = 5;
+  string started_at = 6;
+  string stopped_at = 7;
+}
