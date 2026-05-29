@@ -155,8 +155,10 @@ export enum ProxyIPFraudSignal {
 
 export enum ProxyIPFraudProviderKind {
   PROXY_IP_FRAUD_PROVIDER_KIND_UNSPECIFIED = "PROXY_IP_FRAUD_PROVIDER_KIND_UNSPECIFIED",
-  PROXY_IP_FRAUD_PROVIDER_KIND_FFRAUD = "PROXY_IP_FRAUD_PROVIDER_KIND_FFRAUD",
   PROXY_IP_FRAUD_PROVIDER_KIND_IPAPI = "PROXY_IP_FRAUD_PROVIDER_KIND_IPAPI",
+  PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO = "PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO",
+  PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION = "PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION",
+  PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM = "PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -202,6 +204,14 @@ export enum ProxyChainStrategy {
   PROXY_CHAIN_STRATEGY_REGION_AWARE = "PROXY_CHAIN_STRATEGY_REGION_AWARE",
   PROXY_CHAIN_STRATEGY_LOWEST_LATENCY = "PROXY_CHAIN_STRATEGY_LOWEST_LATENCY",
   PROXY_CHAIN_STRATEGY_STABLE_HASH = "PROXY_CHAIN_STRATEGY_STABLE_HASH",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum ProxyChainHopRole {
+  PROXY_CHAIN_HOP_ROLE_UNSPECIFIED = "PROXY_CHAIN_HOP_ROLE_UNSPECIFIED",
+  PROXY_CHAIN_HOP_ROLE_LINE_PROXY = "PROXY_CHAIN_HOP_ROLE_LINE_PROXY",
+  PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY = "PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY",
+  PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT = "PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -312,6 +322,7 @@ export interface ProxyLineCandidate {
   delay_ms: number;
   region_codes: string[];
   priority: number;
+  source_display_name: string;
 }
 
 export interface ProxyDynamicGatewayCandidate {
@@ -322,6 +333,27 @@ export interface ProxyDynamicGatewayCandidate {
   region_codes: string[];
   protocol: ProxyProtocol;
   priority: number;
+}
+
+export interface ProxyChainHop {
+  hop_id: string;
+  order: number;
+  role: ProxyChainHopRole;
+  source_kind: ProxySourceKind;
+  source_id: string;
+  source_display_name: string;
+  node_id: string;
+  node_display_name: string;
+  provider_account_id: string;
+  provider_id: string;
+  gateway_id: string;
+  gateway_display_name: string;
+  observed_ip: string;
+  country_code: string;
+  region: string;
+  city: string;
+  status: ProxySourceNodeStatus;
+  delay_ms: number;
 }
 
 export interface ProxyChainPolicy {
@@ -342,6 +374,7 @@ export interface ProxyChainPlan {
   dynamic_gateway: ProxyDynamicGatewayCandidate | undefined;
   selection_reasons: string[];
   planned_at: string | undefined;
+  hops: ProxyChainHop[];
 }
 
 export interface ProviderControlPlaneAccess {
@@ -425,6 +458,22 @@ export interface ProxyExitGeo {
   error_message: string;
   region: string;
   city: string;
+}
+
+export interface ProxyExitIP {
+  ip: string;
+  checked_at: string | undefined;
+  error_message: string;
+}
+
+export interface ProxyTargetConnectivityCheck {
+  target_url: string;
+  host: string;
+  reachable: boolean;
+  status_code: number;
+  latency_ms: number;
+  checked_at: string | undefined;
+  error_message: string;
 }
 
 export interface ProxyIPFraudCheck {
@@ -511,6 +560,12 @@ export interface ProxyDynamicIPProviderSettings {
 export interface ProxyRuntimeSettings {
   edge_canary: ProxyEdgeCanarySettingsView | undefined;
   ip_fraud_providers: ProxyIPFraudProviderSettingsView[];
+  dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
+}
+
+export interface ProxyRuntimePersistentSettings {
+  edge_canary: ProxyEdgeCanarySettings | undefined;
+  ip_fraud_providers: ProxyIPFraudProviderSettings[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
 }
 
@@ -690,7 +745,6 @@ export interface ListProxySourceNodesResponse {
 
 export interface ResolveProxyChainRequest {
   account_id: string;
-  provider_account_id: string;
   session_policy: ProxySessionPolicy | undefined;
   chain_policy: ProxyChainPolicy | undefined;
 }
@@ -711,7 +765,6 @@ export interface ListProxyDynamicLeasesResponse {
 export interface AcquireProxyLeaseRequest {
   account_id: string;
   purpose: string;
-  provider_account_id: string;
   policy: ProxySessionPolicy | undefined;
   force_new: boolean;
   chain_policy: ProxyChainPolicy | undefined;
@@ -732,10 +785,18 @@ export interface ReleaseProxyLeaseResponse {
   lease: ProxyDynamicLease | undefined;
 }
 
-export interface GetProxyExitGeoRequest {
+export interface GetProxyExitIPRequest {
   pool_id: string;
   provider_id: string;
   listener_id: string;
+}
+
+export interface GetProxyExitIPResponse {
+  proxy_exit_ip: ProxyExitIP | undefined;
+}
+
+export interface GetProxyExitGeoRequest {
+  ip: string;
 }
 
 export interface GetProxyExitGeoResponse {
@@ -743,9 +804,7 @@ export interface GetProxyExitGeoResponse {
 }
 
 export interface CheckProxyIPFraudRequest {
-  pool_id: string;
-  provider_id: string;
-  listener_id: string;
+  ip: string;
 }
 
 export interface CheckProxyIPFraudResponse {
@@ -757,10 +816,22 @@ export interface CheckProxyEdgeAccessRequest {
   provider_id: string;
   listener_id: string;
   expected_country_code: string;
+  ip: string;
 }
 
 export interface CheckProxyEdgeAccessResponse {
   check: ProxyEdgeAccessCheck | undefined;
+}
+
+export interface CheckProxyTargetConnectivityRequest {
+  pool_id: string;
+  provider_id: string;
+  listener_id: string;
+  target_url: string;
+}
+
+export interface CheckProxyTargetConnectivityResponse {
+  check: ProxyTargetConnectivityCheck | undefined;
 }
 
 export interface GetProxyRuntimeSettingsRequest {

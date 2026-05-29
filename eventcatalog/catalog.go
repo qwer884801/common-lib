@@ -145,18 +145,6 @@ var (
 		PayloadType:  "byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent",
 		OwnerService: "mailbox-api",
 	}
-	GPTJobActionRequested = Definition{
-		Subject:          "byte.v.forge.gpt.job.action.requested",
-		EventName:        "gpt.job.action.requested",
-		EventVersion:     EventVersionV1,
-		Kind:             KindCommand,
-		PayloadType:      "gpt.GPTJobActionRunRequest",
-		OwnerService:     "gpt-service",
-		ConsumerDurable:  "gpt-job-action",
-		Retryable:        true,
-		MaxDeliveries:    20,
-		RetryDelaySecond: 5,
-	}
 )
 
 func All() []Definition {
@@ -172,7 +160,6 @@ func All() []Definition {
 		MailboxRegistrationRequested,
 		MailboxOAuthRequested,
 		MailboxEmailReceived,
-		GPTJobActionRequested,
 		{Subject: DeadLetterTopic, EventName: "platform.dead_letter", EventVersion: EventVersionV1, Kind: KindFact, PayloadType: "byte.v.forge.contracts.common.v1.DeadLetterEvent", OwnerService: "platform"},
 	}
 }

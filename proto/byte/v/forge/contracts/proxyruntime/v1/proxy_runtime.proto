@@ -139,8 +139,12 @@ enum ProxyIPFraudSignal {
 
 enum ProxyIPFraudProviderKind {
   PROXY_IP_FRAUD_PROVIDER_KIND_UNSPECIFIED = 0;
-  PROXY_IP_FRAUD_PROVIDER_KIND_FFRAUD = 1;
+  reserved 1;
+  reserved "PROXY_IP_FRAUD_PROVIDER_KIND_FFRAUD";
   PROXY_IP_FRAUD_PROVIDER_KIND_IPAPI = 2;
+  PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO = 3;
+  PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION = 4;
+  PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM = 5;
 }
 
 enum ProxyEdgeAccessRiskLevel {
@@ -182,6 +186,14 @@ enum ProxyChainStrategy {
   PROXY_CHAIN_STRATEGY_REGION_AWARE = 1;
   PROXY_CHAIN_STRATEGY_LOWEST_LATENCY = 2;
   PROXY_CHAIN_STRATEGY_STABLE_HASH = 3;
+}
+
+
+enum ProxyChainHopRole {
+  PROXY_CHAIN_HOP_ROLE_UNSPECIFIED = 0;
+  PROXY_CHAIN_HOP_ROLE_LINE_PROXY = 1;
+  PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY = 2;
+  PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT = 3;
 }
 
 enum EgressHopRole {
@@ -278,6 +290,8 @@ message ProxySourceDescriptor {
 }
 
 message ProxySourceNode {
+  reserved 9;
+
   string source_id = 1;
   string node_id = 2;
   string display_name = 3;
@@ -289,6 +303,8 @@ message ProxySourceNode {
 }
 
 message ProxyLineCandidate {
+  reserved 10 to 13;
+
   string source_id = 1;
   string node_id = 2;
   string display_name = 3;
@@ -297,6 +313,7 @@ message ProxyLineCandidate {
   uint32 delay_ms = 6;
   repeated string region_codes = 7;
   uint32 priority = 8;
+  string source_display_name = 9;
 }
 
 message ProxyDynamicGatewayCandidate {
@@ -307,6 +324,27 @@ message ProxyDynamicGatewayCandidate {
   repeated string region_codes = 5;
   ProxyProtocol protocol = 6;
   uint32 priority = 7;
+}
+
+message ProxyChainHop {
+  string hop_id = 1;
+  uint32 order = 2;
+  ProxyChainHopRole role = 3;
+  ProxySourceKind source_kind = 4;
+  string source_id = 5;
+  string source_display_name = 6;
+  string node_id = 7;
+  string node_display_name = 8;
+  string provider_account_id = 9;
+  string provider_id = 10;
+  string gateway_id = 11;
+  string gateway_display_name = 12;
+  string observed_ip = 13;
+  string country_code = 14;
+  string region = 15;
+  string city = 16;
+  ProxySourceNodeStatus status = 17;
+  uint32 delay_ms = 18;
 }
 
 message ProxyChainPolicy {
@@ -327,6 +365,7 @@ message ProxyChainPlan {
   ProxyDynamicGatewayCandidate dynamic_gateway = 4;
   repeated string selection_reasons = 5;
   google.protobuf.Timestamp planned_at = 6;
+  repeated ProxyChainHop hops = 7;
 }
 
 message ProviderControlPlaneAccess {
@@ -399,6 +438,22 @@ message ProxyExitGeo {
   string error_message = 4;
   string region = 5;
   string city = 6;
+}
+
+message ProxyExitIP {
+  string ip = 1;
+  google.protobuf.Timestamp checked_at = 2;
+  string error_message = 3;
+}
+
+message ProxyTargetConnectivityCheck {
+  string target_url = 1;
+  string host = 2;
+  bool reachable = 3;
+  uint32 status_code = 4;
+  uint32 latency_ms = 5;
+  google.protobuf.Timestamp checked_at = 6;
+  string error_message = 7;
 }
 
 message ProxyIPFraudCheck {
@@ -489,6 +544,12 @@ message ProxyDynamicIPProviderSettings {
 message ProxyRuntimeSettings {
   ProxyEdgeCanarySettingsView edge_canary = 1;
   repeated ProxyIPFraudProviderSettingsView ip_fraud_providers = 2;
+  repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
+}
+
+message ProxyRuntimePersistentSettings {
+  ProxyEdgeCanarySettings edge_canary = 1;
+  repeated ProxyIPFraudProviderSettings ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
 }
 
@@ -607,8 +668,10 @@ message ListProxySourceNodesRequest { string source_id = 1; }
 message ListProxySourceNodesResponse { repeated ProxySourceNode nodes = 1; }
 
 message ResolveProxyChainRequest {
+  reserved 2;
+  reserved "provider_account_id";
+
   string account_id = 1;
-  string provider_account_id = 2;
   ProxySessionPolicy session_policy = 3;
   ProxyChainPolicy chain_policy = 4;
 }
@@ -621,9 +684,11 @@ message ResolveProxyChainResponse {
 message ListProxyDynamicLeasesRequest {}
 message ListProxyDynamicLeasesResponse { repeated ProxyDynamicLease leases = 1; }
 message AcquireProxyLeaseRequest {
+  reserved 3;
+  reserved "provider_account_id";
+
   string account_id = 1;
   string purpose = 2;
-  string provider_account_id = 3;
   ProxySessionPolicy policy = 4;
   bool force_new = 5;
   ProxyChainPolicy chain_policy = 6;
@@ -637,16 +702,23 @@ message AcquireProxyLeaseResponse {
 message ReleaseProxyLeaseRequest { string account_id = 1; }
 message ReleaseProxyLeaseResponse { ProxyDynamicLease lease = 1; }
 
-message GetProxyExitGeoRequest {
+message GetProxyExitIPRequest {
   string pool_id = 1;
   string provider_id = 2;
   string listener_id = 3;
 }
+message GetProxyExitIPResponse { ProxyExitIP proxy_exit_ip = 1; }
+
+message GetProxyExitGeoRequest {
+  reserved 1, 2, 3;
+  reserved "pool_id", "provider_id", "listener_id";
+  string ip = 4;
+}
 message GetProxyExitGeoResponse { ProxyExitGeo proxy_exit_geo = 1; }
 message CheckProxyIPFraudRequest {
-  string pool_id = 1;
-  string provider_id = 2;
-  string listener_id = 3;
+  reserved 1, 2, 3;
+  reserved "pool_id", "provider_id", "listener_id";
+  string ip = 4;
 }
 message CheckProxyIPFraudResponse { ProxyIPFraudCheck check = 1; }
 message CheckProxyEdgeAccessRequest {
@@ -654,8 +726,16 @@ message CheckProxyEdgeAccessRequest {
   string provider_id = 2;
   string listener_id = 3;
   string expected_country_code = 4;
+  string ip = 5;
 }
 message CheckProxyEdgeAccessResponse { ProxyEdgeAccessCheck check = 1; }
+message CheckProxyTargetConnectivityRequest {
+  string pool_id = 1;
+  string provider_id = 2;
+  string listener_id = 3;
+  string target_url = 4;
+}
+message CheckProxyTargetConnectivityResponse { ProxyTargetConnectivityCheck check = 1; }
 
 message GetProxyRuntimeSettingsRequest {}
 message GetProxyRuntimeSettingsResponse { ProxyRuntimeSettings settings = 1; }
@@ -685,9 +765,11 @@ service ProxyRuntimeService {
   rpc ListProxyDynamicLeases(ListProxyDynamicLeasesRequest) returns (ListProxyDynamicLeasesResponse);
   rpc AcquireProxyLease(AcquireProxyLeaseRequest) returns (AcquireProxyLeaseResponse);
   rpc ReleaseProxyLease(ReleaseProxyLeaseRequest) returns (ReleaseProxyLeaseResponse);
+  rpc GetProxyExitIP(GetProxyExitIPRequest) returns (GetProxyExitIPResponse);
   rpc GetProxyExitGeo(GetProxyExitGeoRequest) returns (GetProxyExitGeoResponse);
   rpc CheckProxyIPFraud(CheckProxyIPFraudRequest) returns (CheckProxyIPFraudResponse);
   rpc CheckProxyEdgeAccess(CheckProxyEdgeAccessRequest) returns (CheckProxyEdgeAccessResponse);
+  rpc CheckProxyTargetConnectivity(CheckProxyTargetConnectivityRequest) returns (CheckProxyTargetConnectivityResponse);
   rpc ListProxyIPFraudProviders(ListProxyIPFraudProvidersRequest) returns (ListProxyIPFraudProvidersResponse);
   rpc GetProxyRuntimeSettings(GetProxyRuntimeSettingsRequest) returns (GetProxyRuntimeSettingsResponse);
   rpc UpdateProxyRuntimeSettings(UpdateProxyRuntimeSettingsRequest) returns (UpdateProxyRuntimeSettingsResponse);
