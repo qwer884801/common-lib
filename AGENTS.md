@@ -9,3 +9,4 @@
 - 禁止放入 GPT、Mailbox、SMS、Proxy、Browser Automation 等业务/provider 分支、页面、数据请求或状态机。
 - 跨仓使用必须通过 Go module、npm package 或部署期包边界消费，不直接复制实现。
 - `ui/src/components/ui/` 下 shadcn/Radix 生成组件按第三方模板维护；优先用官方 `shadcn` CLI 更新，不手写等价基础控件。
+- Linter 检查必须达到 0 error / 0 warning；禁止通过修改或放宽 linter 配置、降低规则级别、删除规则、添加 ignore/disable/nolint/ts-ignore/eslint-disable/biome-ignore/prettier-ignore 等方式绕过问题，只能按 linter 规则修复源码、类型、格式或依赖边界。

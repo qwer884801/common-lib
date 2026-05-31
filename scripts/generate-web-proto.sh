@@ -32,10 +32,12 @@ protoc -I "${PROTO_DIR}" \
   --ts_proto_opt=onlyTypes=true,outputServices=none,esModuleInterop=true,useJsonWireFormat=true,snakeToCamel=false \
   "${PROTO_DIR}/byte/v/forge/contracts/common/v1/common.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/common/v1/eventbus.proto" \
+  "${PROTO_DIR}/byte/v/forge/contracts/account/v1/account.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/observability/v1/hotstream.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/browserautomation/v1/browser_automation.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/dashboard/v1/dashboard.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/mailbox/v1/mailbox.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/proxyruntime/v1/proxy_runtime.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/sms/v1/sms.proto" \
+  "${PROTO_DIR}/byte/v/forge/contracts/wa/v1/wa.proto" \
   "${PROTO_DIR}/byte/v/forge/contracts/workflow/v1/workflow.proto"

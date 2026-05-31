@@ -14,12 +14,14 @@ protoc -I "$ROOT/proto" \
   --go-grpc_opt=module=github.com/byte-v-forge/common-lib \
   "$ROOT/proto/byte/v/forge/contracts/common/v1/common.proto" \
   "$ROOT/proto/byte/v/forge/contracts/common/v1/eventbus.proto" \
+  "$ROOT/proto/byte/v/forge/contracts/account/v1/account.proto" \
   "$ROOT/proto/byte/v/forge/contracts/observability/v1/hotstream.proto" \
   "$ROOT/proto/byte/v/forge/contracts/browserautomation/v1/browser_automation.proto" \
   "$ROOT/proto/byte/v/forge/contracts/dashboard/v1/dashboard.proto" \
   "$ROOT/proto/byte/v/forge/contracts/mailbox/v1/mailbox.proto" \
   "$ROOT/proto/byte/v/forge/contracts/proxyruntime/v1/proxy_runtime.proto" \
   "$ROOT/proto/byte/v/forge/contracts/sms/v1/sms.proto" \
+  "$ROOT/proto/byte/v/forge/contracts/wa/v1/wa.proto" \
   "$ROOT/proto/byte/v/forge/contracts/workflow/v1/workflow.proto"
 
 gofmt -w "$ROOT/gen/go"

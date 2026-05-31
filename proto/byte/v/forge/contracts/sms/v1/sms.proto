@@ -27,6 +27,7 @@ service SmsCatalogService {
   rpc ListSmsApplications(ListSmsApplicationsRequest) returns (ListSmsApplicationsResponse);
   rpc ListSmsCountries(ListSmsCountriesRequest) returns (ListSmsCountriesResponse);
   rpc ListSmsPriceOffers(ListSmsPriceOffersRequest) returns (ListSmsPriceOffersResponse);
+  rpc RecommendSmsRoutes(RecommendSmsRoutesRequest) returns (RecommendSmsRoutesResponse);
 }
 
 enum SmsOrderStatus {
@@ -94,6 +95,7 @@ message SmsNumberAcquireParams {
   string application_key = 10;
   string country_iso2 = 11;
   string country_calling_code = 12;
+  SmsRouteFailurePolicy route_failure_policy = 14;
 }
 
 message FiveSimAcquireParams {
@@ -111,6 +113,7 @@ message SmsBowerAcquireParams {
 message HeroSmsAcquireParams {
   string service = 1;
   string country = 2;
+  string operator = 3;
 }
 
 message SmsCode {
@@ -222,6 +225,44 @@ message SmsPriceOffer {
   string upstream_provider_id = 15;
   string upstream_provider_name = 16;
   SmsNumberAcquireParams acquire_params = 17;
+}
+
+enum SmsRouteStrategy {
+  SMS_ROUTE_STRATEGY_UNSPECIFIED = 0;
+  SMS_ROUTE_STRATEGY_BALANCED = 1;
+  SMS_ROUTE_STRATEGY_LOWEST_PRICE = 2;
+  SMS_ROUTE_STRATEGY_MOST_AVAILABLE = 3;
+}
+
+message SmsRoutePolicy {
+  SmsRouteStrategy strategy = 1;
+  DecimalMoney max_price = 2;
+  int32 limit = 3;
+  int32 min_available_count = 5;
+  SmsRouteFailurePolicy failure_policy = 6;
+}
+
+message SmsRouteFailurePolicy {
+  string scope_key = 1;
+  int32 failure_threshold = 2;
+  int32 failure_window_seconds = 3;
+  int32 disable_ttl_seconds = 4;
+}
+
+message RecommendSmsRoutesRequest {
+  SmsTarget target = 1;
+  SmsRoutePolicy policy = 2;
+  repeated string provider_keys = 3;
+}
+
+message SmsRouteRecommendation {
+  SmsPriceOffer offer = 1;
+  int32 score = 2;
+}
+
+message RecommendSmsRoutesResponse {
+  repeated SmsRouteRecommendation recommendations = 1;
+  SmsError error = 2;
 }
 
 message SmsProviderInfo {

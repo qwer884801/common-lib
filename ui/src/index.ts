@@ -10,6 +10,7 @@ export { Input } from './components/ui/input';
 export { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet, FieldTitle } from './components/ui/field';
 export { Label } from './components/ui/label';
 export { Item, ItemActions, ItemContent, ItemDescription, ItemFooter, ItemGroup, ItemHeader, ItemMedia, ItemSeparator, ItemTitle } from './components/ui/item';
+export { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './components/ui/pagination';
 export { ScrollArea, ScrollBar } from './components/ui/scroll-area';
 export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue } from './components/ui/select';
 export { Separator } from './components/ui/separator';
@@ -28,6 +29,7 @@ export type { Control, SubmitHandler } from 'react-hook-form';
 export { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export type { InfiniteData, QueryKey, UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 export * from './dashboard/common';
+export * from './dashboard/account';
 export * from './dashboard/http';
 export * from './dashboard/hotstream';
 export * from './dashboard/layout';
@@ -37,6 +39,8 @@ export * from './dashboard/uikit';
 export * from './dashboard/utils';
 export { ThemeProvider, useTheme } from './components/theme-provider';
 export * from './dashboard/email/sdk';
+export type { Account, AccountActionDescriptor, AccountCredentialState, AccountKey, AccountStatus, AccountSubject } from './proto/byte/v/forge/contracts/account/v1/account';
+export { AccountActionTone, AccountChangeKind } from './proto/byte/v/forge/contracts/account/v1/account';
 export type { EventContext } from './proto/byte/v/forge/contracts/common/v1/common';
 export type { EventEnvelope, EventPublishAck } from './proto/byte/v/forge/contracts/common/v1/eventbus';
 export { HotStreamControlKind } from './proto/byte/v/forge/contracts/observability/v1/hotstream';
@@ -48,9 +52,15 @@ export type {
   DashboardServiceStatus,
   DashboardServiceStatusResponse
 } from './proto/byte/v/forge/contracts/dashboard/v1/dashboard';
-export { WorkflowRuntimeStatus } from './proto/byte/v/forge/contracts/workflow/v1/workflow';
+export { WorkflowRuntimeStatus, WorkflowRunStatus } from './proto/byte/v/forge/contracts/workflow/v1/workflow';
 export type {
   WorkflowDefinition,
   WorkflowExecution,
-  WorkflowRuntimeSummary
+  WorkflowGraphEdge,
+  WorkflowGraphNode,
+  WorkflowRuntimePageInfo,
+  WorkflowRunProjection,
+  WorkflowRuntimeSummary,
+  WorkflowStepUpdateRequest,
+  WorkflowStepUpdateResponse
 } from './proto/byte/v/forge/contracts/workflow/v1/workflow';

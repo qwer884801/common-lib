@@ -247,21 +247,15 @@ func (c *Client) readResponse(resp *fhttp.Response) (*Response, error) {
 }
 
 func newTLSClient(config Config, cookieJar browserhttp.CookieJar) (browserhttp.TLSClient, error) {
-	client, err := browserhttp.NewTLSClient(browserhttp.Config{
+	return browserhttp.NewTLSClient(browserhttp.Config{
 		Timeout:                 config.Timeout,
 		ProxyURL:                config.ProxyURL,
 		TLSProfileName:          config.Profile.TLSProfileName,
 		DisableHTTP3:            config.DisableHTTP3,
 		ForceHTTP1:              config.ForceHTTP1,
 		RandomTLSExtensionOrder: config.RandomTLSExtensionOrder,
+		NotFollowRedirects:      config.NotFollowRedirects,
 	}, cookieJar)
-	if err != nil {
-		return nil, err
-	}
-	if config.NotFollowRedirects {
-		client.SetFollowRedirect(false)
-	}
-	return client, nil
 }
 
 func normalizeConfig(config Config) Config {

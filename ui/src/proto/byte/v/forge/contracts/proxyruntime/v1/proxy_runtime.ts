@@ -159,6 +159,8 @@ export enum ProxyIPFraudProviderKind {
   PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO = "PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO",
   PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION = "PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION",
   PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM = "PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM",
+  PROXY_IP_FRAUD_PROVIDER_KIND_IPQUALITYSCORE = "PROXY_IP_FRAUD_PROVIDER_KIND_IPQUALITYSCORE",
+  PROXY_IP_FRAUD_PROVIDER_KIND_ABUSEIPDB = "PROXY_IP_FRAUD_PROVIDER_KIND_ABUSEIPDB",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -491,6 +493,8 @@ export interface ProxyIPFraudCheck {
   isp: string;
   checked_at: string | undefined;
   error_message: string;
+  provider_id: string;
+  provider_display_name: string;
 }
 
 export interface ProxyEdgeAccessCheck {
@@ -557,16 +561,22 @@ export interface ProxyDynamicIPProviderSettings {
   gateways: ProxyDynamicIPGatewaySettings[];
 }
 
+export interface ProxyRuntimeCheckSettings {
+  proxy_exit_ip_timeout: string | undefined;
+}
+
 export interface ProxyRuntimeSettings {
   edge_canary: ProxyEdgeCanarySettingsView | undefined;
   ip_fraud_providers: ProxyIPFraudProviderSettingsView[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
+  check_settings: ProxyRuntimeCheckSettings | undefined;
 }
 
 export interface ProxyRuntimePersistentSettings {
   edge_canary: ProxyEdgeCanarySettings | undefined;
   ip_fraud_providers: ProxyIPFraudProviderSettings[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
+  check_settings: ProxyRuntimeCheckSettings | undefined;
 }
 
 export interface ProxyRuntimeOverview {
@@ -852,6 +862,7 @@ export interface UpdateProxyRuntimeSettingsRequest {
   edge_canary: ProxyEdgeCanarySettings | undefined;
   ip_fraud_providers: ProxyIPFraudProviderSettings[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
+  check_settings: ProxyRuntimeCheckSettings | undefined;
 }
 
 export interface UpdateProxyRuntimeSettingsResponse {

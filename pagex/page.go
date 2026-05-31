@@ -5,6 +5,11 @@ import (
 	"strconv"
 )
 
+const (
+	DefaultLimit = 100
+	MaxLimit     = 500
+)
+
 func ParseOffsetToken(pageToken string) (int, error) {
 	if pageToken == "" {
 		return 0, nil
@@ -37,4 +42,34 @@ func ClampSize(pageSize int, fallback int, maximum int) int {
 		return maximum
 	}
 	return pageSize
+}
+
+func NormalizePageLimit(limit int) int {
+	return NormalizeLimit(limit, DefaultLimit, MaxLimit)
+}
+
+func NormalizeLimit(limit int, defaultLimit int, maxLimit int) int {
+	if defaultLimit <= 0 {
+		defaultLimit = DefaultLimit
+	}
+	if maxLimit <= 0 {
+		maxLimit = defaultLimit
+	}
+	if limit <= 0 {
+		return defaultLimit
+	}
+	if limit > maxLimit {
+		return maxLimit
+	}
+	return limit
+}
+
+func TrimLimit[T any](rows []T, limit int) ([]T, bool) {
+	if limit < 0 {
+		limit = 0
+	}
+	if len(rows) <= limit {
+		return rows, false
+	}
+	return rows[:limit], true
 }

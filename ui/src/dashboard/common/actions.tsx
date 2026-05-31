@@ -39,6 +39,25 @@ export type ActionButtonDescriptor = {
   onClick?: () => void;
 };
 
+
+export function ActionSection({ title, description, children, className, contentClassName }: {
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  contentClassName?: string;
+}) {
+  return (
+    <section className={cn('grid gap-3 rounded-xl border bg-card p-3', className)}>
+      <header className="grid gap-1">
+        <h3 className="text-sm font-medium leading-none">{title}</h3>
+        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+      </header>
+      <div className={cn('grid gap-2', contentClassName)}>{children}</div>
+    </section>
+  );
+}
+
 export function ActionButtonGroup({ actions, className }: {
   actions: ActionButtonDescriptor[];
   className?: string;

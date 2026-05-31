@@ -42,6 +42,14 @@ export enum SmsErrorCode {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
+export enum SmsRouteStrategy {
+  SMS_ROUTE_STRATEGY_UNSPECIFIED = "SMS_ROUTE_STRATEGY_UNSPECIFIED",
+  SMS_ROUTE_STRATEGY_BALANCED = "SMS_ROUTE_STRATEGY_BALANCED",
+  SMS_ROUTE_STRATEGY_LOWEST_PRICE = "SMS_ROUTE_STRATEGY_LOWEST_PRICE",
+  SMS_ROUTE_STRATEGY_MOST_AVAILABLE = "SMS_ROUTE_STRATEGY_MOST_AVAILABLE",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
 export interface SmsError {
   code: SmsErrorCode;
   message: string;
@@ -73,6 +81,7 @@ export interface SmsNumberAcquireParams {
   application_key: string;
   country_iso2: string;
   country_calling_code: string;
+  route_failure_policy: SmsRouteFailurePolicy | undefined;
 }
 
 export interface FiveSimAcquireParams {
@@ -90,6 +99,7 @@ export interface SmsBowerAcquireParams {
 export interface HeroSmsAcquireParams {
   service: string;
   country: string;
+  operator: string;
 }
 
 export interface SmsCode {
@@ -201,6 +211,37 @@ export interface SmsPriceOffer {
   upstream_provider_id: string;
   upstream_provider_name: string;
   acquire_params: SmsNumberAcquireParams | undefined;
+}
+
+export interface SmsRoutePolicy {
+  strategy: SmsRouteStrategy;
+  max_price: DecimalMoney | undefined;
+  limit: number;
+  min_available_count: number;
+  failure_policy: SmsRouteFailurePolicy | undefined;
+}
+
+export interface SmsRouteFailurePolicy {
+  scope_key: string;
+  failure_threshold: number;
+  failure_window_seconds: number;
+  disable_ttl_seconds: number;
+}
+
+export interface RecommendSmsRoutesRequest {
+  target: SmsTarget | undefined;
+  policy: SmsRoutePolicy | undefined;
+  provider_keys: string[];
+}
+
+export interface SmsRouteRecommendation {
+  offer: SmsPriceOffer | undefined;
+  score: number;
+}
+
+export interface RecommendSmsRoutesResponse {
+  recommendations: SmsRouteRecommendation[];
+  error: SmsError | undefined;
 }
 
 export interface SmsProviderInfo {

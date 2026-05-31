@@ -76,19 +76,86 @@ func (WorkflowRuntimeStatus) EnumDescriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{0}
 }
 
+type WorkflowRunStatus int32
+
+const (
+	WorkflowRunStatus_WORKFLOW_RUN_STATUS_UNSPECIFIED WorkflowRunStatus = 0
+	WorkflowRunStatus_WORKFLOW_RUN_PENDING            WorkflowRunStatus = 1
+	WorkflowRunStatus_WORKFLOW_RUN_RUNNING            WorkflowRunStatus = 2
+	WorkflowRunStatus_WORKFLOW_RUN_WAITING            WorkflowRunStatus = 3
+	WorkflowRunStatus_WORKFLOW_RUN_SUCCEEDED          WorkflowRunStatus = 4
+	WorkflowRunStatus_WORKFLOW_RUN_FAILED             WorkflowRunStatus = 5
+	WorkflowRunStatus_WORKFLOW_RUN_CANCELED           WorkflowRunStatus = 6
+	WorkflowRunStatus_WORKFLOW_RUN_SKIPPED            WorkflowRunStatus = 7
+)
+
+// Enum value maps for WorkflowRunStatus.
+var (
+	WorkflowRunStatus_name = map[int32]string{
+		0: "WORKFLOW_RUN_STATUS_UNSPECIFIED",
+		1: "WORKFLOW_RUN_PENDING",
+		2: "WORKFLOW_RUN_RUNNING",
+		3: "WORKFLOW_RUN_WAITING",
+		4: "WORKFLOW_RUN_SUCCEEDED",
+		5: "WORKFLOW_RUN_FAILED",
+		6: "WORKFLOW_RUN_CANCELED",
+		7: "WORKFLOW_RUN_SKIPPED",
+	}
+	WorkflowRunStatus_value = map[string]int32{
+		"WORKFLOW_RUN_STATUS_UNSPECIFIED": 0,
+		"WORKFLOW_RUN_PENDING":            1,
+		"WORKFLOW_RUN_RUNNING":            2,
+		"WORKFLOW_RUN_WAITING":            3,
+		"WORKFLOW_RUN_SUCCEEDED":          4,
+		"WORKFLOW_RUN_FAILED":             5,
+		"WORKFLOW_RUN_CANCELED":           6,
+		"WORKFLOW_RUN_SKIPPED":            7,
+	}
+)
+
+func (x WorkflowRunStatus) Enum() *WorkflowRunStatus {
+	p := new(WorkflowRunStatus)
+	*p = x
+	return p
+}
+
+func (x WorkflowRunStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WorkflowRunStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes[1].Descriptor()
+}
+
+func (WorkflowRunStatus) Type() protoreflect.EnumType {
+	return &file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes[1]
+}
+
+func (x WorkflowRunStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WorkflowRunStatus.Descriptor instead.
+func (WorkflowRunStatus) EnumDescriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{1}
+}
+
 type WorkflowRuntimeSummary struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	EngineStatus  WorkflowRuntimeStatus  `protobuf:"varint,1,opt,name=engine_status,json=engineStatus,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus" json:"engine_status,omitempty"`
-	EngineMessage string                 `protobuf:"bytes,2,opt,name=engine_message,json=engineMessage,proto3" json:"engine_message,omitempty"`
-	ApiStatus     WorkflowRuntimeStatus  `protobuf:"varint,3,opt,name=api_status,json=apiStatus,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus" json:"api_status,omitempty"`
-	ApiMessage    string                 `protobuf:"bytes,4,opt,name=api_message,json=apiMessage,proto3" json:"api_message,omitempty"`
-	ApiConfigured bool                   `protobuf:"varint,5,opt,name=api_configured,json=apiConfigured,proto3" json:"api_configured,omitempty"`
-	EditorUrl     string                 `protobuf:"bytes,6,opt,name=editor_url,json=editorUrl,proto3" json:"editor_url,omitempty"`
-	Workflows     []*WorkflowDefinition  `protobuf:"bytes,7,rep,name=workflows,proto3" json:"workflows,omitempty"`
-	Executions    []*WorkflowExecution   `protobuf:"bytes,8,rep,name=executions,proto3" json:"executions,omitempty"`
-	CheckedAtUnix int64                  `protobuf:"varint,9,opt,name=checked_at_unix,json=checkedAtUnix,proto3" json:"checked_at_unix,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState   `protogen:"open.v1"`
+	EngineStatus       WorkflowRuntimeStatus    `protobuf:"varint,1,opt,name=engine_status,json=engineStatus,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus" json:"engine_status,omitempty"`
+	EngineMessage      string                   `protobuf:"bytes,2,opt,name=engine_message,json=engineMessage,proto3" json:"engine_message,omitempty"`
+	ApiStatus          WorkflowRuntimeStatus    `protobuf:"varint,3,opt,name=api_status,json=apiStatus,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus" json:"api_status,omitempty"`
+	ApiMessage         string                   `protobuf:"bytes,4,opt,name=api_message,json=apiMessage,proto3" json:"api_message,omitempty"`
+	ApiConfigured      bool                     `protobuf:"varint,5,opt,name=api_configured,json=apiConfigured,proto3" json:"api_configured,omitempty"`
+	EditorUrl          string                   `protobuf:"bytes,6,opt,name=editor_url,json=editorUrl,proto3" json:"editor_url,omitempty"`
+	Workflows          []*WorkflowDefinition    `protobuf:"bytes,7,rep,name=workflows,proto3" json:"workflows,omitempty"`
+	Executions         []*WorkflowExecution     `protobuf:"bytes,8,rep,name=executions,proto3" json:"executions,omitempty"`
+	CheckedAtUnix      int64                    `protobuf:"varint,9,opt,name=checked_at_unix,json=checkedAtUnix,proto3" json:"checked_at_unix,omitempty"`
+	Runs               []*WorkflowRunProjection `protobuf:"bytes,10,rep,name=runs,proto3" json:"runs,omitempty"`
+	RunsPageInfo       *WorkflowRuntimePageInfo `protobuf:"bytes,11,opt,name=runs_page_info,json=runsPageInfo,proto3" json:"runs_page_info,omitempty"`
+	ExecutionsPageInfo *WorkflowRuntimePageInfo `protobuf:"bytes,12,opt,name=executions_page_info,json=executionsPageInfo,proto3" json:"executions_page_info,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *WorkflowRuntimeSummary) Reset() {
@@ -184,6 +251,87 @@ func (x *WorkflowRuntimeSummary) GetCheckedAtUnix() int64 {
 	return 0
 }
 
+func (x *WorkflowRuntimeSummary) GetRuns() []*WorkflowRunProjection {
+	if x != nil {
+		return x.Runs
+	}
+	return nil
+}
+
+func (x *WorkflowRuntimeSummary) GetRunsPageInfo() *WorkflowRuntimePageInfo {
+	if x != nil {
+		return x.RunsPageInfo
+	}
+	return nil
+}
+
+func (x *WorkflowRuntimeSummary) GetExecutionsPageInfo() *WorkflowRuntimePageInfo {
+	if x != nil {
+		return x.ExecutionsPageInfo
+	}
+	return nil
+}
+
+type WorkflowRuntimePageInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	ItemCount     int32                  `protobuf:"varint,2,opt,name=item_count,json=itemCount,proto3" json:"item_count,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,3,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowRuntimePageInfo) Reset() {
+	*x = WorkflowRuntimePageInfo{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowRuntimePageInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowRuntimePageInfo) ProtoMessage() {}
+
+func (x *WorkflowRuntimePageInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowRuntimePageInfo.ProtoReflect.Descriptor instead.
+func (*WorkflowRuntimePageInfo) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *WorkflowRuntimePageInfo) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *WorkflowRuntimePageInfo) GetItemCount() int32 {
+	if x != nil {
+		return x.ItemCount
+	}
+	return 0
+}
+
+func (x *WorkflowRuntimePageInfo) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
 type WorkflowDefinition struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -191,13 +339,15 @@ type WorkflowDefinition struct {
 	Active        bool                   `protobuf:"varint,3,opt,name=active,proto3" json:"active,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	Tags          []string               `protobuf:"bytes,5,rep,name=tags,proto3" json:"tags,omitempty"`
+	GraphNodes    []*WorkflowGraphNode   `protobuf:"bytes,6,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
+	GraphEdges    []*WorkflowGraphEdge   `protobuf:"bytes,7,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkflowDefinition) Reset() {
 	*x = WorkflowDefinition{}
-	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[1]
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -209,7 +359,7 @@ func (x *WorkflowDefinition) String() string {
 func (*WorkflowDefinition) ProtoMessage() {}
 
 func (x *WorkflowDefinition) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[1]
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +372,7 @@ func (x *WorkflowDefinition) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkflowDefinition.ProtoReflect.Descriptor instead.
 func (*WorkflowDefinition) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{1}
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *WorkflowDefinition) GetId() string {
@@ -260,6 +410,20 @@ func (x *WorkflowDefinition) GetTags() []string {
 	return nil
 }
 
+func (x *WorkflowDefinition) GetGraphNodes() []*WorkflowGraphNode {
+	if x != nil {
+		return x.GraphNodes
+	}
+	return nil
+}
+
+func (x *WorkflowDefinition) GetGraphEdges() []*WorkflowGraphEdge {
+	if x != nil {
+		return x.GraphEdges
+	}
+	return nil
+}
+
 type WorkflowExecution struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -269,13 +433,15 @@ type WorkflowExecution struct {
 	Mode          string                 `protobuf:"bytes,5,opt,name=mode,proto3" json:"mode,omitempty"`
 	StartedAt     string                 `protobuf:"bytes,6,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
 	StoppedAt     string                 `protobuf:"bytes,7,opt,name=stopped_at,json=stoppedAt,proto3" json:"stopped_at,omitempty"`
+	GraphNodes    []*WorkflowGraphNode   `protobuf:"bytes,8,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
+	GraphEdges    []*WorkflowGraphEdge   `protobuf:"bytes,9,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkflowExecution) Reset() {
 	*x = WorkflowExecution{}
-	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[2]
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -287,7 +453,7 @@ func (x *WorkflowExecution) String() string {
 func (*WorkflowExecution) ProtoMessage() {}
 
 func (x *WorkflowExecution) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[2]
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -300,7 +466,7 @@ func (x *WorkflowExecution) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WorkflowExecution.ProtoReflect.Descriptor instead.
 func (*WorkflowExecution) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{2}
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *WorkflowExecution) GetId() string {
@@ -352,11 +518,525 @@ func (x *WorkflowExecution) GetStoppedAt() string {
 	return ""
 }
 
+func (x *WorkflowExecution) GetGraphNodes() []*WorkflowGraphNode {
+	if x != nil {
+		return x.GraphNodes
+	}
+	return nil
+}
+
+func (x *WorkflowExecution) GetGraphEdges() []*WorkflowGraphEdge {
+	if x != nil {
+		return x.GraphEdges
+	}
+	return nil
+}
+
+type WorkflowGraphNode struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Kind          string                 `protobuf:"bytes,3,opt,name=kind,proto3" json:"kind,omitempty"`
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
+	X             float64                `protobuf:"fixed64,5,opt,name=x,proto3" json:"x,omitempty"`
+	Y             float64                `protobuf:"fixed64,6,opt,name=y,proto3" json:"y,omitempty"`
+	TypeVersion   string                 `protobuf:"bytes,7,opt,name=type_version,json=typeVersion,proto3" json:"type_version,omitempty"`
+	Disabled      bool                   `protobuf:"varint,8,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	StartedAtUnix int64                  `protobuf:"varint,9,opt,name=started_at_unix,json=startedAtUnix,proto3" json:"started_at_unix,omitempty"`
+	DurationMs    int64                  `protobuf:"varint,10,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,11,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	Iterations    int32                  `protobuf:"varint,12,opt,name=iterations,proto3" json:"iterations,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowGraphNode) Reset() {
+	*x = WorkflowGraphNode{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowGraphNode) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowGraphNode) ProtoMessage() {}
+
+func (x *WorkflowGraphNode) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowGraphNode.ProtoReflect.Descriptor instead.
+func (*WorkflowGraphNode) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *WorkflowGraphNode) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetKind() string {
+	if x != nil {
+		return x.Kind
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetX() float64 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *WorkflowGraphNode) GetY() float64 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *WorkflowGraphNode) GetTypeVersion() string {
+	if x != nil {
+		return x.TypeVersion
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetDisabled() bool {
+	if x != nil {
+		return x.Disabled
+	}
+	return false
+}
+
+func (x *WorkflowGraphNode) GetStartedAtUnix() int64 {
+	if x != nil {
+		return x.StartedAtUnix
+	}
+	return 0
+}
+
+func (x *WorkflowGraphNode) GetDurationMs() int64 {
+	if x != nil {
+		return x.DurationMs
+	}
+	return 0
+}
+
+func (x *WorkflowGraphNode) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *WorkflowGraphNode) GetIterations() int32 {
+	if x != nil {
+		return x.Iterations
+	}
+	return 0
+}
+
+type WorkflowGraphEdge struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Source        string                 `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
+	Target        string                 `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
+	Label         string                 `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowGraphEdge) Reset() {
+	*x = WorkflowGraphEdge{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowGraphEdge) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowGraphEdge) ProtoMessage() {}
+
+func (x *WorkflowGraphEdge) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowGraphEdge.ProtoReflect.Descriptor instead.
+func (*WorkflowGraphEdge) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *WorkflowGraphEdge) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WorkflowGraphEdge) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+func (x *WorkflowGraphEdge) GetTarget() string {
+	if x != nil {
+		return x.Target
+	}
+	return ""
+}
+
+func (x *WorkflowGraphEdge) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *WorkflowGraphEdge) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+type WorkflowRunProjection struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	RunId           string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	WorkflowId      string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
+	WorkflowName    string                 `protobuf:"bytes,3,opt,name=workflow_name,json=workflowName,proto3" json:"workflow_name,omitempty"`
+	ExecutionId     string                 `protobuf:"bytes,4,opt,name=execution_id,json=executionId,proto3" json:"execution_id,omitempty"`
+	Status          WorkflowRunStatus      `protobuf:"varint,5,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
+	CurrentNodeId   string                 `protobuf:"bytes,6,opt,name=current_node_id,json=currentNodeId,proto3" json:"current_node_id,omitempty"`
+	CurrentNodeName string                 `protobuf:"bytes,7,opt,name=current_node_name,json=currentNodeName,proto3" json:"current_node_name,omitempty"`
+	ErrorMessage    string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	StartedAtUnix   int64                  `protobuf:"varint,9,opt,name=started_at_unix,json=startedAtUnix,proto3" json:"started_at_unix,omitempty"`
+	CompletedAtUnix int64                  `protobuf:"varint,10,opt,name=completed_at_unix,json=completedAtUnix,proto3" json:"completed_at_unix,omitempty"`
+	UpdatedAtUnix   int64                  `protobuf:"varint,11,opt,name=updated_at_unix,json=updatedAtUnix,proto3" json:"updated_at_unix,omitempty"`
+	GraphNodes      []*WorkflowGraphNode   `protobuf:"bytes,12,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
+	GraphEdges      []*WorkflowGraphEdge   `protobuf:"bytes,13,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *WorkflowRunProjection) Reset() {
+	*x = WorkflowRunProjection{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowRunProjection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowRunProjection) ProtoMessage() {}
+
+func (x *WorkflowRunProjection) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowRunProjection.ProtoReflect.Descriptor instead.
+func (*WorkflowRunProjection) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *WorkflowRunProjection) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetWorkflowId() string {
+	if x != nil {
+		return x.WorkflowId
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetWorkflowName() string {
+	if x != nil {
+		return x.WorkflowName
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetExecutionId() string {
+	if x != nil {
+		return x.ExecutionId
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetStatus() WorkflowRunStatus {
+	if x != nil {
+		return x.Status
+	}
+	return WorkflowRunStatus_WORKFLOW_RUN_STATUS_UNSPECIFIED
+}
+
+func (x *WorkflowRunProjection) GetCurrentNodeId() string {
+	if x != nil {
+		return x.CurrentNodeId
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetCurrentNodeName() string {
+	if x != nil {
+		return x.CurrentNodeName
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *WorkflowRunProjection) GetStartedAtUnix() int64 {
+	if x != nil {
+		return x.StartedAtUnix
+	}
+	return 0
+}
+
+func (x *WorkflowRunProjection) GetCompletedAtUnix() int64 {
+	if x != nil {
+		return x.CompletedAtUnix
+	}
+	return 0
+}
+
+func (x *WorkflowRunProjection) GetUpdatedAtUnix() int64 {
+	if x != nil {
+		return x.UpdatedAtUnix
+	}
+	return 0
+}
+
+func (x *WorkflowRunProjection) GetGraphNodes() []*WorkflowGraphNode {
+	if x != nil {
+		return x.GraphNodes
+	}
+	return nil
+}
+
+func (x *WorkflowRunProjection) GetGraphEdges() []*WorkflowGraphEdge {
+	if x != nil {
+		return x.GraphEdges
+	}
+	return nil
+}
+
+type WorkflowStepUpdateRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	RunId          string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	WorkflowId     string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
+	WorkflowName   string                 `protobuf:"bytes,3,opt,name=workflow_name,json=workflowName,proto3" json:"workflow_name,omitempty"`
+	ExecutionId    string                 `protobuf:"bytes,4,opt,name=execution_id,json=executionId,proto3" json:"execution_id,omitempty"`
+	NodeId         string                 `protobuf:"bytes,5,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	NodeName       string                 `protobuf:"bytes,6,opt,name=node_name,json=nodeName,proto3" json:"node_name,omitempty"`
+	Status         WorkflowRunStatus      `protobuf:"varint,7,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
+	ErrorMessage   string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	OccurredAtUnix int64                  `protobuf:"varint,9,opt,name=occurred_at_unix,json=occurredAtUnix,proto3" json:"occurred_at_unix,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *WorkflowStepUpdateRequest) Reset() {
+	*x = WorkflowStepUpdateRequest{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowStepUpdateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowStepUpdateRequest) ProtoMessage() {}
+
+func (x *WorkflowStepUpdateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowStepUpdateRequest.ProtoReflect.Descriptor instead.
+func (*WorkflowStepUpdateRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *WorkflowStepUpdateRequest) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetWorkflowId() string {
+	if x != nil {
+		return x.WorkflowId
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetWorkflowName() string {
+	if x != nil {
+		return x.WorkflowName
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetExecutionId() string {
+	if x != nil {
+		return x.ExecutionId
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetNodeName() string {
+	if x != nil {
+		return x.NodeName
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetStatus() WorkflowRunStatus {
+	if x != nil {
+		return x.Status
+	}
+	return WorkflowRunStatus_WORKFLOW_RUN_STATUS_UNSPECIFIED
+}
+
+func (x *WorkflowStepUpdateRequest) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *WorkflowStepUpdateRequest) GetOccurredAtUnix() int64 {
+	if x != nil {
+		return x.OccurredAtUnix
+	}
+	return 0
+}
+
+type WorkflowStepUpdateResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Run           *WorkflowRunProjection `protobuf:"bytes,1,opt,name=run,proto3" json:"run,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowStepUpdateResponse) Reset() {
+	*x = WorkflowStepUpdateResponse{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowStepUpdateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowStepUpdateResponse) ProtoMessage() {}
+
+func (x *WorkflowStepUpdateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowStepUpdateResponse.ProtoReflect.Descriptor instead.
+func (*WorkflowStepUpdateResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *WorkflowStepUpdateResponse) GetRun() *WorkflowRunProjection {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
 var File_byte_v_forge_contracts_workflow_v1_workflow_proto protoreflect.FileDescriptor
 
 const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\n" +
-	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\"\xb5\x04\n" +
+	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\"\xd6\x06\n" +
 	"\x16WorkflowRuntimeSummary\x12^\n" +
 	"\rengine_status\x18\x01 \x01(\x0e29.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatusR\fengineStatus\x12%\n" +
 	"\x0eengine_message\x18\x02 \x01(\tR\rengineMessage\x12X\n" +
@@ -371,14 +1051,27 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\n" +
 	"executions\x18\b \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowExecutionR\n" +
 	"executions\x12&\n" +
-	"\x0fchecked_at_unix\x18\t \x01(\x03R\rcheckedAtUnix\"\x83\x01\n" +
+	"\x0fchecked_at_unix\x18\t \x01(\x03R\rcheckedAtUnix\x12M\n" +
+	"\x04runs\x18\n" +
+	" \x03(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x04runs\x12a\n" +
+	"\x0eruns_page_info\x18\v \x01(\v2;.byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfoR\frunsPageInfo\x12m\n" +
+	"\x14executions_page_info\x18\f \x01(\v2;.byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfoR\x12executionsPageInfo\"}\n" +
+	"\x17WorkflowRuntimePageInfo\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"item_count\x18\x02 \x01(\x05R\titemCount\x12&\n" +
+	"\x0fnext_page_token\x18\x03 \x01(\tR\rnextPageToken\"\xb3\x02\n" +
 	"\x12WorkflowDefinition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
 	"\x06active\x18\x03 \x01(\bR\x06active\x12\x1d\n" +
 	"\n" +
 	"updated_at\x18\x04 \x01(\tR\tupdatedAt\x12\x12\n" +
-	"\x04tags\x18\x05 \x03(\tR\x04tags\"\xd3\x01\n" +
+	"\x04tags\x18\x05 \x03(\tR\x04tags\x12V\n" +
+	"\vgraph_nodes\x18\x06 \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
+	"graphNodes\x12V\n" +
+	"\vgraph_edges\x18\a \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
+	"graphEdges\"\x83\x03\n" +
 	"\x11WorkflowExecution\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
@@ -389,13 +1082,80 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\n" +
 	"started_at\x18\x06 \x01(\tR\tstartedAt\x12\x1d\n" +
 	"\n" +
-	"stopped_at\x18\a \x01(\tR\tstoppedAt*\xc4\x01\n" +
+	"stopped_at\x18\a \x01(\tR\tstoppedAt\x12V\n" +
+	"\vgraph_nodes\x18\b \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
+	"graphNodes\x12V\n" +
+	"\vgraph_edges\x18\t \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
+	"graphEdges\"\xcc\x02\n" +
+	"\x11WorkflowGraphNode\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
+	"\x04kind\x18\x03 \x01(\tR\x04kind\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\x12\f\n" +
+	"\x01x\x18\x05 \x01(\x01R\x01x\x12\f\n" +
+	"\x01y\x18\x06 \x01(\x01R\x01y\x12!\n" +
+	"\ftype_version\x18\a \x01(\tR\vtypeVersion\x12\x1a\n" +
+	"\bdisabled\x18\b \x01(\bR\bdisabled\x12&\n" +
+	"\x0fstarted_at_unix\x18\t \x01(\x03R\rstartedAtUnix\x12\x1f\n" +
+	"\vduration_ms\x18\n" +
+	" \x01(\x03R\n" +
+	"durationMs\x12#\n" +
+	"\rerror_message\x18\v \x01(\tR\ferrorMessage\x12\x1e\n" +
+	"\n" +
+	"iterations\x18\f \x01(\x05R\n" +
+	"iterations\"\x81\x01\n" +
+	"\x11WorkflowGraphEdge\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
+	"\x06source\x18\x02 \x01(\tR\x06source\x12\x16\n" +
+	"\x06target\x18\x03 \x01(\tR\x06target\x12\x14\n" +
+	"\x05label\x18\x04 \x01(\tR\x05label\x12\x16\n" +
+	"\x06status\x18\x05 \x01(\tR\x06status\"\x8b\x05\n" +
+	"\x15WorkflowRunProjection\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1f\n" +
+	"\vworkflow_id\x18\x02 \x01(\tR\n" +
+	"workflowId\x12#\n" +
+	"\rworkflow_name\x18\x03 \x01(\tR\fworkflowName\x12!\n" +
+	"\fexecution_id\x18\x04 \x01(\tR\vexecutionId\x12M\n" +
+	"\x06status\x18\x05 \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12&\n" +
+	"\x0fcurrent_node_id\x18\x06 \x01(\tR\rcurrentNodeId\x12*\n" +
+	"\x11current_node_name\x18\a \x01(\tR\x0fcurrentNodeName\x12#\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12&\n" +
+	"\x0fstarted_at_unix\x18\t \x01(\x03R\rstartedAtUnix\x12*\n" +
+	"\x11completed_at_unix\x18\n" +
+	" \x01(\x03R\x0fcompletedAtUnix\x12&\n" +
+	"\x0fupdated_at_unix\x18\v \x01(\x03R\rupdatedAtUnix\x12V\n" +
+	"\vgraph_nodes\x18\f \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
+	"graphNodes\x12V\n" +
+	"\vgraph_edges\x18\r \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
+	"graphEdges\"\xef\x02\n" +
+	"\x19WorkflowStepUpdateRequest\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1f\n" +
+	"\vworkflow_id\x18\x02 \x01(\tR\n" +
+	"workflowId\x12#\n" +
+	"\rworkflow_name\x18\x03 \x01(\tR\fworkflowName\x12!\n" +
+	"\fexecution_id\x18\x04 \x01(\tR\vexecutionId\x12\x17\n" +
+	"\anode_id\x18\x05 \x01(\tR\x06nodeId\x12\x1b\n" +
+	"\tnode_name\x18\x06 \x01(\tR\bnodeName\x12M\n" +
+	"\x06status\x18\a \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12#\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12(\n" +
+	"\x10occurred_at_unix\x18\t \x01(\x03R\x0eoccurredAtUnix\"i\n" +
+	"\x1aWorkflowStepUpdateResponse\x12K\n" +
+	"\x03run\x18\x01 \x01(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x03run*\xc4\x01\n" +
 	"\x15WorkflowRuntimeStatus\x12'\n" +
 	"#WORKFLOW_RUNTIME_STATUS_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aWORKFLOW_RUNTIME_AVAILABLE\x10\x01\x12\x1d\n" +
 	"\x19WORKFLOW_RUNTIME_DEGRADED\x10\x02\x12!\n" +
 	"\x1dWORKFLOW_RUNTIME_UNCONFIGURED\x10\x03\x12 \n" +
-	"\x1cWORKFLOW_RUNTIME_UNAVAILABLE\x10\x04B\xd6\x01\n" +
+	"\x1cWORKFLOW_RUNTIME_UNAVAILABLE\x10\x04*\xf0\x01\n" +
+	"\x11WorkflowRunStatus\x12#\n" +
+	"\x1fWORKFLOW_RUN_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14WORKFLOW_RUN_PENDING\x10\x01\x12\x18\n" +
+	"\x14WORKFLOW_RUN_RUNNING\x10\x02\x12\x18\n" +
+	"\x14WORKFLOW_RUN_WAITING\x10\x03\x12\x1a\n" +
+	"\x16WORKFLOW_RUN_SUCCEEDED\x10\x04\x12\x17\n" +
+	"\x13WORKFLOW_RUN_FAILED\x10\x05\x12\x19\n" +
+	"\x15WORKFLOW_RUN_CANCELED\x10\x06\x12\x18\n" +
+	"\x14WORKFLOW_RUN_SKIPPED\x10\aB\xd6\x01\n" +
 	"$com.bytevforge.contracts.workflow.v1B\rWorkflowProtoP\x01ZWgithub.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/workflow/v1;workflowv1\xaa\x02 ByteVForge.Contracts.Workflow.V1\xca\x02 ByteVForge\\Contracts\\Workflow\\V1b\x06proto3"
 
 var (
@@ -410,24 +1170,43 @@ func file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP() []byte
 	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescData
 }
 
-var file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_byte_v_forge_contracts_workflow_v1_workflow_proto_goTypes = []any{
-	(WorkflowRuntimeStatus)(0),     // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
-	(*WorkflowRuntimeSummary)(nil), // 1: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
-	(*WorkflowDefinition)(nil),     // 2: byte.v.forge.contracts.workflow.v1.WorkflowDefinition
-	(*WorkflowExecution)(nil),      // 3: byte.v.forge.contracts.workflow.v1.WorkflowExecution
+	(WorkflowRuntimeStatus)(0),         // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
+	(WorkflowRunStatus)(0),             // 1: byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	(*WorkflowRuntimeSummary)(nil),     // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
+	(*WorkflowRuntimePageInfo)(nil),    // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	(*WorkflowDefinition)(nil),         // 4: byte.v.forge.contracts.workflow.v1.WorkflowDefinition
+	(*WorkflowExecution)(nil),          // 5: byte.v.forge.contracts.workflow.v1.WorkflowExecution
+	(*WorkflowGraphNode)(nil),          // 6: byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	(*WorkflowGraphEdge)(nil),          // 7: byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	(*WorkflowRunProjection)(nil),      // 8: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	(*WorkflowStepUpdateRequest)(nil),  // 9: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest
+	(*WorkflowStepUpdateResponse)(nil), // 10: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse
 }
 var file_byte_v_forge_contracts_workflow_v1_workflow_proto_depIdxs = []int32{
-	0, // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.engine_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
-	0, // 1: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.api_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
-	2, // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.workflows:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowDefinition
-	3, // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowExecution
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0,  // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.engine_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
+	0,  // 1: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.api_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
+	4,  // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.workflows:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowDefinition
+	5,  // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowExecution
+	8,  // 4: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	3,  // 5: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	3,  // 6: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	6,  // 7: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	7,  // 8: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	6,  // 9: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	7,  // 10: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	1,  // 11: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	6,  // 12: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	7,  // 13: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	1,  // 14: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	8,  // 15: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse.run:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_workflow_v1_workflow_proto_init() }
@@ -440,8 +1219,8 @@ func file_byte_v_forge_contracts_workflow_v1_workflow_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc), len(file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   3,
+			NumEnums:      2,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

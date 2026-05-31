@@ -25,6 +25,7 @@ type Config struct {
 	RandomTLSExtensionOrder bool
 	DisableHTTP3            bool
 	ForceHTTP1              bool
+	NotFollowRedirects      bool
 	HeaderOrder             HeaderOrderFunc
 }
 
@@ -73,7 +74,14 @@ func NewTLSClient(config Config, cookieJar CookieJar) (TLSClient, error) {
 	if config.ProxyURL != "" {
 		options = append(options, tlsclient.WithProxyUrl(config.ProxyURL))
 	}
-	return tlsclient.NewHttpClient(tlsclient.NewNoopLogger(), options...)
+	client, err := tlsclient.NewHttpClient(tlsclient.NewNoopLogger(), options...)
+	if err != nil {
+		return nil, err
+	}
+	if config.NotFollowRedirects {
+		client.SetFollowRedirect(false)
+	}
+	return client, nil
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, error) {

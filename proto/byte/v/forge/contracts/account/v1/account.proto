@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package byte.v.forge.contracts.account.v1;
+
+import "byte/v/forge/contracts/common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "ByteVForge.Contracts.Account.V1";
+option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/account/v1;accountv1";
+option java_multiple_files = true;
+option java_outer_classname = "AccountProto";
+option java_package = "com.bytevforge.contracts.account.v1";
+option php_namespace = "ByteVForge\\Contracts\\Account\\V1";
+
+message AccountKey {
+  string source_service = 1;
+  string account_type = 2;
+  string account_id = 3;
+}
+
+message AccountSubject {
+  reserved 3;
+  reserved "user_id";
+  oneof value {
+    string email = 1;
+    string phone_e164 = 2;
+    string external_id = 4;
+  }
+  string display = 10;
+}
+
+message AccountError {
+  string code = 1;
+  string message = 2;
+  bool retryable = 3;
+}
+
+message AccountStatus {
+  string value = 1;
+  string label = 2;
+  AccountError error = 3;
+}
+
+message AccountCredentialState {
+  string kind = 1;
+  bool present = 2;
+  string status = 3;
+  google.protobuf.Timestamp expires_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message Account {
+  AccountKey key = 1;
+  string provider_key = 2;
+  string display_name = 3;
+  AccountSubject subject = 4;
+  AccountStatus status = 5;
+  repeated AccountCredentialState credential_states = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+enum AccountActionTone {
+  ACCOUNT_ACTION_TONE_UNSPECIFIED = 0;
+  ACCOUNT_ACTION_TONE_DEFAULT = 1;
+  ACCOUNT_ACTION_TONE_PRIMARY = 2;
+  ACCOUNT_ACTION_TONE_DANGER = 3;
+}
+
+message AccountActionDescriptor {
+  string action_id = 1;
+  string label = 2;
+  AccountActionTone tone = 3;
+  bool disabled = 4;
+  string disabled_reason = 5;
+  bool requires_confirmation = 6;
+}
+
+enum AccountActionEngine {
+  ACCOUNT_ACTION_ENGINE_UNSPECIFIED = 0;
+  ACCOUNT_ACTION_ENGINE_N8N = 1;
+}
+
+enum AccountActionAPIKind {
+  ACCOUNT_ACTION_API_KIND_UNSPECIFIED = 0;
+  ACCOUNT_ACTION_API_KIND_TYPED = 1;
+  ACCOUNT_ACTION_API_KIND_RAW_N8N = 2;
+}
+
+message AccountActionButton {
+  string id = 1;
+  string label = 2;
+  string placement = 3;
+  string intent = 4;
+  string start_path = 5;
+}
+
+message AccountActionWorkflowDefinition {
+  string key = 1;
+  string id_prefix = 2;
+  string start_path = 3;
+  string n8n_action_scope = 4;
+  string n8n_webhook_path = 5;
+  string action_path_prefix = 6;
+  AccountActionAPIKind action_api_kind = 7;
+}
+
+message AccountActionDefinition {
+  string action_id = 1;
+  string display_name = 2;
+  string owner = 3;
+  AccountActionEngine engine = 4;
+  string request_proto = 5;
+  string response_proto = 6;
+  repeated string required_account_statuses = 7;
+  repeated string blocked_account_statuses = 8;
+  repeated string required_fields = 9;
+  repeated string capabilities = 10;
+  string visibility = 11;
+  AccountActionWorkflowDefinition workflow = 12;
+  repeated AccountActionButton ui_buttons = 13;
+}
+
+message AccountActionCatalog {
+  repeated AccountActionDefinition actions = 1;
+}
+
+enum AccountChangeKind {
+  ACCOUNT_CHANGE_KIND_UNSPECIFIED = 0;
+  ACCOUNT_CHANGE_KIND_UPSERTED = 1;
+  ACCOUNT_CHANGE_KIND_UPDATED = 2;
+  ACCOUNT_CHANGE_KIND_DELETED = 3;
+  ACCOUNT_CHANGE_KIND_STATUS_CHANGED = 4;
+  ACCOUNT_CHANGE_KIND_CREDENTIAL_CHANGED = 5;
+}
+
+message AccountChangedEvent {
+  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  AccountChangeKind change_kind = 2;
+  Account account = 3;
+}

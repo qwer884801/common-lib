@@ -315,6 +315,7 @@ const (
 	SmsCatalogService_ListSmsApplications_FullMethodName = "/byte.v.forge.contracts.sms.v1.SmsCatalogService/ListSmsApplications"
 	SmsCatalogService_ListSmsCountries_FullMethodName    = "/byte.v.forge.contracts.sms.v1.SmsCatalogService/ListSmsCountries"
 	SmsCatalogService_ListSmsPriceOffers_FullMethodName  = "/byte.v.forge.contracts.sms.v1.SmsCatalogService/ListSmsPriceOffers"
+	SmsCatalogService_RecommendSmsRoutes_FullMethodName  = "/byte.v.forge.contracts.sms.v1.SmsCatalogService/RecommendSmsRoutes"
 )
 
 // SmsCatalogServiceClient is the client API for SmsCatalogService service.
@@ -325,6 +326,7 @@ type SmsCatalogServiceClient interface {
 	ListSmsApplications(ctx context.Context, in *ListSmsApplicationsRequest, opts ...grpc.CallOption) (*ListSmsApplicationsResponse, error)
 	ListSmsCountries(ctx context.Context, in *ListSmsCountriesRequest, opts ...grpc.CallOption) (*ListSmsCountriesResponse, error)
 	ListSmsPriceOffers(ctx context.Context, in *ListSmsPriceOffersRequest, opts ...grpc.CallOption) (*ListSmsPriceOffersResponse, error)
+	RecommendSmsRoutes(ctx context.Context, in *RecommendSmsRoutesRequest, opts ...grpc.CallOption) (*RecommendSmsRoutesResponse, error)
 }
 
 type smsCatalogServiceClient struct {
@@ -375,6 +377,16 @@ func (c *smsCatalogServiceClient) ListSmsPriceOffers(ctx context.Context, in *Li
 	return out, nil
 }
 
+func (c *smsCatalogServiceClient) RecommendSmsRoutes(ctx context.Context, in *RecommendSmsRoutesRequest, opts ...grpc.CallOption) (*RecommendSmsRoutesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RecommendSmsRoutesResponse)
+	err := c.cc.Invoke(ctx, SmsCatalogService_RecommendSmsRoutes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SmsCatalogServiceServer is the server API for SmsCatalogService service.
 // All implementations must embed UnimplementedSmsCatalogServiceServer
 // for forward compatibility.
@@ -383,6 +395,7 @@ type SmsCatalogServiceServer interface {
 	ListSmsApplications(context.Context, *ListSmsApplicationsRequest) (*ListSmsApplicationsResponse, error)
 	ListSmsCountries(context.Context, *ListSmsCountriesRequest) (*ListSmsCountriesResponse, error)
 	ListSmsPriceOffers(context.Context, *ListSmsPriceOffersRequest) (*ListSmsPriceOffersResponse, error)
+	RecommendSmsRoutes(context.Context, *RecommendSmsRoutesRequest) (*RecommendSmsRoutesResponse, error)
 	mustEmbedUnimplementedSmsCatalogServiceServer()
 }
 
@@ -404,6 +417,9 @@ func (UnimplementedSmsCatalogServiceServer) ListSmsCountries(context.Context, *L
 }
 func (UnimplementedSmsCatalogServiceServer) ListSmsPriceOffers(context.Context, *ListSmsPriceOffersRequest) (*ListSmsPriceOffersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSmsPriceOffers not implemented")
+}
+func (UnimplementedSmsCatalogServiceServer) RecommendSmsRoutes(context.Context, *RecommendSmsRoutesRequest) (*RecommendSmsRoutesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RecommendSmsRoutes not implemented")
 }
 func (UnimplementedSmsCatalogServiceServer) mustEmbedUnimplementedSmsCatalogServiceServer() {}
 func (UnimplementedSmsCatalogServiceServer) testEmbeddedByValue()                           {}
@@ -498,6 +514,24 @@ func _SmsCatalogService_ListSmsPriceOffers_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SmsCatalogService_RecommendSmsRoutes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecommendSmsRoutesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmsCatalogServiceServer).RecommendSmsRoutes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SmsCatalogService_RecommendSmsRoutes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmsCatalogServiceServer).RecommendSmsRoutes(ctx, req.(*RecommendSmsRoutesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SmsCatalogService_ServiceDesc is the grpc.ServiceDesc for SmsCatalogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -520,6 +554,10 @@ var SmsCatalogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListSmsPriceOffers",
 			Handler:    _SmsCatalogService_ListSmsPriceOffers_Handler,
+		},
+		{
+			MethodName: "RecommendSmsRoutes",
+			Handler:    _SmsCatalogService_RecommendSmsRoutes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

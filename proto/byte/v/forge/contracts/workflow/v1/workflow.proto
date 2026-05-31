@@ -17,6 +17,17 @@ enum WorkflowRuntimeStatus {
   WORKFLOW_RUNTIME_UNAVAILABLE = 4;
 }
 
+enum WorkflowRunStatus {
+  WORKFLOW_RUN_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_RUN_PENDING = 1;
+  WORKFLOW_RUN_RUNNING = 2;
+  WORKFLOW_RUN_WAITING = 3;
+  WORKFLOW_RUN_SUCCEEDED = 4;
+  WORKFLOW_RUN_FAILED = 5;
+  WORKFLOW_RUN_CANCELED = 6;
+  WORKFLOW_RUN_SKIPPED = 7;
+}
+
 message WorkflowRuntimeSummary {
   WorkflowRuntimeStatus engine_status = 1;
   string engine_message = 2;
@@ -27,6 +38,15 @@ message WorkflowRuntimeSummary {
   repeated WorkflowDefinition workflows = 7;
   repeated WorkflowExecution executions = 8;
   int64 checked_at_unix = 9;
+  repeated WorkflowRunProjection runs = 10;
+  WorkflowRuntimePageInfo runs_page_info = 11;
+  WorkflowRuntimePageInfo executions_page_info = 12;
+}
+
+message WorkflowRuntimePageInfo {
+  int32 page_size = 1;
+  int32 item_count = 2;
+  string next_page_token = 3;
 }
 
 message WorkflowDefinition {
@@ -35,6 +55,8 @@ message WorkflowDefinition {
   bool active = 3;
   string updated_at = 4;
   repeated string tags = 5;
+  repeated WorkflowGraphNode graph_nodes = 6;
+  repeated WorkflowGraphEdge graph_edges = 7;
 }
 
 message WorkflowExecution {
@@ -45,4 +67,61 @@ message WorkflowExecution {
   string mode = 5;
   string started_at = 6;
   string stopped_at = 7;
+  repeated WorkflowGraphNode graph_nodes = 8;
+  repeated WorkflowGraphEdge graph_edges = 9;
+}
+
+message WorkflowGraphNode {
+  string id = 1;
+  string name = 2;
+  string kind = 3;
+  string status = 4;
+  double x = 5;
+  double y = 6;
+  string type_version = 7;
+  bool disabled = 8;
+  int64 started_at_unix = 9;
+  int64 duration_ms = 10;
+  string error_message = 11;
+  int32 iterations = 12;
+}
+
+message WorkflowGraphEdge {
+  string id = 1;
+  string source = 2;
+  string target = 3;
+  string label = 4;
+  string status = 5;
+}
+
+message WorkflowRunProjection {
+  string run_id = 1;
+  string workflow_id = 2;
+  string workflow_name = 3;
+  string execution_id = 4;
+  WorkflowRunStatus status = 5;
+  string current_node_id = 6;
+  string current_node_name = 7;
+  string error_message = 8;
+  int64 started_at_unix = 9;
+  int64 completed_at_unix = 10;
+  int64 updated_at_unix = 11;
+  repeated WorkflowGraphNode graph_nodes = 12;
+  repeated WorkflowGraphEdge graph_edges = 13;
+}
+
+message WorkflowStepUpdateRequest {
+  string run_id = 1;
+  string workflow_id = 2;
+  string workflow_name = 3;
+  string execution_id = 4;
+  string node_id = 5;
+  string node_name = 6;
+  WorkflowRunStatus status = 7;
+  string error_message = 8;
+  int64 occurred_at_unix = 9;
+}
+
+message WorkflowStepUpdateResponse {
+  WorkflowRunProjection run = 1;
 }

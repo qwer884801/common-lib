@@ -1,0 +1,149 @@
+@import "@xyflow/react/dist/style.css";
+
+.workflowGraphShell {
+  min-height: 320px;
+  height: 420px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--card) 96%, transparent), var(--background));
+}
+
+.workflowGraphShell .react-flow__pane {
+  cursor: grab;
+}
+
+.workflowGraphShell .react-flow__minimap {
+  width: 150px;
+  height: 104px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  opacity: .88;
+}
+
+.workflowGraphNode {
+  width: 238px;
+  height: 96px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 3px 10px;
+  align-items: start;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  padding: 8px 12px 8px 9px;
+  box-shadow: 0 10px 28px rgb(15 23 42 / 7%);
+  backdrop-filter: blur(7px);
+}
+
+.workflowGraphNode.selected {
+  border-color: color-mix(in srgb, var(--ring) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 18%, transparent), 0 12px 30px rgb(15 23 42 / 10%);
+}
+
+.workflowGraphNode.good .workflowGraphNodeIcon { color: var(--success); }
+.workflowGraphNode.active .workflowGraphNodeIcon { color: var(--warning); animation: workflowGraphPulse 1.2s ease-in-out infinite; }
+.workflowGraphNode.bad .workflowGraphNodeIcon { color: var(--danger); }
+
+.workflowGraphNodeHeader {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workflowGraphNodeHeader strong {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workflowGraphNodeHeader em {
+  flex: 0 0 auto;
+  max-width: 78px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--muted);
+  padding: 2px 7px;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workflowGraphNodeIcon {
+  width: 31px;
+  height: 31px;
+  grid-row: 1 / span 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 82%, transparent);
+  color: var(--muted-foreground);
+}
+
+.workflowGraphNodeMeta,
+.workflowGraphNodeTime,
+.workflowGraphNodeMessage,
+.workflowGraphNodeError {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workflowGraphNodeMessage {
+  color: #2563eb;
+}
+
+.workflowGraphNodeError {
+  border-radius: 10px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  padding: 6px 8px;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.workflowGraphHandle {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+
+.workflowGraphEdge.good path { stroke: var(--success); }
+.workflowGraphEdge.active path { stroke: var(--warning); stroke-width: 2.2; }
+.workflowGraphEdge.bad path { stroke: var(--danger); }
+.workflowGraphEdge.neutral path { stroke: #94a3b8; }
+
+.workflowGraphEdge .react-flow__edge-textbg {
+  fill: var(--card);
+}
+
+.workflowGraphEdge .react-flow__edge-text {
+  fill: var(--muted-foreground);
+  font-size: 11px;
+}
+
+@keyframes workflowGraphPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .55; transform: scale(.72); }
+}

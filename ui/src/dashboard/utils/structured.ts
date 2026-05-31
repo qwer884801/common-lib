@@ -2,8 +2,8 @@ export function stringValue(value: unknown) {
   return typeof value === 'string' ? value : '';
 }
 
-export function objectValue(value: unknown): Record<string, any> {
-  return value && typeof value === 'object' ? value as Record<string, any> : {};
+export function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' ? value as Record<string, unknown> : {};
 }
 
 export function numberValue(value: unknown) {

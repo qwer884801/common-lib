@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package byte.v.forge.contracts.wa.v1;
+
+import "byte/v/forge/contracts/common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "ByteVForge.Contracts.Wa.V1";
+option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/wa/v1;wav1";
+option java_multiple_files = true;
+option java_outer_classname = "WaProto";
+option java_package = "com.bytevforge.contracts.wa.v1";
+option php_namespace = "ByteVForge\\Contracts\\Wa\\V1";
+
+enum WaOtpSource {
+  WA_OTP_SOURCE_UNSPECIFIED = 0;
+  WA_OTP_SOURCE_LONG_CONNECTION = 1;
+  WA_OTP_SOURCE_MANUAL_EXTRACTION = 2;
+}
+
+message WaOtpReceivedEvent {
+  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  string workspace_id = 2;
+  string e164_number = 3;
+  WaOtpSource source = 4;
+  string otp = 5;
+  string wa_account_id = 6;
+  string client_profile_id = 7;
+  string registered_identity_id = 8;
+  string message_id = 9;
+  string candidate_id = 10;
+  google.protobuf.Timestamp received_at = 11;
+}

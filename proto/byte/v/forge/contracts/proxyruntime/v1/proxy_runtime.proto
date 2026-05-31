@@ -145,6 +145,8 @@ enum ProxyIPFraudProviderKind {
   PROXY_IP_FRAUD_PROVIDER_KIND_IPINFO = 3;
   PROXY_IP_FRAUD_PROVIDER_KIND_IP2LOCATION = 4;
   PROXY_IP_FRAUD_PROVIDER_KIND_IP_API_COM = 5;
+  PROXY_IP_FRAUD_PROVIDER_KIND_IPQUALITYSCORE = 6;
+  PROXY_IP_FRAUD_PROVIDER_KIND_ABUSEIPDB = 7;
 }
 
 enum ProxyEdgeAccessRiskLevel {
@@ -471,6 +473,8 @@ message ProxyIPFraudCheck {
   string isp = 12;
   google.protobuf.Timestamp checked_at = 13;
   string error_message = 14;
+  string provider_id = 15;
+  string provider_display_name = 16;
 }
 
 message ProxyEdgeAccessCheck {
@@ -541,16 +545,22 @@ message ProxyDynamicIPProviderSettings {
   repeated ProxyDynamicIPGatewaySettings gateways = 2;
 }
 
+message ProxyRuntimeCheckSettings {
+  google.protobuf.Duration proxy_exit_ip_timeout = 1;
+}
+
 message ProxyRuntimeSettings {
   ProxyEdgeCanarySettingsView edge_canary = 1;
   repeated ProxyIPFraudProviderSettingsView ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
+  ProxyRuntimeCheckSettings check_settings = 4;
 }
 
 message ProxyRuntimePersistentSettings {
   ProxyEdgeCanarySettings edge_canary = 1;
   repeated ProxyIPFraudProviderSettings ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
+  ProxyRuntimeCheckSettings check_settings = 4;
 }
 
 message ProxyRuntimeOverview {
@@ -745,6 +755,7 @@ message UpdateProxyRuntimeSettingsRequest {
   ProxyEdgeCanarySettings edge_canary = 1;
   repeated ProxyIPFraudProviderSettings ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
+  ProxyRuntimeCheckSettings check_settings = 4;
 }
 message UpdateProxyRuntimeSettingsResponse { ProxyRuntimeSettings settings = 1; }
 

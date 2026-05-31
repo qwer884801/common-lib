@@ -17,6 +17,18 @@ export enum WorkflowRuntimeStatus {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
+export enum WorkflowRunStatus {
+  WORKFLOW_RUN_STATUS_UNSPECIFIED = "WORKFLOW_RUN_STATUS_UNSPECIFIED",
+  WORKFLOW_RUN_PENDING = "WORKFLOW_RUN_PENDING",
+  WORKFLOW_RUN_RUNNING = "WORKFLOW_RUN_RUNNING",
+  WORKFLOW_RUN_WAITING = "WORKFLOW_RUN_WAITING",
+  WORKFLOW_RUN_SUCCEEDED = "WORKFLOW_RUN_SUCCEEDED",
+  WORKFLOW_RUN_FAILED = "WORKFLOW_RUN_FAILED",
+  WORKFLOW_RUN_CANCELED = "WORKFLOW_RUN_CANCELED",
+  WORKFLOW_RUN_SKIPPED = "WORKFLOW_RUN_SKIPPED",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
 export interface WorkflowRuntimeSummary {
   engine_status: WorkflowRuntimeStatus;
   engine_message: string;
@@ -27,6 +39,15 @@ export interface WorkflowRuntimeSummary {
   workflows: WorkflowDefinition[];
   executions: WorkflowExecution[];
   checked_at_unix: number;
+  runs: WorkflowRunProjection[];
+  runs_page_info: WorkflowRuntimePageInfo | undefined;
+  executions_page_info: WorkflowRuntimePageInfo | undefined;
+}
+
+export interface WorkflowRuntimePageInfo {
+  page_size: number;
+  item_count: number;
+  next_page_token: string;
 }
 
 export interface WorkflowDefinition {
@@ -35,6 +56,8 @@ export interface WorkflowDefinition {
   active: boolean;
   updated_at: string;
   tags: string[];
+  graph_nodes: WorkflowGraphNode[];
+  graph_edges: WorkflowGraphEdge[];
 }
 
 export interface WorkflowExecution {
@@ -45,4 +68,61 @@ export interface WorkflowExecution {
   mode: string;
   started_at: string;
   stopped_at: string;
+  graph_nodes: WorkflowGraphNode[];
+  graph_edges: WorkflowGraphEdge[];
+}
+
+export interface WorkflowGraphNode {
+  id: string;
+  name: string;
+  kind: string;
+  status: string;
+  x: number;
+  y: number;
+  type_version: string;
+  disabled: boolean;
+  started_at_unix: number;
+  duration_ms: number;
+  error_message: string;
+  iterations: number;
+}
+
+export interface WorkflowGraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  label: string;
+  status: string;
+}
+
+export interface WorkflowRunProjection {
+  run_id: string;
+  workflow_id: string;
+  workflow_name: string;
+  execution_id: string;
+  status: WorkflowRunStatus;
+  current_node_id: string;
+  current_node_name: string;
+  error_message: string;
+  started_at_unix: number;
+  completed_at_unix: number;
+  updated_at_unix: number;
+  graph_nodes: WorkflowGraphNode[];
+  graph_edges: WorkflowGraphEdge[];
+}
+
+export interface WorkflowStepUpdateRequest {
+  run_id: string;
+  workflow_id: string;
+  workflow_name: string;
+  execution_id: string;
+  node_id: string;
+  node_name: string;
+  status: WorkflowRunStatus;
+  error_message: string;
+  occurred_at_unix: number;
+}
+
+export interface WorkflowStepUpdateResponse {
+  run: WorkflowRunProjection | undefined;
 }

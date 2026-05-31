@@ -2,7 +2,7 @@ import React from 'react';
 import { AlertTriangle, Clock } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
 
-export function PanelHeader({ title, icon, children }: { title: string; icon: React.ReactNode; children?: React.ReactNode }) {
+export function PanelHeader({ title, icon, children }: { title: React.ReactNode; icon: React.ReactNode; children?: React.ReactNode }) {
   return (
     <div className="panelHeader">
       <div><span>{icon}</span>{title}</div>

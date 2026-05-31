@@ -137,6 +137,25 @@ var (
 		MaxDeliveries:    20,
 		RetryDelaySecond: 5,
 	}
+
+	AccountChanged = Definition{
+		Subject:      "byte.v.forge.account.changed",
+		EventName:    "account.changed",
+		EventVersion: EventVersionV1,
+		Kind:         KindFact,
+		PayloadType:  "byte.v.forge.contracts.account.v1.AccountChangedEvent",
+		OwnerService: "platform",
+	}
+
+	WAOTPReceived = Definition{
+		Subject:      "byte.v.forge.wa.otp.received",
+		EventName:    "wa.otp.received",
+		EventVersion: EventVersionV1,
+		Kind:         KindFact,
+		PayloadType:  "byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent",
+		OwnerService: "wa-app-service",
+	}
+
 	MailboxEmailReceived = Definition{
 		Subject:      "byte.v.forge.mailbox.email.received",
 		EventName:    "mailbox.email.received",
@@ -160,6 +179,8 @@ func All() []Definition {
 		MailboxRegistrationRequested,
 		MailboxOAuthRequested,
 		MailboxEmailReceived,
+		AccountChanged,
+		WAOTPReceived,
 		{Subject: DeadLetterTopic, EventName: "platform.dead_letter", EventVersion: EventVersionV1, Kind: KindFact, PayloadType: "byte.v.forge.contracts.common.v1.DeadLetterEvent", OwnerService: "platform"},
 	}
 }
