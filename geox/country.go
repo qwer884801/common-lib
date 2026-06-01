@@ -30,6 +30,30 @@ func NormalizeCountryAlpha2(value string) string {
 	return country.Alpha2()
 }
 
+func CountryAlpha2ByName(value string) string {
+	country := countries.ByName(strings.TrimSpace(value))
+	if !country.IsValid() {
+		return ""
+	}
+	return country.Alpha2()
+}
+
+func CountryCallingCode(value string) string {
+	country := countryByAlpha(value)
+	if !country.IsValid() {
+		country = countries.ByName(strings.TrimSpace(value))
+	}
+	if !country.IsValid() {
+		return ""
+	}
+	for _, code := range country.CallCodes() {
+		if code.IsValid() {
+			return strings.TrimPrefix(code.String(), "+")
+		}
+	}
+	return ""
+}
+
 func CountryRegionCode(value string) string {
 	country := countryByAlpha(value)
 	if !country.IsValid() {
