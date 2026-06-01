@@ -81,7 +81,9 @@ export interface SmsNumberAcquireParams {
   application_key: string;
   country_iso2: string;
   country_calling_code: string;
+  min_available_count: number;
   route_failure_policy: SmsRouteFailurePolicy | undefined;
+  max_price: DecimalMoney | undefined;
 }
 
 export interface FiveSimAcquireParams {

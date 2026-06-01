@@ -95,7 +95,9 @@ message SmsNumberAcquireParams {
   string application_key = 10;
   string country_iso2 = 11;
   string country_calling_code = 12;
+  int32 min_available_count = 13;
   SmsRouteFailurePolicy route_failure_policy = 14;
+  DecimalMoney max_price = 15;
 }
 
 message FiveSimAcquireParams {
