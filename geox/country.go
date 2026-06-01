@@ -87,11 +87,20 @@ func alpha2ByCountryName(value string, inText bool) string {
 		if country.name == "" {
 			continue
 		}
-		if normalized == country.name || inText && strings.Contains(" "+normalized+" ", " "+country.name+" ") {
+		if normalized == country.name || inText && countryNameOccursInText(normalized, country.name) {
 			return country.alpha2
 		}
 	}
 	return ""
+}
+
+func countryNameOccursInText(text, name string) bool {
+	text = " " + text + " "
+	name = " " + name + " "
+	if strings.Contains(text, name) {
+		return true
+	}
+	return strings.Contains(text, strings.TrimSuffix(name, " ")+"s ")
 }
 
 var countryNameSeparator = regexp.MustCompile(`[^a-z0-9]+`)
