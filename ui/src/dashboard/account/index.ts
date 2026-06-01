@@ -25,6 +25,7 @@ export * from './management-drawer-view';
 export * from './model';
 export * from './mutation-actions';
 export * from './otp-action-row';
+export * from './phone-fields';
 export * from './selection';
 export * from './token-editor';
 export * from './types';
