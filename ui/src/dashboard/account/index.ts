@@ -8,6 +8,7 @@ export * from './carrier';
 export * from './carrier-list';
 export * from './carrier-workspace';
 export * from './card';
+export * from './catalog-action-buttons';
 export * from './cache';
 export * from './cache-actions';
 export * from './collection';
