@@ -34,5 +34,6 @@ export * from './render-config';
 export * from './selection';
 export * from './token-editor';
 export * from './types';
+export * from './workflow-action-runner';
 export * from './workflow-submit';
 export * from './workspace';
