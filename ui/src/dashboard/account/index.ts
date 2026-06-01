@@ -26,6 +26,7 @@ export * from './management-drawer-view';
 export * from './model';
 export * from './mutation-actions';
 export * from './otp-action-row';
+export * from './phone-add-dialog';
 export * from './phone-fields';
 export * from './render-config';
 export * from './selection';
