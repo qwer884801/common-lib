@@ -29,6 +29,7 @@ export * from './mutation-actions';
 export * from './otp-action-row';
 export * from './phone-add-dialog';
 export * from './phone-fields';
+export * from './phone-probe-toolbox';
 export * from './probe-action';
 export * from './render-config';
 export * from './selection';
