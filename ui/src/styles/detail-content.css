@@ -46,6 +46,53 @@
 }
 
 
+.detailActionRows {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+
+.detailActionRow {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+
+
+.detailActionRow.unlabeled {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+
+.detailActionLabel {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+
+.detailActionRow .sectionActions {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+
+.appDrawer .detailActionRow .sectionActions {
+  justify-content: flex-start;
+}
+
+
+.detailActionRow button {
+  min-height: 30px;
+  padding: 5px 9px;
+}
+
+
 .kv {
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr) 34px;

@@ -5,8 +5,8 @@ import { cn } from '../../lib/utils';
 
 export type AppDrawerProps = {
   open: boolean;
-  title: string;
-  description?: string;
+  title: React.ReactNode;
+  description?: React.ReactNode;
   icon?: React.ReactNode;
   size?: 'default' | 'wide';
   className?: string;
@@ -31,7 +31,7 @@ export function AppDrawer({
       <SheetContent className={cn('appDrawer', className)} data-size={size} side="right" showCloseButton>
         <SheetHeader className="appDrawerHeader">
           <SheetTitle className="appDrawerTitle">{icon || <Activity size={16} />}{title}</SheetTitle>
-          <SheetDescription className={description ? '' : 'sr-only'}>{description || `${title}明细面板`}</SheetDescription>
+          <SheetDescription className={description ? '' : 'sr-only'}>{description || `${drawerTitleText(title)}明细面板`}</SheetDescription>
         </SheetHeader>
         <div className={cn('appDrawerBody', bodyClassName)}>{children}</div>
       </SheetContent>
@@ -39,8 +39,12 @@ export function AppDrawer({
   );
 }
 
+function drawerTitleText(title: React.ReactNode) {
+  return typeof title === 'string' ? title : '详情';
+}
+
 export type DetailDrawerProps = Omit<AppDrawerProps, 'description' | 'onOpenChange'> & {
-  description?: string;
+  description?: React.ReactNode;
   onClose: () => void;
 };
 

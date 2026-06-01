@@ -20,6 +20,7 @@ export * from './identity';
 export * from './list';
 export * from './mailbox-context';
 export * from './management-view';
+export * from './management-drawer-view';
 export * from './model';
 export * from './mutation-actions';
 export * from './otp-action-row';

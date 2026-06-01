@@ -26,9 +26,10 @@ const (
 type WaOtpSource int32
 
 const (
-	WaOtpSource_WA_OTP_SOURCE_UNSPECIFIED       WaOtpSource = 0
-	WaOtpSource_WA_OTP_SOURCE_LONG_CONNECTION   WaOtpSource = 1
-	WaOtpSource_WA_OTP_SOURCE_MANUAL_EXTRACTION WaOtpSource = 2
+	WaOtpSource_WA_OTP_SOURCE_UNSPECIFIED      WaOtpSource = 0
+	WaOtpSource_WA_OTP_SOURCE_LONG_CONNECTION  WaOtpSource = 1
+	WaOtpSource_WA_OTP_SOURCE_AUTO_EXTRACTION  WaOtpSource = 2
+	WaOtpSource_WA_OTP_SOURCE_IMPORTED_HISTORY WaOtpSource = 3
 )
 
 // Enum value maps for WaOtpSource.
@@ -36,12 +37,14 @@ var (
 	WaOtpSource_name = map[int32]string{
 		0: "WA_OTP_SOURCE_UNSPECIFIED",
 		1: "WA_OTP_SOURCE_LONG_CONNECTION",
-		2: "WA_OTP_SOURCE_MANUAL_EXTRACTION",
+		2: "WA_OTP_SOURCE_AUTO_EXTRACTION",
+		3: "WA_OTP_SOURCE_IMPORTED_HISTORY",
 	}
 	WaOtpSource_value = map[string]int32{
-		"WA_OTP_SOURCE_UNSPECIFIED":       0,
-		"WA_OTP_SOURCE_LONG_CONNECTION":   1,
-		"WA_OTP_SOURCE_MANUAL_EXTRACTION": 2,
+		"WA_OTP_SOURCE_UNSPECIFIED":      0,
+		"WA_OTP_SOURCE_LONG_CONNECTION":  1,
+		"WA_OTP_SOURCE_AUTO_EXTRACTION":  2,
+		"WA_OTP_SOURCE_IMPORTED_HISTORY": 3,
 	}
 )
 
@@ -85,6 +88,7 @@ type WaOtpReceivedEvent struct {
 	MessageId            string                 `protobuf:"bytes,9,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
 	CandidateId          string                 `protobuf:"bytes,10,opt,name=candidate_id,json=candidateId,proto3" json:"candidate_id,omitempty"`
 	ReceivedAt           *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=received_at,json=receivedAt,proto3" json:"received_at,omitempty"`
+	SourceParty          string                 `protobuf:"bytes,12,opt,name=source_party,json=sourceParty,proto3" json:"source_party,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -196,11 +200,18 @@ func (x *WaOtpReceivedEvent) GetReceivedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *WaOtpReceivedEvent) GetSourceParty() string {
+	if x != nil {
+		return x.SourceParty
+	}
+	return ""
+}
+
 var File_byte_v_forge_contracts_wa_v1_wa_proto protoreflect.FileDescriptor
 
 const file_byte_v_forge_contracts_wa_v1_wa_proto_rawDesc = "" +
 	"\n" +
-	"%byte/v/forge/contracts/wa/v1/wa.proto\x12\x1cbyte.v.forge.contracts.wa.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xfc\x03\n" +
+	"%byte/v/forge/contracts/wa/v1/wa.proto\x12\x1cbyte.v.forge.contracts.wa.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9f\x04\n" +
 	"\x12WaOtpReceivedEvent\x12H\n" +
 	"\acontext\x18\x01 \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x1f\n" +
@@ -216,11 +227,13 @@ const file_byte_v_forge_contracts_wa_v1_wa_proto_rawDesc = "" +
 	"\fcandidate_id\x18\n" +
 	" \x01(\tR\vcandidateId\x12;\n" +
 	"\vreceived_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"receivedAt*t\n" +
+	"receivedAt\x12!\n" +
+	"\fsource_party\x18\f \x01(\tR\vsourceParty*\x96\x01\n" +
 	"\vWaOtpSource\x12\x1d\n" +
 	"\x19WA_OTP_SOURCE_UNSPECIFIED\x10\x00\x12!\n" +
-	"\x1dWA_OTP_SOURCE_LONG_CONNECTION\x10\x01\x12#\n" +
-	"\x1fWA_OTP_SOURCE_MANUAL_EXTRACTION\x10\x02B\xb2\x01\n" +
+	"\x1dWA_OTP_SOURCE_LONG_CONNECTION\x10\x01\x12!\n" +
+	"\x1dWA_OTP_SOURCE_AUTO_EXTRACTION\x10\x02\x12\"\n" +
+	"\x1eWA_OTP_SOURCE_IMPORTED_HISTORY\x10\x03B\xb2\x01\n" +
 	"\x1ecom.bytevforge.contracts.wa.v1B\aWaProtoP\x01ZKgithub.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/wa/v1;wav1\xaa\x02\x1aByteVForge.Contracts.Wa.V1\xca\x02\x1aByteVForge\\Contracts\\Wa\\V1b\x06proto3"
 
 var (

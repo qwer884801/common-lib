@@ -7,6 +7,7 @@ export * from './common/drawer';
 export * from './common/empty';
 export * from './common/fields';
 export * from './common/form-fields';
+export * from './common/one-time-otp-submit';
 export * from './common/panels';
 export * from './common/records';
 export * from './common/result';

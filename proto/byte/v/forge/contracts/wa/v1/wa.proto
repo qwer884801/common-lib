@@ -15,7 +15,8 @@ option php_namespace = "ByteVForge\\Contracts\\Wa\\V1";
 enum WaOtpSource {
   WA_OTP_SOURCE_UNSPECIFIED = 0;
   WA_OTP_SOURCE_LONG_CONNECTION = 1;
-  WA_OTP_SOURCE_MANUAL_EXTRACTION = 2;
+  WA_OTP_SOURCE_AUTO_EXTRACTION = 2;
+  WA_OTP_SOURCE_IMPORTED_HISTORY = 3;
 }
 
 message WaOtpReceivedEvent {
@@ -30,4 +31,5 @@ message WaOtpReceivedEvent {
   string message_id = 9;
   string candidate_id = 10;
   google.protobuf.Timestamp received_at = 11;
+  string source_party = 12;
 }

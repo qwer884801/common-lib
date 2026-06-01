@@ -12,7 +12,8 @@ export const protobufPackage = "byte.v.forge.contracts.wa.v1";
 export enum WaOtpSource {
   WA_OTP_SOURCE_UNSPECIFIED = "WA_OTP_SOURCE_UNSPECIFIED",
   WA_OTP_SOURCE_LONG_CONNECTION = "WA_OTP_SOURCE_LONG_CONNECTION",
-  WA_OTP_SOURCE_MANUAL_EXTRACTION = "WA_OTP_SOURCE_MANUAL_EXTRACTION",
+  WA_OTP_SOURCE_AUTO_EXTRACTION = "WA_OTP_SOURCE_AUTO_EXTRACTION",
+  WA_OTP_SOURCE_IMPORTED_HISTORY = "WA_OTP_SOURCE_IMPORTED_HISTORY",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -28,4 +29,5 @@ export interface WaOtpReceivedEvent {
   message_id: string;
   candidate_id: string;
   received_at: string | undefined;
+  source_party: string;
 }
