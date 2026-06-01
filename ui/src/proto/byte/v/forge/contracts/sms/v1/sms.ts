@@ -84,6 +84,7 @@ export interface SmsNumberAcquireParams {
   min_available_count: number;
   route_failure_policy: SmsRouteFailurePolicy | undefined;
   max_price: DecimalMoney | undefined;
+  min_price: DecimalMoney | undefined;
 }
 
 export interface FiveSimAcquireParams {
@@ -221,6 +222,7 @@ export interface SmsRoutePolicy {
   limit: number;
   min_available_count: number;
   failure_policy: SmsRouteFailurePolicy | undefined;
+  min_price: DecimalMoney | undefined;
 }
 
 export interface SmsRouteFailurePolicy {

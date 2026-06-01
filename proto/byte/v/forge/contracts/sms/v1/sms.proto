@@ -98,6 +98,7 @@ message SmsNumberAcquireParams {
   int32 min_available_count = 13;
   SmsRouteFailurePolicy route_failure_policy = 14;
   DecimalMoney max_price = 15;
+  DecimalMoney min_price = 16;
 }
 
 message FiveSimAcquireParams {
@@ -242,6 +243,7 @@ message SmsRoutePolicy {
   int32 limit = 3;
   int32 min_available_count = 5;
   SmsRouteFailurePolicy failure_policy = 6;
+  DecimalMoney min_price = 7;
 }
 
 message SmsRouteFailurePolicy {
