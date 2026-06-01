@@ -14,6 +14,7 @@ export * from './collection';
 export * from './controller';
 export * from './credentials';
 export * from './delete-actions';
+export * from './detail-layout';
 export * from './details';
 export * from './hotstream';
 export * from './identity';

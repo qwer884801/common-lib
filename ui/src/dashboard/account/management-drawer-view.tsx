@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { cn } from '../../lib/utils';
-import { ContentTabs, type WorkspaceTabDescriptor } from '../layout';
+import type { WorkspaceTabDescriptor } from '../layout';
 import { DetailDrawer } from '../common/drawer';
 import { AccountCarrierList, type AccountCarrierListProps } from './carrier-list';
 import { accountRecordFromCarrier, type AccountRecordCarrier } from './carrier';
+import { AccountDetailTabs } from './detail-layout';
 import { accountId, accountSubject, accountTitle } from './identity';
 import { AccountManagementFrame, type AccountManagementFrameProps } from './management-view';
 import type { AccountRecord } from './types';
@@ -86,7 +87,7 @@ function renderDetail<T extends AccountRecordCarrier>(
 ) {
   const tabs = detailTabs?.(carrier, account) || [];
   if (tabs.length > 0) {
-    return <ContentTabs tabs={tabs} tabsListVariant="line" tabsClassName="accountDetailsTabs" />;
+    return <AccountDetailTabs tabs={tabs} />;
   }
   return detail?.(carrier, account) || null;
 }
