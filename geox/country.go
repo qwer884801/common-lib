@@ -1,6 +1,7 @@
 package geox
 
 import (
+	"regexp"
 	"strings"
 	"sync"
 
@@ -17,8 +18,18 @@ var countryEmojiIndex = struct {
 	values []countryEmoji
 }{}
 
+var countryNameIndex = struct {
+	sync.Once
+	values []countryName
+}{}
+
 type countryEmoji struct {
 	emoji  string
+	alpha2 string
+}
+
+type countryName struct {
+	name   string
 	alpha2 string
 }
 
@@ -31,11 +42,11 @@ func NormalizeCountryAlpha2(value string) string {
 }
 
 func CountryAlpha2ByName(value string) string {
-	country := countries.ByName(strings.TrimSpace(value))
-	if !country.IsValid() {
-		return ""
-	}
-	return country.Alpha2()
+	return alpha2ByCountryName(value, false)
+}
+
+func CountryAlpha2InText(value string) string {
+	return alpha2ByCountryName(value, true)
 }
 
 func CountryCallingCode(value string) string {
@@ -52,6 +63,43 @@ func CountryCallingCode(value string) string {
 		}
 	}
 	return ""
+}
+
+func alpha2ByCountryName(value string, inText bool) string {
+	normalized := normalizeCountryNameText(value)
+	if normalized == "" {
+		return ""
+	}
+	country := countries.ByName(normalized)
+	if country.IsValid() {
+		return country.Alpha2()
+	}
+	countryNameIndex.Do(func() {
+		countryNameIndex.values = make([]countryName, 0, countries.Total())
+		for _, country := range countries.All() {
+			if !country.IsValid() {
+				continue
+			}
+			countryNameIndex.values = append(countryNameIndex.values, countryName{name: normalizeCountryNameText(country.String()), alpha2: country.Alpha2()})
+		}
+	})
+	for _, country := range countryNameIndex.values {
+		if country.name == "" {
+			continue
+		}
+		if normalized == country.name || inText && strings.Contains(" "+normalized+" ", " "+country.name+" ") {
+			return country.alpha2
+		}
+	}
+	return ""
+}
+
+var countryNameSeparator = regexp.MustCompile(`[^a-z0-9]+`)
+
+func normalizeCountryNameText(value string) string {
+	value = strings.ToLower(strings.TrimSpace(value))
+	value = countryNameSeparator.ReplaceAllString(value, " ")
+	return strings.Join(strings.Fields(value), " ")
 }
 
 func CountryRegionCode(value string) string {
