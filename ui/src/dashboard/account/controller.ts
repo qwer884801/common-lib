@@ -8,6 +8,11 @@ export type AccountManagementControllerOptions<
   R extends AccountCarrierPageResponse<T>,
 > = AccountCarrierCollectionOptions<T, R>;
 
+export type AccountManagementController<
+  T extends AccountRecordCarrier,
+  R extends AccountCarrierPageResponse<T>,
+> = ReturnType<typeof useAccountManagementController<T, R>>;
+
 export function useAccountManagementController<
   T extends AccountRecordCarrier,
   R extends AccountCarrierPageResponse<T>,
