@@ -32,6 +32,7 @@ export * from './dashboard/common';
 export * from './dashboard/account';
 export * from './dashboard/http';
 export * from './dashboard/hotstream';
+export * from './dashboard/target-preparation';
 export * from './dashboard/layout';
 export * from './dashboard/shell/sidebar';
 export * from './dashboard/types';

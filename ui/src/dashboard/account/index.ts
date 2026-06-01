@@ -1,3 +1,4 @@
+export * from './add-dialog';
 export * from './action-catalog';
 export * from './action-rows';
 export * from './action-runner';
@@ -18,6 +19,7 @@ export * from './hotstream';
 export * from './identity';
 export * from './list';
 export * from './mailbox-context';
+export * from './management-view';
 export * from './model';
 export * from './mutation-actions';
 export * from './otp-action-row';

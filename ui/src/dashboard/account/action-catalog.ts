@@ -171,7 +171,9 @@ function accountActionSubjectField(account: AccountActionSubjectLike, field: str
     default:
       const value = (account as Record<string, unknown>)[field];
       if (String(value ?? '').trim()) return value;
-      return (record as unknown as Record<string, unknown> | undefined)?.[field];
+      const recordValue = (record as unknown as Record<string, unknown> | undefined)?.[field];
+      if (String(recordValue ?? '').trim()) return recordValue;
+      return record?.credential_states?.find((credential) => credential.kind.trim() === field && credential.present)?.status || '';
   }
 }
 

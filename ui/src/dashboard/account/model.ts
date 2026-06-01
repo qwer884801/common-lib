@@ -2,6 +2,7 @@ import type { AccountCredentialState, AccountError, AccountStatus, AccountSubjec
 import type { AccountRecord } from './types';
 
 export const ACCOUNT_CREDENTIAL_KIND_MAILBOX = 'mailbox';
+export const ACCOUNT_CREDENTIAL_KIND_PASSWORD = 'password';
 export const ACCOUNT_CREDENTIAL_KIND_PIN = 'pin';
 export const ACCOUNT_CREDENTIAL_KIND_TOKEN = 'token';
 export const ACCOUNT_CREDENTIAL_KIND_ACCESS_TOKEN = 'access_token';

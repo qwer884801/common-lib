@@ -36,16 +36,20 @@ export type AccountCarrierListProps<T extends AccountRecordCarrier> = {
 export type AccountCarrierPanelProps<T extends AccountRecordCarrier> = AccountCarrierListProps<T> & {
   title: ReactNode;
   countText?: ReactNode;
+  actions?: ReactNode;
   className?: string;
   headerClassName?: string;
 };
 
-export function AccountCarrierPanel<T extends AccountRecordCarrier>({ title, countText, className, headerClassName, carriers, ...listProps }: AccountCarrierPanelProps<T>) {
+export function AccountCarrierPanel<T extends AccountRecordCarrier>({ title, countText, actions, className, headerClassName, carriers, ...listProps }: AccountCarrierPanelProps<T>) {
   return (
     <section className={cn('grid gap-2', className)}>
       <div className={cn('flex min-w-0 items-center justify-between gap-2 text-xs text-muted-foreground', headerClassName)}>
         <strong className="text-sm text-foreground">{title}</strong>
-        {countText !== null && <span>{countText ?? `${carriers?.length ?? 0} 个账号`}</span>}
+        <div className="flex shrink-0 items-center gap-2">
+          {countText !== null && <span>{countText ?? `${carriers?.length ?? 0} 个账号`}</span>}
+          {actions}
+        </div>
       </div>
       <AccountCarrierList carriers={carriers} {...listProps} />
     </section>

@@ -9,6 +9,7 @@ import (
 const (
 	CredentialKindAccessToken  = "access_token"
 	CredentialKindMailbox      = "mailbox"
+	CredentialKindPassword     = "password"
 	CredentialKindPIN          = "pin"
 	CredentialKindSessionToken = "session_token"
 	CredentialKindToken        = "token"
