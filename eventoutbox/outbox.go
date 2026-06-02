@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/byte-v-forge/common-lib/eventbus"
+	"github.com/byte-v-forge/common-lib/eventcatalog"
 	commonv1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -74,6 +75,19 @@ func NewRecord(message eventbus.Message) (Record, error) {
 		IdempotencyKey: eventCtx.GetIdempotencyKey(),
 		Envelope:       payload,
 	}, nil
+}
+
+func NewRecordFor(
+	definition eventcatalog.Definition,
+	event proto.Message,
+	eventCtx *commonv1.EventContext,
+	attributes map[string]string,
+) (Record, error) {
+	message, err := definition.NewMessage(event, eventCtx, attributes)
+	if err != nil {
+		return Record{}, err
+	}
+	return NewRecord(message)
 }
 
 func PublishRows(ctx context.Context, publisher eventbus.Publisher, rows []Row, updates Updates, options PublishOptions) (int, error) {

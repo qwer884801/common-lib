@@ -163,6 +163,17 @@ func (b *Bus) PullWorkerConsumer(stream string, subject string, durable string, 
 	})
 }
 
+func (b *Bus) PullWorkerForDefinition(stream string, definition eventcatalog.Definition, batch int, ackWait time.Duration) (*PullConsumer, error) {
+	return b.PullWorkerForBinding(stream, definition.DefaultConsumerBinding(), batch, ackWait)
+}
+
+func (b *Bus) PullWorkerForBinding(stream string, binding eventcatalog.ConsumerBinding, batch int, ackWait time.Duration) (*PullConsumer, error) {
+	if err := binding.Validate(); err != nil {
+		return nil, err
+	}
+	return b.PullWorkerConsumer(stream, binding.Subject(), binding.DurableName(), batch, ackWait)
+}
+
 func (c *PullConsumer) Fetch(ctx context.Context, batch int) ([]eventbus.ReceivedMessage, error) {
 	if c == nil || c.sub == nil {
 		return nil, errors.New("nats pull consumer is not configured")

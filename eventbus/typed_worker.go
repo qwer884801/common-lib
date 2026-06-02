@@ -40,6 +40,7 @@ type TypedMessageHandler[T proto.Message] func(context.Context, T, ReceivedMessa
 type TypedConsumerWorkerConfig[T proto.Message] struct {
 	Name            string
 	Consumer        Consumer
+	Expected        ExpectedMessage
 	NewMessage      func() T
 	Validate        func(T) error
 	Handler         TypedMessageHandler[T]
@@ -54,6 +55,9 @@ func RunTypedConsumerWorker[T proto.Message](ctx context.Context, cfg TypedConsu
 		return nil
 	}
 	cfg = normalizeTypedConsumerWorkerConfig(cfg)
+	if err := cfg.Expected.ValidateEvent(cfg.NewMessage()); err != nil {
+		return fmt.Errorf("configure %s expected event: %w", cfg.Name, err)
+	}
 	return RunConsumerWorker(ctx, ConsumerWorkerConfig{
 		Name:            cfg.Name,
 		Consumer:        cfg.Consumer,
@@ -67,6 +71,11 @@ func RunTypedConsumerWorker[T proto.Message](ctx context.Context, cfg TypedConsu
 }
 
 func handleTypedMessage[T proto.Message](ctx context.Context, cfg TypedConsumerWorkerConfig[T], received ReceivedMessage) {
+	if err := cfg.Expected.ValidateReceived(received); err != nil {
+		cfg.Logf("validate %s envelope failed event_id=%s: %v", cfg.Name, EventID(received), err)
+		TermMessage(ctx, received, cfg.MalformedLabel, cfg.Logf)
+		return
+	}
 	message := cfg.NewMessage()
 	if err := UnmarshalPayload(received, message); err != nil {
 		cfg.Logf("decode %s failed event_id=%s: %v", cfg.Name, EventID(received), err)
