@@ -259,9 +259,8 @@ func publishDeadLetter(ctx context.Context, bus *Bus, durable string, envelope *
 		CorrelationID: correlationID,
 		TraceID:       traceID,
 	})
-	_, err := bus.Publish(ctx, eventbus.Message{
-		Subject: eventcatalog.DeadLetterTopic,
-		Event: &commonv1.DeadLetterEvent{
+	message, err := eventcatalog.DeadLetter.NewMessage(
+		&commonv1.DeadLetterEvent{
 			Context:               deadCtx,
 			OriginalSubject:       envelope.GetSubject(),
 			OriginalEventId:       originalID,
@@ -274,14 +273,18 @@ func publishDeadLetter(ctx context.Context, bus *Bus, durable string, envelope *
 			ErrorMessage:          reason,
 			CorrelationId:         correlationID,
 		},
-		Context: deadCtx,
-		Attributes: eventbus.Attributes(
+		deadCtx,
+		eventbus.Attributes(
 			"original_subject", envelope.GetSubject(),
 			"original_event_id", originalID,
 			"consumer_durable", durable,
 			"delivery_attempt", fmt.Sprintf("%d", attempt),
 		),
-	})
+	)
+	if err != nil {
+		return err
+	}
+	_, err = bus.Publish(ctx, message)
 	return err
 }
 

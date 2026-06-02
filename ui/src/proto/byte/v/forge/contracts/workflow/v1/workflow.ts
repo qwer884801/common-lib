@@ -5,6 +5,7 @@
 // source: byte/v/forge/contracts/workflow/v1/workflow.proto
 
 /* eslint-disable */
+import type { EventContext } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.workflow.v1";
 
@@ -121,8 +122,10 @@ export interface WorkflowStepUpdateRequest {
   status: WorkflowRunStatus;
   error_message: string;
   occurred_at_unix: number;
+  context: EventContext | undefined;
 }
 
 export interface WorkflowStepUpdateResponse {
   run: WorkflowRunProjection | undefined;
+  duplicate: boolean;
 }

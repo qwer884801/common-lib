@@ -14,9 +14,16 @@ import (
 const ProtobufContentType = "application/x-protobuf"
 
 var (
-	ErrEmptySubject = errors.New("event subject is required")
-	ErrEmptyEvent   = errors.New("event message is required")
-	ErrEmptyPayload = errors.New("event payload is required")
+	ErrEmptySubject        = errors.New("event subject is required")
+	ErrEmptyEvent          = errors.New("event message is required")
+	ErrEmptyPayload        = errors.New("event payload is required")
+	ErrEmptyEventContext   = errors.New("event context is required")
+	ErrEmptyEventID        = errors.New("event context event_id is required")
+	ErrEmptyEventName      = errors.New("event context event_name is required")
+	ErrEmptyEventVersion   = errors.New("event context event_version is required")
+	ErrEmptySourceService  = errors.New("event context source_service is required")
+	ErrEmptyIdempotencyKey = errors.New("event context idempotency_key is required")
+	ErrEmptyOccurredAt     = errors.New("event context occurred_at is required")
 )
 
 type Message struct {
@@ -60,6 +67,9 @@ func NewEnvelope(message Message) (*commonv1.EventEnvelope, error) {
 	if message.Event == nil {
 		return nil, ErrEmptyEvent
 	}
+	if err := ValidateContext(message.Context); err != nil {
+		return nil, err
+	}
 	payload, err := proto.Marshal(message.Event)
 	if err != nil {
 		return nil, fmt.Errorf("marshal event payload: %w", err)
@@ -72,6 +82,31 @@ func NewEnvelope(message Message) (*commonv1.EventEnvelope, error) {
 		ContentType: ProtobufContentType,
 		Attributes:  cloneAttributes(message.Attributes),
 	}, nil
+}
+
+func ValidateContext(eventCtx *commonv1.EventContext) error {
+	if eventCtx == nil {
+		return ErrEmptyEventContext
+	}
+	if strings.TrimSpace(eventCtx.GetEventId()) == "" {
+		return ErrEmptyEventID
+	}
+	if strings.TrimSpace(eventCtx.GetEventName()) == "" {
+		return ErrEmptyEventName
+	}
+	if strings.TrimSpace(eventCtx.GetEventVersion()) == "" {
+		return ErrEmptyEventVersion
+	}
+	if eventCtx.GetOccurredAt() == nil || !eventCtx.GetOccurredAt().IsValid() {
+		return ErrEmptyOccurredAt
+	}
+	if strings.TrimSpace(eventCtx.GetSourceService()) == "" {
+		return ErrEmptySourceService
+	}
+	if strings.TrimSpace(eventCtx.GetIdempotencyKey()) == "" {
+		return ErrEmptyIdempotencyKey
+	}
+	return nil
 }
 
 func UnmarshalPayload(message ReceivedMessage, event proto.Message) error {

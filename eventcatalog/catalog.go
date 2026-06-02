@@ -91,6 +91,14 @@ var (
 		PayloadType:  "byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent",
 		OwnerService: "mailbox-api",
 	}
+	DeadLetter = Definition{
+		Subject:      DeadLetterTopic,
+		EventName:    "platform.dead_letter",
+		EventVersion: EventVersionV1,
+		Kind:         KindFact,
+		PayloadType:  "byte.v.forge.contracts.common.v1.DeadLetterEvent",
+		OwnerService: "platform",
+	}
 )
 
 func All() []Definition {
@@ -102,7 +110,7 @@ func All() []Definition {
 		MailboxEmailReceived,
 		AccountChanged,
 		WAOTPReceived,
-		{Subject: DeadLetterTopic, EventName: "platform.dead_letter", EventVersion: EventVersionV1, Kind: KindFact, PayloadType: "byte.v.forge.contracts.common.v1.DeadLetterEvent", OwnerService: "platform"},
+		DeadLetter,
 	}
 }
 

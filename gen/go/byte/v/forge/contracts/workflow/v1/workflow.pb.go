@@ -7,6 +7,7 @@
 package workflowv1
 
 import (
+	v1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -891,6 +892,7 @@ type WorkflowStepUpdateRequest struct {
 	Status         WorkflowRunStatus      `protobuf:"varint,7,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
 	ErrorMessage   string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	OccurredAtUnix int64                  `protobuf:"varint,9,opt,name=occurred_at_unix,json=occurredAtUnix,proto3" json:"occurred_at_unix,omitempty"`
+	Context        *v1.EventContext       `protobuf:"bytes,10,opt,name=context,proto3" json:"context,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -988,9 +990,17 @@ func (x *WorkflowStepUpdateRequest) GetOccurredAtUnix() int64 {
 	return 0
 }
 
+func (x *WorkflowStepUpdateRequest) GetContext() *v1.EventContext {
+	if x != nil {
+		return x.Context
+	}
+	return nil
+}
+
 type WorkflowStepUpdateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Run           *WorkflowRunProjection `protobuf:"bytes,1,opt,name=run,proto3" json:"run,omitempty"`
+	Duplicate     bool                   `protobuf:"varint,2,opt,name=duplicate,proto3" json:"duplicate,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1032,11 +1042,18 @@ func (x *WorkflowStepUpdateResponse) GetRun() *WorkflowRunProjection {
 	return nil
 }
 
+func (x *WorkflowStepUpdateResponse) GetDuplicate() bool {
+	if x != nil {
+		return x.Duplicate
+	}
+	return false
+}
+
 var File_byte_v_forge_contracts_workflow_v1_workflow_proto protoreflect.FileDescriptor
 
 const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\n" +
-	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\"\xd6\x06\n" +
+	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\"\xd6\x06\n" +
 	"\x16WorkflowRuntimeSummary\x12^\n" +
 	"\rengine_status\x18\x01 \x01(\x0e29.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatusR\fengineStatus\x12%\n" +
 	"\x0eengine_message\x18\x02 \x01(\tR\rengineMessage\x12X\n" +
@@ -1127,7 +1144,7 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\vgraph_nodes\x18\f \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
 	"graphNodes\x12V\n" +
 	"\vgraph_edges\x18\r \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
-	"graphEdges\"\xef\x02\n" +
+	"graphEdges\"\xb9\x03\n" +
 	"\x19WorkflowStepUpdateRequest\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
@@ -1138,9 +1155,12 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\tnode_name\x18\x06 \x01(\tR\bnodeName\x12M\n" +
 	"\x06status\x18\a \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12#\n" +
 	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12(\n" +
-	"\x10occurred_at_unix\x18\t \x01(\x03R\x0eoccurredAtUnix\"i\n" +
+	"\x10occurred_at_unix\x18\t \x01(\x03R\x0eoccurredAtUnix\x12H\n" +
+	"\acontext\x18\n" +
+	" \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\"\x87\x01\n" +
 	"\x1aWorkflowStepUpdateResponse\x12K\n" +
-	"\x03run\x18\x01 \x01(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x03run*\xc4\x01\n" +
+	"\x03run\x18\x01 \x01(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x03run\x12\x1c\n" +
+	"\tduplicate\x18\x02 \x01(\bR\tduplicate*\xc4\x01\n" +
 	"\x15WorkflowRuntimeStatus\x12'\n" +
 	"#WORKFLOW_RUNTIME_STATUS_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aWORKFLOW_RUNTIME_AVAILABLE\x10\x01\x12\x1d\n" +
@@ -1184,6 +1204,7 @@ var file_byte_v_forge_contracts_workflow_v1_workflow_proto_goTypes = []any{
 	(*WorkflowRunProjection)(nil),      // 8: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
 	(*WorkflowStepUpdateRequest)(nil),  // 9: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest
 	(*WorkflowStepUpdateResponse)(nil), // 10: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse
+	(*v1.EventContext)(nil),            // 11: byte.v.forge.contracts.common.v1.EventContext
 }
 var file_byte_v_forge_contracts_workflow_v1_workflow_proto_depIdxs = []int32{
 	0,  // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.engine_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
@@ -1201,12 +1222,13 @@ var file_byte_v_forge_contracts_workflow_v1_workflow_proto_depIdxs = []int32{
 	6,  // 12: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
 	7,  // 13: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
 	1,  // 14: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
-	8,  // 15: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse.run:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	11, // 15: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
+	8,  // 16: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse.run:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_workflow_v1_workflow_proto_init() }

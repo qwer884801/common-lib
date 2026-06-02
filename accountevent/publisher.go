@@ -56,10 +56,14 @@ func (p *Publisher) PublishChanged(ctx context.Context, kind accountv1.AccountCh
 	if err := accountmodel.ValidateKey(account.GetKey()); err != nil {
 		return eventbus.PublishAck{}, err
 	}
-	return p.publisher.Publish(ctx, Message(kind, account, p.sourceService))
+	message, err := Message(kind, account, p.sourceService)
+	if err != nil {
+		return eventbus.PublishAck{}, err
+	}
+	return p.publisher.Publish(ctx, message)
 }
 
-func Message(kind accountv1.AccountChangeKind, account *accountv1.Account, sourceService string) eventbus.Message {
+func Message(kind accountv1.AccountChangeKind, account *accountv1.Account, sourceService string) (eventbus.Message, error) {
 	if account == nil {
 		account = accountmodel.Account(nil)
 	}
@@ -73,16 +77,15 @@ func Message(kind accountv1.AccountChangeKind, account *accountv1.Account, sourc
 		SourceService: metadata.SourceService,
 		CorrelationID: metadata.CorrelationID,
 	})
-	return eventbus.Message{
-		Subject: eventcatalog.AccountChanged.Subject,
-		Event: &accountv1.AccountChangedEvent{
+	return eventcatalog.AccountChanged.NewMessage(
+		&accountv1.AccountChangedEvent{
 			Context:    context,
 			ChangeKind: metadata.Kind,
 			Account:    account,
 		},
-		Context:    context,
-		Attributes: metadata.Attributes,
-	}
+		context,
+		metadata.Attributes,
+	)
 }
 
 func firstNonEmpty(values ...string) string {

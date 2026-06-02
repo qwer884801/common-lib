@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package byte.v.forge.contracts.workflow.v1;
 
+import "byte/v/forge/contracts/common/v1/common.proto";
+
 option csharp_namespace = "ByteVForge.Contracts.Workflow.V1";
 option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/workflow/v1;workflowv1";
 option java_multiple_files = true;
@@ -120,8 +122,10 @@ message WorkflowStepUpdateRequest {
   WorkflowRunStatus status = 7;
   string error_message = 8;
   int64 occurred_at_unix = 9;
+  byte.v.forge.contracts.common.v1.EventContext context = 10;
 }
 
 message WorkflowStepUpdateResponse {
   WorkflowRunProjection run = 1;
+  bool duplicate = 2;
 }
