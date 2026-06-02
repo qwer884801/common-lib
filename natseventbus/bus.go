@@ -60,6 +60,17 @@ func Connect(cfg Config, opts ...nats.Option) (*Bus, error) {
 	return &Bus{conn: conn, js: js, stream: DefaultStream}, nil
 }
 
+func ConnectRequired(cfg Config, requiredMessage string, opts ...nats.Option) (*Bus, error) {
+	if strings.TrimSpace(cfg.URL) == "" {
+		requiredMessage = strings.TrimSpace(requiredMessage)
+		if requiredMessage == "" {
+			requiredMessage = "nats url is required"
+		}
+		return nil, errors.New(requiredMessage)
+	}
+	return Connect(cfg, opts...)
+}
+
 func (b *Bus) Close() {
 	if b == nil || b.conn == nil {
 		return

@@ -21,12 +21,53 @@ type Config struct {
 	BufferSize int
 }
 
+type ServiceConfig struct {
+	URL             string
+	Service         string
+	ClientName      string
+	Subject         string
+	BufferSize      int
+	RequiredMessage string
+}
+
 type Bus struct {
 	conn    *nats.Conn
 	hub     *hotstream.Hub
 	subject string
 	nodeID  string
 	sub     *nats.Subscription
+}
+
+func ConnectService(ctx context.Context, cfg ServiceConfig, opts ...nats.Option) (*Bus, error) {
+	if strings.TrimSpace(cfg.URL) == "" {
+		message := strings.TrimSpace(cfg.RequiredMessage)
+		if message == "" {
+			message = "hotstream nats url is required"
+		}
+		return nil, errors.New(message)
+	}
+	clientName := strings.TrimSpace(cfg.ClientName)
+	service := strings.TrimSpace(cfg.Service)
+	if clientName == "" {
+		clientName = service
+	}
+	if clientName == "" {
+		clientName = "byte-v-forge"
+	}
+	subject := strings.TrimSpace(cfg.Subject)
+	if subject == "" {
+		subjectService := service
+		if subjectService == "" {
+			subjectService = clientName
+		}
+		subject = hotstream.ServiceStateSubject(subjectService)
+	}
+	return Connect(ctx, Config{
+		URL:        cfg.URL,
+		ClientName: clientName,
+		Subject:    subject,
+		BufferSize: cfg.BufferSize,
+	}, opts...)
 }
 
 func Connect(ctx context.Context, cfg Config, opts ...nats.Option) (*Bus, error) {
