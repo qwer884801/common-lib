@@ -20,4 +20,5 @@
 
 - Run `scripts/check-boundaries.sh` before moving reusable code into `common-lib`.
 - Run `scripts/check-proto-breaking.py --base <ref>` before changing public proto contracts.
+- Run `scripts/check-event-catalog.py` before adding platform events or consumers.
 - Run `scripts/list-contract-consumers.py --source-root ..` when planning a contract migration to identify impacted repositories.

@@ -33,6 +33,9 @@ else
   echo "skip proto breaking check; base ref unavailable: ${proto_breaking_base}"
 fi
 
+echo "event catalog check"
+python3 scripts/check-event-catalog.py
+
 for module in "${modules[@]}"; do
   if [[ -f "${module}/go.mod" ]]; then
     echo "go vet ${module}"

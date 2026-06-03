@@ -31,6 +31,7 @@
 - 逻辑分层见 `docs/layers.md`。
 - `scripts/check-boundaries.sh` 检查公共库是否反向依赖业务仓、UI 是否导入 private/provider 路径、公开 proto 是否暴露 internal/private/provider namespace。
 - `scripts/check-proto-breaking.py --base origin/main` 检查公开 proto 的字段编号、字段名称/类型、枚举编号和 RPC 删除。
+- `scripts/check-event-catalog.py` 检查平台事件 catalog 的 subject、event name、payload type、owner、command durable 与重试语义。
 - `scripts/list-contract-consumers.py --source-root ..` 列出消费 common-lib 契约的 sibling 仓，用于规划跨仓契约迁移批次。
 
 ## 生成
