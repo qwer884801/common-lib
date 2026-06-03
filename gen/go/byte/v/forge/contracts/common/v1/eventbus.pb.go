@@ -21,16 +21,65 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type EventKind int32
+
+const (
+	EventKind_EVENT_KIND_UNSPECIFIED EventKind = 0
+	EventKind_EVENT_KIND_FACT        EventKind = 1
+	EventKind_EVENT_KIND_COMMAND     EventKind = 2
+)
+
+// Enum value maps for EventKind.
+var (
+	EventKind_name = map[int32]string{
+		0: "EVENT_KIND_UNSPECIFIED",
+		1: "EVENT_KIND_FACT",
+		2: "EVENT_KIND_COMMAND",
+	}
+	EventKind_value = map[string]int32{
+		"EVENT_KIND_UNSPECIFIED": 0,
+		"EVENT_KIND_FACT":        1,
+		"EVENT_KIND_COMMAND":     2,
+	}
+)
+
+func (x EventKind) Enum() *EventKind {
+	p := new(EventKind)
+	*p = x
+	return p
+}
+
+func (x EventKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EventKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_enumTypes[0].Descriptor()
+}
+
+func (EventKind) Type() protoreflect.EnumType {
+	return &file_byte_v_forge_contracts_common_v1_eventbus_proto_enumTypes[0]
+}
+
+func (x EventKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EventKind.Descriptor instead.
+func (EventKind) EnumDescriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{0}
+}
+
 type EventEnvelope struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Context       *EventContext          `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
-	Subject       string                 `protobuf:"bytes,2,opt,name=subject,proto3" json:"subject,omitempty"`
-	ProtoType     string                 `protobuf:"bytes,3,opt,name=proto_type,json=protoType,proto3" json:"proto_type,omitempty"`
-	Payload       []byte                 `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`
-	ContentType   string                 `protobuf:"bytes,5,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
-	Attributes    map[string]string      `protobuf:"bytes,6,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Metadata        *EventMetadata         `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Subject         string                 `protobuf:"bytes,2,opt,name=subject,proto3" json:"subject,omitempty"`
+	PayloadType     string                 `protobuf:"bytes,3,opt,name=payload_type,json=payloadType,proto3" json:"payload_type,omitempty"`
+	Payload         []byte                 `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`
+	DataContentType string                 `protobuf:"bytes,5,opt,name=data_content_type,json=dataContentType,proto3" json:"data_content_type,omitempty"`
+	Extensions      map[string]string      `protobuf:"bytes,6,rep,name=extensions,proto3" json:"extensions,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *EventEnvelope) Reset() {
@@ -63,9 +112,9 @@ func (*EventEnvelope) Descriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventEnvelope) GetContext() *EventContext {
+func (x *EventEnvelope) GetMetadata() *EventMetadata {
 	if x != nil {
-		return x.Context
+		return x.Metadata
 	}
 	return nil
 }
@@ -77,9 +126,9 @@ func (x *EventEnvelope) GetSubject() string {
 	return ""
 }
 
-func (x *EventEnvelope) GetProtoType() string {
+func (x *EventEnvelope) GetPayloadType() string {
 	if x != nil {
-		return x.ProtoType
+		return x.PayloadType
 	}
 	return ""
 }
@@ -91,16 +140,192 @@ func (x *EventEnvelope) GetPayload() []byte {
 	return nil
 }
 
-func (x *EventEnvelope) GetContentType() string {
+func (x *EventEnvelope) GetDataContentType() string {
 	if x != nil {
-		return x.ContentType
+		return x.DataContentType
 	}
 	return ""
 }
 
-func (x *EventEnvelope) GetAttributes() map[string]string {
+func (x *EventEnvelope) GetExtensions() map[string]string {
 	if x != nil {
-		return x.Attributes
+		return x.Extensions
+	}
+	return nil
+}
+
+type EventDefinition struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Subject           string                 `protobuf:"bytes,1,opt,name=subject,proto3" json:"subject,omitempty"`
+	EventName         string                 `protobuf:"bytes,2,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	EventVersion      string                 `protobuf:"bytes,3,opt,name=event_version,json=eventVersion,proto3" json:"event_version,omitempty"`
+	Kind              EventKind              `protobuf:"varint,4,opt,name=kind,proto3,enum=byte.v.forge.contracts.common.v1.EventKind" json:"kind,omitempty"`
+	PayloadType       string                 `protobuf:"bytes,5,opt,name=payload_type,json=payloadType,proto3" json:"payload_type,omitempty"`
+	OwnerService      string                 `protobuf:"bytes,6,opt,name=owner_service,json=ownerService,proto3" json:"owner_service,omitempty"`
+	ConsumerDurable   string                 `protobuf:"bytes,7,opt,name=consumer_durable,json=consumerDurable,proto3" json:"consumer_durable,omitempty"`
+	Retryable         bool                   `protobuf:"varint,8,opt,name=retryable,proto3" json:"retryable,omitempty"`
+	MaxDeliveries     int32                  `protobuf:"varint,9,opt,name=max_deliveries,json=maxDeliveries,proto3" json:"max_deliveries,omitempty"`
+	RetryDelaySeconds int32                  `protobuf:"varint,10,opt,name=retry_delay_seconds,json=retryDelaySeconds,proto3" json:"retry_delay_seconds,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *EventDefinition) Reset() {
+	*x = EventDefinition{}
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventDefinition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventDefinition) ProtoMessage() {}
+
+func (x *EventDefinition) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventDefinition.ProtoReflect.Descriptor instead.
+func (*EventDefinition) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *EventDefinition) GetSubject() string {
+	if x != nil {
+		return x.Subject
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetEventName() string {
+	if x != nil {
+		return x.EventName
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetEventVersion() string {
+	if x != nil {
+		return x.EventVersion
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetKind() EventKind {
+	if x != nil {
+		return x.Kind
+	}
+	return EventKind_EVENT_KIND_UNSPECIFIED
+}
+
+func (x *EventDefinition) GetPayloadType() string {
+	if x != nil {
+		return x.PayloadType
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetOwnerService() string {
+	if x != nil {
+		return x.OwnerService
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetConsumerDurable() string {
+	if x != nil {
+		return x.ConsumerDurable
+	}
+	return ""
+}
+
+func (x *EventDefinition) GetRetryable() bool {
+	if x != nil {
+		return x.Retryable
+	}
+	return false
+}
+
+func (x *EventDefinition) GetMaxDeliveries() int32 {
+	if x != nil {
+		return x.MaxDeliveries
+	}
+	return 0
+}
+
+func (x *EventDefinition) GetRetryDelaySeconds() int32 {
+	if x != nil {
+		return x.RetryDelaySeconds
+	}
+	return 0
+}
+
+type EventCatalog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamName    string                 `protobuf:"bytes,1,opt,name=stream_name,json=streamName,proto3" json:"stream_name,omitempty"`
+	StreamSubject string                 `protobuf:"bytes,2,opt,name=stream_subject,json=streamSubject,proto3" json:"stream_subject,omitempty"`
+	Definitions   []*EventDefinition     `protobuf:"bytes,3,rep,name=definitions,proto3" json:"definitions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EventCatalog) Reset() {
+	*x = EventCatalog{}
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventCatalog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventCatalog) ProtoMessage() {}
+
+func (x *EventCatalog) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventCatalog.ProtoReflect.Descriptor instead.
+func (*EventCatalog) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EventCatalog) GetStreamName() string {
+	if x != nil {
+		return x.StreamName
+	}
+	return ""
+}
+
+func (x *EventCatalog) GetStreamSubject() string {
+	if x != nil {
+		return x.StreamSubject
+	}
+	return ""
+}
+
+func (x *EventCatalog) GetDefinitions() []*EventDefinition {
+	if x != nil {
+		return x.Definitions
 	}
 	return nil
 }
@@ -116,7 +341,7 @@ type EventPublishAck struct {
 
 func (x *EventPublishAck) Reset() {
 	*x = EventPublishAck{}
-	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[1]
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -128,7 +353,7 @@ func (x *EventPublishAck) String() string {
 func (*EventPublishAck) ProtoMessage() {}
 
 func (x *EventPublishAck) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[1]
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -141,7 +366,7 @@ func (x *EventPublishAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventPublishAck.ProtoReflect.Descriptor instead.
 func (*EventPublishAck) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{1}
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *EventPublishAck) GetStream() string {
@@ -166,25 +391,25 @@ func (x *EventPublishAck) GetDuplicate() bool {
 }
 
 type DeadLetterEvent struct {
-	state                 protoimpl.MessageState `protogen:"open.v1"`
-	Context               *EventContext          `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
-	OriginalSubject       string                 `protobuf:"bytes,2,opt,name=original_subject,json=originalSubject,proto3" json:"original_subject,omitempty"`
-	OriginalEventId       string                 `protobuf:"bytes,3,opt,name=original_event_id,json=originalEventId,proto3" json:"original_event_id,omitempty"`
-	OriginalEventName     string                 `protobuf:"bytes,4,opt,name=original_event_name,json=originalEventName,proto3" json:"original_event_name,omitempty"`
-	OriginalEventVersion  string                 `protobuf:"bytes,5,opt,name=original_event_version,json=originalEventVersion,proto3" json:"original_event_version,omitempty"`
-	OriginalSourceService string                 `protobuf:"bytes,6,opt,name=original_source_service,json=originalSourceService,proto3" json:"original_source_service,omitempty"`
-	ConsumerDurable       string                 `protobuf:"bytes,7,opt,name=consumer_durable,json=consumerDurable,proto3" json:"consumer_durable,omitempty"`
-	DeliveryAttempt       int32                  `protobuf:"varint,8,opt,name=delivery_attempt,json=deliveryAttempt,proto3" json:"delivery_attempt,omitempty"`
-	ErrorCode             string                 `protobuf:"bytes,9,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
-	ErrorMessage          string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	CorrelationId         string                 `protobuf:"bytes,11,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Metadata             *EventMetadata         `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	OriginalSubject      string                 `protobuf:"bytes,2,opt,name=original_subject,json=originalSubject,proto3" json:"original_subject,omitempty"`
+	OriginalEventId      string                 `protobuf:"bytes,3,opt,name=original_event_id,json=originalEventId,proto3" json:"original_event_id,omitempty"`
+	OriginalEventType    string                 `protobuf:"bytes,4,opt,name=original_event_type,json=originalEventType,proto3" json:"original_event_type,omitempty"`
+	OriginalEventVersion string                 `protobuf:"bytes,5,opt,name=original_event_version,json=originalEventVersion,proto3" json:"original_event_version,omitempty"`
+	OriginalSource       string                 `protobuf:"bytes,6,opt,name=original_source,json=originalSource,proto3" json:"original_source,omitempty"`
+	ConsumerDurable      string                 `protobuf:"bytes,7,opt,name=consumer_durable,json=consumerDurable,proto3" json:"consumer_durable,omitempty"`
+	DeliveryAttempt      int32                  `protobuf:"varint,8,opt,name=delivery_attempt,json=deliveryAttempt,proto3" json:"delivery_attempt,omitempty"`
+	ErrorCode            string                 `protobuf:"bytes,9,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage         string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	CorrelationId        string                 `protobuf:"bytes,11,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *DeadLetterEvent) Reset() {
 	*x = DeadLetterEvent{}
-	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[2]
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -196,7 +421,7 @@ func (x *DeadLetterEvent) String() string {
 func (*DeadLetterEvent) ProtoMessage() {}
 
 func (x *DeadLetterEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[2]
+	mi := &file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -209,12 +434,12 @@ func (x *DeadLetterEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeadLetterEvent.ProtoReflect.Descriptor instead.
 func (*DeadLetterEvent) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{2}
+	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *DeadLetterEvent) GetContext() *EventContext {
+func (x *DeadLetterEvent) GetMetadata() *EventMetadata {
 	if x != nil {
-		return x.Context
+		return x.Metadata
 	}
 	return nil
 }
@@ -233,9 +458,9 @@ func (x *DeadLetterEvent) GetOriginalEventId() string {
 	return ""
 }
 
-func (x *DeadLetterEvent) GetOriginalEventName() string {
+func (x *DeadLetterEvent) GetOriginalEventType() string {
 	if x != nil {
-		return x.OriginalEventName
+		return x.OriginalEventType
 	}
 	return ""
 }
@@ -247,9 +472,9 @@ func (x *DeadLetterEvent) GetOriginalEventVersion() string {
 	return ""
 }
 
-func (x *DeadLetterEvent) GetOriginalSourceService() string {
+func (x *DeadLetterEvent) GetOriginalSource() string {
 	if x != nil {
-		return x.OriginalSourceService
+		return x.OriginalSource
 	}
 	return ""
 }
@@ -293,38 +518,59 @@ var File_byte_v_forge_contracts_common_v1_eventbus_proto protoreflect.FileDescri
 
 const file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDesc = "" +
 	"\n" +
-	"/byte/v/forge/contracts/common/v1/eventbus.proto\x12 byte.v.forge.contracts.common.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\"\xef\x02\n" +
-	"\rEventEnvelope\x12H\n" +
-	"\acontext\x18\x01 \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\x12\x18\n" +
-	"\asubject\x18\x02 \x01(\tR\asubject\x12\x1d\n" +
+	"/byte/v/forge/contracts/common/v1/eventbus.proto\x12 byte.v.forge.contracts.common.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\"\xff\x02\n" +
+	"\rEventEnvelope\x12K\n" +
+	"\bmetadata\x18\x01 \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\x12\x18\n" +
+	"\asubject\x18\x02 \x01(\tR\asubject\x12!\n" +
+	"\fpayload_type\x18\x03 \x01(\tR\vpayloadType\x12\x18\n" +
+	"\apayload\x18\x04 \x01(\fR\apayload\x12*\n" +
+	"\x11data_content_type\x18\x05 \x01(\tR\x0fdataContentType\x12_\n" +
 	"\n" +
-	"proto_type\x18\x03 \x01(\tR\tprotoType\x12\x18\n" +
-	"\apayload\x18\x04 \x01(\fR\apayload\x12!\n" +
-	"\fcontent_type\x18\x05 \x01(\tR\vcontentType\x12_\n" +
-	"\n" +
-	"attributes\x18\x06 \x03(\v2?.byte.v.forge.contracts.common.v1.EventEnvelope.AttributesEntryR\n" +
-	"attributes\x1a=\n" +
-	"\x0fAttributesEntry\x12\x10\n" +
+	"extensions\x18\x06 \x03(\v2?.byte.v.forge.contracts.common.v1.EventEnvelope.ExtensionsEntryR\n" +
+	"extensions\x1a=\n" +
+	"\x0fExtensionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"c\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x98\x03\n" +
+	"\x0fEventDefinition\x12\x18\n" +
+	"\asubject\x18\x01 \x01(\tR\asubject\x12\x1d\n" +
+	"\n" +
+	"event_name\x18\x02 \x01(\tR\teventName\x12#\n" +
+	"\revent_version\x18\x03 \x01(\tR\feventVersion\x12?\n" +
+	"\x04kind\x18\x04 \x01(\x0e2+.byte.v.forge.contracts.common.v1.EventKindR\x04kind\x12!\n" +
+	"\fpayload_type\x18\x05 \x01(\tR\vpayloadType\x12#\n" +
+	"\rowner_service\x18\x06 \x01(\tR\fownerService\x12)\n" +
+	"\x10consumer_durable\x18\a \x01(\tR\x0fconsumerDurable\x12\x1c\n" +
+	"\tretryable\x18\b \x01(\bR\tretryable\x12%\n" +
+	"\x0emax_deliveries\x18\t \x01(\x05R\rmaxDeliveries\x12.\n" +
+	"\x13retry_delay_seconds\x18\n" +
+	" \x01(\x05R\x11retryDelaySeconds\"\xab\x01\n" +
+	"\fEventCatalog\x12\x1f\n" +
+	"\vstream_name\x18\x01 \x01(\tR\n" +
+	"streamName\x12%\n" +
+	"\x0estream_subject\x18\x02 \x01(\tR\rstreamSubject\x12S\n" +
+	"\vdefinitions\x18\x03 \x03(\v21.byte.v.forge.contracts.common.v1.EventDefinitionR\vdefinitions\"c\n" +
 	"\x0fEventPublishAck\x12\x16\n" +
 	"\x06stream\x18\x01 \x01(\tR\x06stream\x12\x1a\n" +
 	"\bsequence\x18\x02 \x01(\x04R\bsequence\x12\x1c\n" +
-	"\tduplicate\x18\x03 \x01(\bR\tduplicate\"\x91\x04\n" +
-	"\x0fDeadLetterEvent\x12H\n" +
-	"\acontext\x18\x01 \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\x12)\n" +
+	"\tduplicate\x18\x03 \x01(\bR\tduplicate\"\x85\x04\n" +
+	"\x0fDeadLetterEvent\x12K\n" +
+	"\bmetadata\x18\x01 \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\x12)\n" +
 	"\x10original_subject\x18\x02 \x01(\tR\x0foriginalSubject\x12*\n" +
 	"\x11original_event_id\x18\x03 \x01(\tR\x0foriginalEventId\x12.\n" +
-	"\x13original_event_name\x18\x04 \x01(\tR\x11originalEventName\x124\n" +
-	"\x16original_event_version\x18\x05 \x01(\tR\x14originalEventVersion\x126\n" +
-	"\x17original_source_service\x18\x06 \x01(\tR\x15originalSourceService\x12)\n" +
+	"\x13original_event_type\x18\x04 \x01(\tR\x11originalEventType\x124\n" +
+	"\x16original_event_version\x18\x05 \x01(\tR\x14originalEventVersion\x12'\n" +
+	"\x0foriginal_source\x18\x06 \x01(\tR\x0eoriginalSource\x12)\n" +
 	"\x10consumer_durable\x18\a \x01(\tR\x0fconsumerDurable\x12)\n" +
 	"\x10delivery_attempt\x18\b \x01(\x05R\x0fdeliveryAttempt\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\t \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\n" +
 	" \x01(\tR\ferrorMessage\x12%\n" +
-	"\x0ecorrelation_id\x18\v \x01(\tR\rcorrelationIdB\xcc\x01\n" +
+	"\x0ecorrelation_id\x18\v \x01(\tR\rcorrelationId*T\n" +
+	"\tEventKind\x12\x1a\n" +
+	"\x16EVENT_KIND_UNSPECIFIED\x10\x00\x12\x13\n" +
+	"\x0fEVENT_KIND_FACT\x10\x01\x12\x16\n" +
+	"\x12EVENT_KIND_COMMAND\x10\x02B\xcc\x01\n" +
 	"\"com.bytevforge.contracts.common.v1B\rEventbusProtoP\x01ZSgithub.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1;commonv1\xaa\x02\x1eByteVForge.Contracts.Common.V1\xca\x02\x1eByteVForge\\Contracts\\Common\\V1b\x06proto3"
 
 var (
@@ -339,23 +585,29 @@ func file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescGZIP() []byte {
 	return file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDescData
 }
 
-var file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_byte_v_forge_contracts_common_v1_eventbus_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_byte_v_forge_contracts_common_v1_eventbus_proto_goTypes = []any{
-	(*EventEnvelope)(nil),   // 0: byte.v.forge.contracts.common.v1.EventEnvelope
-	(*EventPublishAck)(nil), // 1: byte.v.forge.contracts.common.v1.EventPublishAck
-	(*DeadLetterEvent)(nil), // 2: byte.v.forge.contracts.common.v1.DeadLetterEvent
-	nil,                     // 3: byte.v.forge.contracts.common.v1.EventEnvelope.AttributesEntry
-	(*EventContext)(nil),    // 4: byte.v.forge.contracts.common.v1.EventContext
+	(EventKind)(0),          // 0: byte.v.forge.contracts.common.v1.EventKind
+	(*EventEnvelope)(nil),   // 1: byte.v.forge.contracts.common.v1.EventEnvelope
+	(*EventDefinition)(nil), // 2: byte.v.forge.contracts.common.v1.EventDefinition
+	(*EventCatalog)(nil),    // 3: byte.v.forge.contracts.common.v1.EventCatalog
+	(*EventPublishAck)(nil), // 4: byte.v.forge.contracts.common.v1.EventPublishAck
+	(*DeadLetterEvent)(nil), // 5: byte.v.forge.contracts.common.v1.DeadLetterEvent
+	nil,                     // 6: byte.v.forge.contracts.common.v1.EventEnvelope.ExtensionsEntry
+	(*EventMetadata)(nil),   // 7: byte.v.forge.contracts.common.v1.EventMetadata
 }
 var file_byte_v_forge_contracts_common_v1_eventbus_proto_depIdxs = []int32{
-	4, // 0: byte.v.forge.contracts.common.v1.EventEnvelope.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
-	3, // 1: byte.v.forge.contracts.common.v1.EventEnvelope.attributes:type_name -> byte.v.forge.contracts.common.v1.EventEnvelope.AttributesEntry
-	4, // 2: byte.v.forge.contracts.common.v1.DeadLetterEvent.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	7, // 0: byte.v.forge.contracts.common.v1.EventEnvelope.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
+	6, // 1: byte.v.forge.contracts.common.v1.EventEnvelope.extensions:type_name -> byte.v.forge.contracts.common.v1.EventEnvelope.ExtensionsEntry
+	0, // 2: byte.v.forge.contracts.common.v1.EventDefinition.kind:type_name -> byte.v.forge.contracts.common.v1.EventKind
+	2, // 3: byte.v.forge.contracts.common.v1.EventCatalog.definitions:type_name -> byte.v.forge.contracts.common.v1.EventDefinition
+	7, // 4: byte.v.forge.contracts.common.v1.DeadLetterEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_common_v1_eventbus_proto_init() }
@@ -369,13 +621,14 @@ func file_byte_v_forge_contracts_common_v1_eventbus_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDesc), len(file_byte_v_forge_contracts_common_v1_eventbus_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_byte_v_forge_contracts_common_v1_eventbus_proto_goTypes,
 		DependencyIndexes: file_byte_v_forge_contracts_common_v1_eventbus_proto_depIdxs,
+		EnumInfos:         file_byte_v_forge_contracts_common_v1_eventbus_proto_enumTypes,
 		MessageInfos:      file_byte_v_forge_contracts_common_v1_eventbus_proto_msgTypes,
 	}.Build()
 	File_byte_v_forge_contracts_common_v1_eventbus_proto = out.File

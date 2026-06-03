@@ -77,7 +77,7 @@ func (WaOtpSource) EnumDescriptor() ([]byte, []int) {
 
 type WaOtpReceivedEvent struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Context              *v1.EventContext       `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
+	Metadata             *v1.EventMetadata      `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	WorkspaceId          string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	E164Number           string                 `protobuf:"bytes,3,opt,name=e164_number,json=e164Number,proto3" json:"e164_number,omitempty"`
 	Source               WaOtpSource            `protobuf:"varint,4,opt,name=source,proto3,enum=byte.v.forge.contracts.wa.v1.WaOtpSource" json:"source,omitempty"`
@@ -123,9 +123,9 @@ func (*WaOtpReceivedEvent) Descriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_wa_v1_wa_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *WaOtpReceivedEvent) GetContext() *v1.EventContext {
+func (x *WaOtpReceivedEvent) GetMetadata() *v1.EventMetadata {
 	if x != nil {
-		return x.Context
+		return x.Metadata
 	}
 	return nil
 }
@@ -211,9 +211,9 @@ var File_byte_v_forge_contracts_wa_v1_wa_proto protoreflect.FileDescriptor
 
 const file_byte_v_forge_contracts_wa_v1_wa_proto_rawDesc = "" +
 	"\n" +
-	"%byte/v/forge/contracts/wa/v1/wa.proto\x12\x1cbyte.v.forge.contracts.wa.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9f\x04\n" +
-	"\x12WaOtpReceivedEvent\x12H\n" +
-	"\acontext\x18\x01 \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\x12!\n" +
+	"%byte/v/forge/contracts/wa/v1/wa.proto\x12\x1cbyte.v.forge.contracts.wa.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa2\x04\n" +
+	"\x12WaOtpReceivedEvent\x12K\n" +
+	"\bmetadata\x18\x01 \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12\x1f\n" +
 	"\ve164_number\x18\x03 \x01(\tR\n" +
 	"e164Number\x12A\n" +
@@ -253,11 +253,11 @@ var file_byte_v_forge_contracts_wa_v1_wa_proto_msgTypes = make([]protoimpl.Messa
 var file_byte_v_forge_contracts_wa_v1_wa_proto_goTypes = []any{
 	(WaOtpSource)(0),              // 0: byte.v.forge.contracts.wa.v1.WaOtpSource
 	(*WaOtpReceivedEvent)(nil),    // 1: byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent
-	(*v1.EventContext)(nil),       // 2: byte.v.forge.contracts.common.v1.EventContext
+	(*v1.EventMetadata)(nil),      // 2: byte.v.forge.contracts.common.v1.EventMetadata
 	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
 }
 var file_byte_v_forge_contracts_wa_v1_wa_proto_depIdxs = []int32{
-	2, // 0: byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
+	2, // 0: byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
 	0, // 1: byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent.source:type_name -> byte.v.forge.contracts.wa.v1.WaOtpSource
 	3, // 2: byte.v.forge.contracts.wa.v1.WaOtpReceivedEvent.received_at:type_name -> google.protobuf.Timestamp
 	3, // [3:3] is the sub-list for method output_type

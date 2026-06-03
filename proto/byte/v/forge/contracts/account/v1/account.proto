@@ -135,7 +135,7 @@ enum AccountChangeKind {
 }
 
 message AccountChangedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   AccountChangeKind change_kind = 2;
   Account account = 3;
 }

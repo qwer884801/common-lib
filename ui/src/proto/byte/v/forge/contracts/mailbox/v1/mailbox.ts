@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/mailbox/v1/mailbox.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { ArtifactRef, EventMetadata, SecretRef } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.mailbox.v1";
 
@@ -20,6 +20,36 @@ export enum MailboxCredentialKind {
   MAILBOX_CREDENTIAL_KIND_PASSWORD = "MAILBOX_CREDENTIAL_KIND_PASSWORD",
   MAILBOX_CREDENTIAL_KIND_OAUTH_REFRESH_TOKEN = "MAILBOX_CREDENTIAL_KIND_OAUTH_REFRESH_TOKEN",
   MAILBOX_CREDENTIAL_KIND_OAUTH_ACCESS_TOKEN = "MAILBOX_CREDENTIAL_KIND_OAUTH_ACCESS_TOKEN",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum MailboxAuthStatus {
+  MAILBOX_AUTH_STATUS_UNSPECIFIED = "MAILBOX_AUTH_STATUS_UNSPECIFIED",
+  MAILBOX_AUTH_STATUS_UNKNOWN = "MAILBOX_AUTH_STATUS_UNKNOWN",
+  MAILBOX_AUTH_STATUS_OAUTH_PENDING = "MAILBOX_AUTH_STATUS_OAUTH_PENDING",
+  MAILBOX_AUTH_STATUS_AUTHORIZED = "MAILBOX_AUTH_STATUS_AUTHORIZED",
+  MAILBOX_AUTH_STATUS_AUTH_FAILED = "MAILBOX_AUTH_STATUS_AUTH_FAILED",
+  MAILBOX_AUTH_STATUS_PASSWORD_ONLY = "MAILBOX_AUTH_STATUS_PASSWORD_ONLY",
+  MAILBOX_AUTH_STATUS_WEBHOOK_ONLY = "MAILBOX_AUTH_STATUS_WEBHOOK_ONLY",
+  MAILBOX_AUTH_STATUS_DISABLED = "MAILBOX_AUTH_STATUS_DISABLED",
+  MAILBOX_AUTH_STATUS_NEEDS_MANUAL_VERIFICATION = "MAILBOX_AUTH_STATUS_NEEDS_MANUAL_VERIFICATION",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum MailboxOperationAction {
+  MAILBOX_OPERATION_ACTION_UNSPECIFIED = "MAILBOX_OPERATION_ACTION_UNSPECIFIED",
+  MAILBOX_OPERATION_ACTION_REGISTER_MAILBOX = "MAILBOX_OPERATION_ACTION_REGISTER_MAILBOX",
+  MAILBOX_OPERATION_ACTION_MAILBOX_OAUTH = "MAILBOX_OPERATION_ACTION_MAILBOX_OAUTH",
+  MAILBOX_OPERATION_ACTION_FETCH_INBOXES = "MAILBOX_OPERATION_ACTION_FETCH_INBOXES",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum MailboxOperationStatus {
+  MAILBOX_OPERATION_STATUS_UNSPECIFIED = "MAILBOX_OPERATION_STATUS_UNSPECIFIED",
+  MAILBOX_OPERATION_STATUS_CREATED = "MAILBOX_OPERATION_STATUS_CREATED",
+  MAILBOX_OPERATION_STATUS_RUNNING = "MAILBOX_OPERATION_STATUS_RUNNING",
+  MAILBOX_OPERATION_STATUS_SUCCEEDED = "MAILBOX_OPERATION_STATUS_SUCCEEDED",
+  MAILBOX_OPERATION_STATUS_FAILED = "MAILBOX_OPERATION_STATUS_FAILED",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -43,12 +73,12 @@ export enum MailboxProviderAction {
 
 export interface EmailSignal {
   kind: EmailSignalKind;
-  code: string;
+  secret_ref: SecretRef | undefined;
   label: string;
   profile: string;
   parser: string;
   confidence: number;
-  evidence: string;
+  evidence_preview: string;
 }
 
 export interface MailboxCredentialState {
@@ -62,7 +92,7 @@ export interface EmailMailbox {
   last_error: string;
   created_at: number;
   updated_at: number;
-  auth_status: string;
+  auth_status: MailboxAuthStatus;
   latest_signal: EmailSignal | undefined;
   domain: string;
   credential_state: MailboxCredentialState | undefined;
@@ -78,8 +108,8 @@ export interface EmailInboxMessage {
   received_at_unix: number;
   recipients: string[];
   source_mailbox_email: string;
-  body_text: string;
-  html_body: string;
+  body_artifact_ref: ArtifactRef | undefined;
+  html_artifact_ref: ArtifactRef | undefined;
   raw_size: number;
   signals: EmailSignal[];
   primary_signal: EmailSignal | undefined;
@@ -87,12 +117,12 @@ export interface EmailInboxMessage {
 }
 
 export interface MailboxEmailReceivedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   message: EmailInboxMessage | undefined;
 }
 
 export interface MailboxEmailSignalReceivedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   message: EmailInboxMessage | undefined;
   signal: EmailSignal | undefined;
 }
@@ -179,8 +209,8 @@ export interface StartMailboxOAuthResponse {
 
 export interface MailboxOperation {
   operation_id: string;
-  action: string;
-  status: string;
+  action: MailboxOperationAction;
+  status: MailboxOperationStatus;
   email_address: string;
   last_step: string;
   error_message: string;
@@ -204,8 +234,8 @@ export interface GetMailboxOperationResponse {
 
 export interface ListMailboxOperationsRequest {
   limit: number;
-  status: string;
-  action: string;
+  status: MailboxOperationStatus;
+  action: MailboxOperationAction;
   email_address: string;
 }
 
@@ -247,7 +277,7 @@ export interface MailboxMessageRetentionPolicy {
 export interface MailboxProviderActionCapability {
   action: MailboxProviderAction;
   required_credentials: MailboxCredentialKind[];
-  required_auth_statuses: string[];
+  required_auth_statuses: MailboxAuthStatus[];
   bulk_supported: boolean;
 }
 

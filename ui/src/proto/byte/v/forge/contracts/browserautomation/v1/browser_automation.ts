@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/browserautomation/v1/browser_automation.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { ArtifactRef, EventMetadata, SecretRef } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.browserautomation.v1";
 
@@ -145,10 +145,9 @@ export interface BrowserProfile {
   user_agent: string;
   viewport: BrowserViewport | undefined;
   proxy_ref: string;
-  storage_state_secret_ref: string;
+  storage_state_secret_ref: SecretRef | undefined;
   extra_http_headers: { [key: string]: string };
   init_scripts: string[];
-  labels: { [key: string]: string };
 }
 
 export interface BrowserProfile_ExtraHttpHeadersEntry {
@@ -156,15 +155,10 @@ export interface BrowserProfile_ExtraHttpHeadersEntry {
   value: string;
 }
 
-export interface BrowserProfile_LabelsEntry {
-  key: string;
-  value: string;
-}
-
 export interface BrowserArtifact {
   artifact_id: string;
   kind: BrowserArtifactKind;
-  uri: string;
+  ref: ArtifactRef | undefined;
   content_type: string;
   size_bytes: number;
   labels: { [key: string]: string };
@@ -174,6 +168,14 @@ export interface BrowserArtifact {
 export interface BrowserArtifact_LabelsEntry {
   key: string;
   value: string;
+}
+
+export interface BrowserSecurityPolicy {
+  allowed_hosts: string[];
+  allow_file_upload: boolean;
+  allow_cookie_read: boolean;
+  allow_storage_state_read: boolean;
+  allow_main_world_eval: boolean;
 }
 
 export interface BrowserSelector {
@@ -409,7 +411,7 @@ export interface ScreenshotCommand {
 
 export interface UploadFileCommand {
   selector: BrowserSelector | undefined;
-  file_secret_refs: string[];
+  file_secret_refs: SecretRef[];
   timeout: string | undefined;
   selector_group: BrowserSelectorGroup | undefined;
 }
@@ -430,9 +432,10 @@ export interface SubmitFormCommand {
 }
 
 export interface EvaluateCommand {
-  expression: string;
+  script_ref: string;
   args: { [key: string]: any } | undefined;
   timeout: string | undefined;
+  inline_expression: string;
 }
 
 export interface GetCookiesCommand {
@@ -532,6 +535,8 @@ export interface BrowserCommandResult {
   visible: boolean;
   bounding_box: BrowserRect | undefined;
   title: string;
+  secret_ref: SecretRef | undefined;
+  artifact_ref: ArtifactRef | undefined;
   completed_at: string | undefined;
 }
 
@@ -567,6 +572,7 @@ export interface BrowserTaskInput {
   target_url: string;
   timeout: string | undefined;
   commands: BrowserCommand[];
+  security_policy: BrowserSecurityPolicy | undefined;
   labels: { [key: string]: string };
 }
 
@@ -610,6 +616,13 @@ export interface StartBrowserSessionRequest {
   request_id: string;
   profile: BrowserProfile | undefined;
   ttl: string | undefined;
+  security_policy: BrowserSecurityPolicy | undefined;
+  labels: { [key: string]: string };
+}
+
+export interface StartBrowserSessionRequest_LabelsEntry {
+  key: string;
+  value: string;
 }
 
 export interface StartBrowserSessionResponse {
@@ -679,19 +692,19 @@ export interface ListBrowserTasksResponse {
 }
 
 export interface BrowserSessionStartedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   session: BrowserSession | undefined;
 }
 
 export interface BrowserSessionStoppedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   session_id: string;
   status: BrowserSessionStatus;
   reason: string;
 }
 
 export interface BrowserTaskStatusChangedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   task_id: string;
   previous_status: BrowserTaskStatus;
   current_status: BrowserTaskStatus;

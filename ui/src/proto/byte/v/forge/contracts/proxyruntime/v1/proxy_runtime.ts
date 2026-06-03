@@ -5,6 +5,7 @@
 // source: byte/v/forge/contracts/proxyruntime/v1/proxy_runtime.proto
 
 /* eslint-disable */
+import type { SecretRef } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.proxyruntime.v1";
 
@@ -201,22 +202,6 @@ export enum ProxySelectorStrategy {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export enum ProxyChainStrategy {
-  PROXY_CHAIN_STRATEGY_UNSPECIFIED = "PROXY_CHAIN_STRATEGY_UNSPECIFIED",
-  PROXY_CHAIN_STRATEGY_REGION_AWARE = "PROXY_CHAIN_STRATEGY_REGION_AWARE",
-  PROXY_CHAIN_STRATEGY_LOWEST_LATENCY = "PROXY_CHAIN_STRATEGY_LOWEST_LATENCY",
-  PROXY_CHAIN_STRATEGY_STABLE_HASH = "PROXY_CHAIN_STRATEGY_STABLE_HASH",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export enum ProxyChainHopRole {
-  PROXY_CHAIN_HOP_ROLE_UNSPECIFIED = "PROXY_CHAIN_HOP_ROLE_UNSPECIFIED",
-  PROXY_CHAIN_HOP_ROLE_LINE_PROXY = "PROXY_CHAIN_HOP_ROLE_LINE_PROXY",
-  PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY = "PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY",
-  PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT = "PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
 export enum EgressHopRole {
   EGRESS_HOP_ROLE_UNSPECIFIED = "EGRESS_HOP_ROLE_UNSPECIFIED",
   EGRESS_HOP_ROLE_FORWARD = "EGRESS_HOP_ROLE_FORWARD",
@@ -337,46 +322,25 @@ export interface ProxyDynamicGatewayCandidate {
   priority: number;
 }
 
-export interface ProxyChainHop {
-  hop_id: string;
-  order: number;
-  role: ProxyChainHopRole;
-  source_kind: ProxySourceKind;
-  source_id: string;
-  source_display_name: string;
-  node_id: string;
-  node_display_name: string;
-  provider_account_id: string;
-  provider_id: string;
-  gateway_id: string;
-  gateway_display_name: string;
-  observed_ip: string;
-  country_code: string;
-  region: string;
-  city: string;
-  status: ProxySourceNodeStatus;
-  delay_ms: number;
-}
-
-export interface ProxyChainPolicy {
+export interface EgressRoutePolicy {
   country_code: string;
   region: string;
   purpose: string;
-  strategy: ProxyChainStrategy;
+  strategy: ProxySelectorStrategy;
   max_attempts: number;
   require_dynamic_exit: boolean;
   allow_direct_dynamic_gateway: boolean;
   prefer_line_proxy: boolean;
 }
 
-export interface ProxyChainPlan {
-  chain_id: string;
-  policy: ProxyChainPolicy | undefined;
+export interface EgressRoutePlan {
+  route_id: string;
+  policy: EgressRoutePolicy | undefined;
   line: ProxyLineCandidate | undefined;
   dynamic_gateway: ProxyDynamicGatewayCandidate | undefined;
   selection_reasons: string[];
   planned_at: string | undefined;
-  hops: ProxyChainHop[];
+  route: EgressRoute | undefined;
 }
 
 export interface ProviderControlPlaneAccess {
@@ -450,7 +414,7 @@ export interface ProxyDynamicLease {
   acquired_at: string | undefined;
   expires_at: string | undefined;
   error_message: string;
-  chain_plan: ProxyChainPlan | undefined;
+  route_plan: EgressRoutePlan | undefined;
 }
 
 export interface ProxyExitGeo {
@@ -509,7 +473,7 @@ export interface ProxyEdgeAccessCheck {
 
 export interface ProxyEdgeCanarySettings {
   url: string;
-  token: string;
+  token_secret_ref: SecretRef | undefined;
   clear_token: boolean;
   enabled: boolean;
 }
@@ -525,7 +489,7 @@ export interface ProxyIPFraudProviderSettings {
   weight: number;
   kind: ProxyIPFraudProviderKind;
   anonymous: boolean;
-  api_keys: string[];
+  api_key_secret_refs: SecretRef[];
   clear_api_keys: boolean;
 }
 
@@ -682,7 +646,7 @@ export interface UpsertProxyProviderAccountRequest {
   display_name: string;
   enabled: boolean;
   username: string;
-  password: string;
+  password_secret_ref: SecretRef | undefined;
   clear_password: boolean;
 }
 
@@ -753,14 +717,14 @@ export interface ListProxySourceNodesResponse {
   nodes: ProxySourceNode[];
 }
 
-export interface ResolveProxyChainRequest {
+export interface ResolveEgressRouteRequest {
   account_id: string;
   session_policy: ProxySessionPolicy | undefined;
-  chain_policy: ProxyChainPolicy | undefined;
+  route_policy: EgressRoutePolicy | undefined;
 }
 
-export interface ResolveProxyChainResponse {
-  plan: ProxyChainPlan | undefined;
+export interface ResolveEgressRouteResponse {
+  plan: EgressRoutePlan | undefined;
   line_candidates: ProxyLineCandidate[];
   dynamic_gateway_candidates: ProxyDynamicGatewayCandidate[];
 }
@@ -777,18 +741,20 @@ export interface AcquireProxyLeaseRequest {
   purpose: string;
   policy: ProxySessionPolicy | undefined;
   force_new: boolean;
-  chain_policy: ProxyChainPolicy | undefined;
+  route_policy: EgressRoutePolicy | undefined;
 }
 
 export interface AcquireProxyLeaseResponse {
   lease: ProxyDynamicLease | undefined;
   pool: ProxyPoolSnapshot | undefined;
   egress: ProxyEndpoint | undefined;
-  chain_plan: ProxyChainPlan | undefined;
+  route_plan: EgressRoutePlan | undefined;
 }
 
 export interface ReleaseProxyLeaseRequest {
+  lease_id: string;
   account_id: string;
+  purpose: string;
 }
 
 export interface ReleaseProxyLeaseResponse {

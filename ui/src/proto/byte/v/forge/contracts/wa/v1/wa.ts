@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/wa/v1/wa.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { EventMetadata } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.wa.v1";
 
@@ -18,7 +18,7 @@ export enum WaOtpSource {
 }
 
 export interface WaOtpReceivedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   workspace_id: string;
   e164_number: string;
   source: WaOtpSource;

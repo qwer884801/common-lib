@@ -1,7 +1,7 @@
 export { canonicalUiEmail, formatEmailList, maskEmail, normalizeUiEmail } from './email-utils';
 export { mergeInboxMessage, mailboxEventURL, useMailboxEmailEventCache } from './mailbox-events';
 export { inboxResultForMailbox, latestOtpForEmail, messageSignals, signalKindName, signalLabel, verificationCodeForMessage } from './mailbox-signal-utils';
-export { MailboxCredentialKind, MailboxProviderAction } from './types';
+export { MailboxAuthStatus, MailboxCredentialKind, MailboxOperationAction, MailboxOperationStatus, MailboxProviderAction } from './types';
 export type { MailboxEmailEventCacheOptions } from './mailbox-events';
 export type {
   EmailInboxMessage,

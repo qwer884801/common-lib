@@ -19,7 +19,7 @@ func (definition Definition) ExpectedMessage() eventbus.ExpectedMessage {
 		Subject:      strings.TrimSpace(definition.Subject),
 		EventName:    strings.TrimSpace(definition.EventName),
 		EventVersion: strings.TrimSpace(definition.EventVersion),
-		ProtoType:    strings.TrimSpace(definition.PayloadType),
+		PayloadType:  strings.TrimSpace(definition.PayloadType),
 	}
 }
 

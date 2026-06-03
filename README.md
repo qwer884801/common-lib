@@ -4,7 +4,7 @@
 
 - `proto/byte/v/forge/contracts/`：公开 proto 契约唯一源头，只放跨仓稳定公开建模和 gRPC service；内部/private/provider 细节不得进入本目录。
   公开资源只暴露状态投影和 capability，不能暴露 password、token、cookie、provider raw shape 等可复用 secret；例如 mailbox 公开模型只提供 `credential_state`，真实凭据留在 mailbox 内部契约和存储。
-  `contracts/common/v1` 承载跨域复用的事件上下文等基础消息，业务事件引用它而不是重复定义。
+  `contracts/common/v1` 承载跨域复用的事件 metadata、secret/artifact 引用和通用错误等基础消息，业务事件引用它而不是重复定义。
 - `gen/go/byte/v/forge/contracts/`：公开契约的 Go message、client/server interface 生成物。
 - `ui/src/proto/byte/v/forge/contracts/`：公开契约的 TypeScript 类型，供前端模块通过 `@byte-v-forge/common-ui/proto/...` 消费。
 - `scripts/generate-python-proto.sh`：按需生成 Python proto/gRPC SDK；默认输出到忽略提交的 `gen/python/`，也可用 `OUT_DIR` 指定目标。
@@ -22,7 +22,7 @@
 - `gormx`：GORM 基础 helper，当前统一 conflict columns、do nothing、update columns/assignments 等 upsert 声明。
 - `grpchealth`：标准 gRPC Health Checking 注册 helper。
 - `redisx`：Redis URL client 初始化、optional/required client 创建、Redis keyspace 前缀归一化、带 namespace/TTL 的通用字符串 KV helper 和 Redis 分布式锁。
-- `eventbus` / `natseventbus` / `eventoutbox`：平台事件总线抽象、稳定事件 ID/标准 `EventContext` 构造、事件 attributes 构造、`EventEnvelope` proto 载荷编解码、通用 consumer worker、NATS JetStream 连接/stream 初始化、subject 合并、worker pull consumer 默认配置、适配和无业务语义的事务 outbox 编解码、PostgreSQL pgx/GORM 表操作、发布重试 helper；业务状态仍以各服务数据库为真源。
+- `eventbus` / `natseventbus` / `eventoutbox`：平台事件总线抽象、稳定事件 ID/标准 `EventMetadata` 构造、事件 extensions 构造、`EventEnvelope` proto 载荷编解码、通用 consumer worker、NATS JetStream 连接/stream 初始化、subject 合并、worker pull consumer 默认配置、适配和无业务语义的事务 outbox 编解码、PostgreSQL pgx/GORM 表操作、发布重试 helper；业务状态仍以各服务数据库为真源。
 - `protojsonx` / `protojsonhttp`：公开 proto JSON 编解码和 HTTP 读写 helper，统一 `UseProtoNames` / `DiscardUnknown` 策略。
 - `ui`：共享 React/shadcn dashboard uikit 包 `@byte-v-forge/common-ui`。
 

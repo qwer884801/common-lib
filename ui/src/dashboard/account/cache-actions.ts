@@ -10,7 +10,7 @@ import type { AccountRecord } from './types';
 
 export type AccountCacheActionsOptions<
   T extends AccountRecordCarrier,
-  R extends AccountCarrierListResponse<T>,
+  _R extends AccountCarrierListResponse<T>,
 > = {
   listQueryKey: QueryKey;
   invalidateQueryKeys?: Iterable<QueryKey>;

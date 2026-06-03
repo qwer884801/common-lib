@@ -17,26 +17,26 @@ var (
 	ErrEmptySubject        = errors.New("event subject is required")
 	ErrEmptyEvent          = errors.New("event message is required")
 	ErrEmptyPayload        = errors.New("event payload is required")
-	ErrEmptyEventContext   = errors.New("event context is required")
-	ErrEmptyEventID        = errors.New("event context event_id is required")
-	ErrEmptyEventName      = errors.New("event context event_name is required")
-	ErrEmptyEventVersion   = errors.New("event context event_version is required")
-	ErrEmptySourceService  = errors.New("event context source_service is required")
-	ErrEmptyIdempotencyKey = errors.New("event context idempotency_key is required")
-	ErrEmptyOccurredAt     = errors.New("event context occurred_at is required")
+	ErrEmptyEventMetadata  = errors.New("event metadata is required")
+	ErrEmptyEventID        = errors.New("event metadata id is required")
+	ErrEmptyEventType      = errors.New("event metadata type is required")
+	ErrEmptyEventVersion   = errors.New("event metadata version is required")
+	ErrEmptySource         = errors.New("event metadata source is required")
+	ErrEmptyIdempotencyKey = errors.New("event metadata idempotency_key is required")
+	ErrEmptyEventTime      = errors.New("event metadata time is required")
 )
 
 type Message struct {
 	Subject    string
 	Event      proto.Message
-	Context    *commonv1.EventContext
-	Attributes map[string]string
+	Metadata   *commonv1.EventMetadata
+	Extensions map[string]string
 }
 
 type ReceivedMessage struct {
 	Subject    string
 	Envelope   *commonv1.EventEnvelope
-	Attributes map[string]string
+	Extensions map[string]string
 	Attempt    int32
 	Ack        func(context.Context) error
 	Nak        func(context.Context) error
@@ -67,7 +67,7 @@ func NewEnvelope(message Message) (*commonv1.EventEnvelope, error) {
 	if message.Event == nil {
 		return nil, ErrEmptyEvent
 	}
-	if err := ValidateContext(message.Context); err != nil {
+	if err := ValidateMetadata(message.Metadata); err != nil {
 		return nil, err
 	}
 	payload, err := proto.Marshal(message.Event)
@@ -75,35 +75,35 @@ func NewEnvelope(message Message) (*commonv1.EventEnvelope, error) {
 		return nil, fmt.Errorf("marshal event payload: %w", err)
 	}
 	return &commonv1.EventEnvelope{
-		Context:     message.Context,
-		Subject:     subject,
-		ProtoType:   string(message.Event.ProtoReflect().Descriptor().FullName()),
-		Payload:     payload,
-		ContentType: ProtobufContentType,
-		Attributes:  cloneAttributes(message.Attributes),
+		Metadata:        message.Metadata,
+		Subject:         subject,
+		PayloadType:     string(message.Event.ProtoReflect().Descriptor().FullName()),
+		Payload:         payload,
+		DataContentType: ProtobufContentType,
+		Extensions:      cloneExtensions(message.Extensions),
 	}, nil
 }
 
-func ValidateContext(eventCtx *commonv1.EventContext) error {
-	if eventCtx == nil {
-		return ErrEmptyEventContext
+func ValidateMetadata(metadata *commonv1.EventMetadata) error {
+	if metadata == nil {
+		return ErrEmptyEventMetadata
 	}
-	if strings.TrimSpace(eventCtx.GetEventId()) == "" {
+	if strings.TrimSpace(metadata.GetId()) == "" {
 		return ErrEmptyEventID
 	}
-	if strings.TrimSpace(eventCtx.GetEventName()) == "" {
-		return ErrEmptyEventName
+	if strings.TrimSpace(metadata.GetType()) == "" {
+		return ErrEmptyEventType
 	}
-	if strings.TrimSpace(eventCtx.GetEventVersion()) == "" {
+	if strings.TrimSpace(metadata.GetVersion()) == "" {
 		return ErrEmptyEventVersion
 	}
-	if eventCtx.GetOccurredAt() == nil || !eventCtx.GetOccurredAt().IsValid() {
-		return ErrEmptyOccurredAt
+	if metadata.GetTime() == nil || !metadata.GetTime().IsValid() {
+		return ErrEmptyEventTime
 	}
-	if strings.TrimSpace(eventCtx.GetSourceService()) == "" {
-		return ErrEmptySourceService
+	if strings.TrimSpace(metadata.GetSource()) == "" {
+		return ErrEmptySource
 	}
-	if strings.TrimSpace(eventCtx.GetIdempotencyKey()) == "" {
+	if strings.TrimSpace(metadata.GetIdempotencyKey()) == "" {
 		return ErrEmptyIdempotencyKey
 	}
 	return nil
@@ -122,7 +122,7 @@ func UnmarshalPayload(message ReceivedMessage, event proto.Message) error {
 	return nil
 }
 
-func cloneAttributes(values map[string]string) map[string]string {
+func cloneExtensions(values map[string]string) map[string]string {
 	if len(values) == 0 {
 		return nil
 	}

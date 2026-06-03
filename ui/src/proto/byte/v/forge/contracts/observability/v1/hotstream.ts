@@ -5,6 +5,7 @@
 // source: byte/v/forge/contracts/observability/v1/hotstream.proto
 
 /* eslint-disable */
+import type { EventMetadata } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.observability.v1";
 
@@ -18,15 +19,10 @@ export enum HotStreamControlKind {
 }
 
 export interface HotStreamEvent {
-  event_id: string;
-  event_type: string;
-  source_service: string;
+  metadata: EventMetadata | undefined;
   resource_type: string;
   resource_id: string;
   scope: string;
-  occurred_at: string | undefined;
-  correlation_id: string;
-  trace_id: string;
   attributes: { [key: string]: string };
 }
 

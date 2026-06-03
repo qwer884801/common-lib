@@ -3,6 +3,7 @@ syntax = "proto3";
 package byte.v.forge.contracts.workflow.v1;
 
 import "byte/v/forge/contracts/common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "ByteVForge.Contracts.Workflow.V1";
 option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/workflow/v1;workflowv1";
@@ -30,6 +31,15 @@ enum WorkflowRunStatus {
   WORKFLOW_RUN_SKIPPED = 7;
 }
 
+enum WorkflowGraphElementStatus {
+  WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_GRAPH_ELEMENT_PENDING = 1;
+  WORKFLOW_GRAPH_ELEMENT_RUNNING = 2;
+  WORKFLOW_GRAPH_ELEMENT_SUCCEEDED = 3;
+  WORKFLOW_GRAPH_ELEMENT_FAILED = 4;
+  WORKFLOW_GRAPH_ELEMENT_SKIPPED = 5;
+}
+
 message WorkflowRuntimeSummary {
   WorkflowRuntimeStatus engine_status = 1;
   string engine_message = 2;
@@ -39,7 +49,7 @@ message WorkflowRuntimeSummary {
   string editor_url = 6;
   repeated WorkflowDefinition workflows = 7;
   repeated WorkflowExecution executions = 8;
-  int64 checked_at_unix = 9;
+  google.protobuf.Timestamp checked_at = 9;
   repeated WorkflowRunProjection runs = 10;
   WorkflowRuntimePageInfo runs_page_info = 11;
   WorkflowRuntimePageInfo executions_page_info = 12;
@@ -55,7 +65,7 @@ message WorkflowDefinition {
   string id = 1;
   string name = 2;
   bool active = 3;
-  string updated_at = 4;
+  google.protobuf.Timestamp updated_at = 4;
   repeated string tags = 5;
   repeated WorkflowGraphNode graph_nodes = 6;
   repeated WorkflowGraphEdge graph_edges = 7;
@@ -65,10 +75,10 @@ message WorkflowExecution {
   string id = 1;
   string workflow_id = 2;
   string workflow_name = 3;
-  string status = 4;
+  WorkflowRunStatus status = 4;
   string mode = 5;
-  string started_at = 6;
-  string stopped_at = 7;
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp stopped_at = 7;
   repeated WorkflowGraphNode graph_nodes = 8;
   repeated WorkflowGraphEdge graph_edges = 9;
 }
@@ -77,12 +87,12 @@ message WorkflowGraphNode {
   string id = 1;
   string name = 2;
   string kind = 3;
-  string status = 4;
+  WorkflowGraphElementStatus status = 4;
   double x = 5;
   double y = 6;
   string type_version = 7;
   bool disabled = 8;
-  int64 started_at_unix = 9;
+  google.protobuf.Timestamp started_at = 9;
   int64 duration_ms = 10;
   string error_message = 11;
   int32 iterations = 12;
@@ -93,7 +103,7 @@ message WorkflowGraphEdge {
   string source = 2;
   string target = 3;
   string label = 4;
-  string status = 5;
+  WorkflowGraphElementStatus status = 5;
 }
 
 message WorkflowRunProjection {
@@ -105,9 +115,9 @@ message WorkflowRunProjection {
   string current_node_id = 6;
   string current_node_name = 7;
   string error_message = 8;
-  int64 started_at_unix = 9;
-  int64 completed_at_unix = 10;
-  int64 updated_at_unix = 11;
+  google.protobuf.Timestamp started_at = 9;
+  google.protobuf.Timestamp completed_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
   repeated WorkflowGraphNode graph_nodes = 12;
   repeated WorkflowGraphEdge graph_edges = 13;
 }
@@ -121,11 +131,35 @@ message WorkflowStepUpdateRequest {
   string node_name = 6;
   WorkflowRunStatus status = 7;
   string error_message = 8;
-  int64 occurred_at_unix = 9;
-  byte.v.forge.contracts.common.v1.EventContext context = 10;
+  google.protobuf.Timestamp occurred_at = 9;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 10;
 }
 
 message WorkflowStepUpdateResponse {
   WorkflowRunProjection run = 1;
   bool duplicate = 2;
+}
+
+message GetWorkflowRuntimeSummaryRequest {
+  int32 runs_page_size = 1;
+  string runs_page_token = 2;
+  int32 executions_page_size = 3;
+  string executions_page_token = 4;
+}
+
+message GetWorkflowRuntimeSummaryResponse {
+  WorkflowRuntimeSummary summary = 1;
+}
+
+message StreamWorkflowRuntimeStateRequest {}
+
+message WorkflowRuntimeStateEvent {
+  string event_type = 1;
+  WorkflowRuntimeSummary summary = 2;
+}
+
+service WorkflowRuntimeService {
+  rpc GetWorkflowRuntimeSummary(GetWorkflowRuntimeSummaryRequest) returns (GetWorkflowRuntimeSummaryResponse);
+  rpc UpdateWorkflowStep(WorkflowStepUpdateRequest) returns (WorkflowStepUpdateResponse);
+  rpc StreamWorkflowRuntimeState(StreamWorkflowRuntimeStateRequest) returns (stream WorkflowRuntimeStateEvent);
 }

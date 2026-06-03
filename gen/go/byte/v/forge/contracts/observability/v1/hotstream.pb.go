@@ -7,6 +7,7 @@
 package observabilityv1
 
 import (
+	v1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -79,15 +80,10 @@ func (HotStreamControlKind) EnumDescriptor() ([]byte, []int) {
 
 type HotStreamEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	EventId       string                 `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	EventType     string                 `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
-	SourceService string                 `protobuf:"bytes,3,opt,name=source_service,json=sourceService,proto3" json:"source_service,omitempty"`
+	Metadata      *v1.EventMetadata      `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	ResourceType  string                 `protobuf:"bytes,4,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
 	ResourceId    string                 `protobuf:"bytes,5,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
 	Scope         string                 `protobuf:"bytes,6,opt,name=scope,proto3" json:"scope,omitempty"`
-	OccurredAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
-	CorrelationId string                 `protobuf:"bytes,8,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty"`
-	TraceId       string                 `protobuf:"bytes,9,opt,name=trace_id,json=traceId,proto3" json:"trace_id,omitempty"`
 	Attributes    map[string]string      `protobuf:"bytes,10,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -123,25 +119,11 @@ func (*HotStreamEvent) Descriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_observability_v1_hotstream_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *HotStreamEvent) GetEventId() string {
+func (x *HotStreamEvent) GetMetadata() *v1.EventMetadata {
 	if x != nil {
-		return x.EventId
+		return x.Metadata
 	}
-	return ""
-}
-
-func (x *HotStreamEvent) GetEventType() string {
-	if x != nil {
-		return x.EventType
-	}
-	return ""
-}
-
-func (x *HotStreamEvent) GetSourceService() string {
-	if x != nil {
-		return x.SourceService
-	}
-	return ""
+	return nil
 }
 
 func (x *HotStreamEvent) GetResourceType() string {
@@ -161,27 +143,6 @@ func (x *HotStreamEvent) GetResourceId() string {
 func (x *HotStreamEvent) GetScope() string {
 	if x != nil {
 		return x.Scope
-	}
-	return ""
-}
-
-func (x *HotStreamEvent) GetOccurredAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.OccurredAt
-	}
-	return nil
-}
-
-func (x *HotStreamEvent) GetCorrelationId() string {
-	if x != nil {
-		return x.CorrelationId
-	}
-	return ""
-}
-
-func (x *HotStreamEvent) GetTraceId() string {
-	if x != nil {
-		return x.TraceId
 	}
 	return ""
 }
@@ -265,27 +226,22 @@ var File_byte_v_forge_contracts_observability_v1_hotstream_proto protoreflect.Fi
 
 const file_byte_v_forge_contracts_observability_v1_hotstream_proto_rawDesc = "" +
 	"\n" +
-	"7byte/v/forge/contracts/observability/v1/hotstream.proto\x12'byte.v.forge.contracts.observability.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf4\x03\n" +
-	"\x0eHotStreamEvent\x12\x19\n" +
-	"\bevent_id\x18\x01 \x01(\tR\aeventId\x12\x1d\n" +
-	"\n" +
-	"event_type\x18\x02 \x01(\tR\teventType\x12%\n" +
-	"\x0esource_service\x18\x03 \x01(\tR\rsourceService\x12#\n" +
+	"7byte/v/forge/contracts/observability/v1/hotstream.proto\x12'byte.v.forge.contracts.observability.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc2\x03\n" +
+	"\x0eHotStreamEvent\x12K\n" +
+	"\bmetadata\x18\x01 \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\x12#\n" +
 	"\rresource_type\x18\x04 \x01(\tR\fresourceType\x12\x1f\n" +
 	"\vresource_id\x18\x05 \x01(\tR\n" +
 	"resourceId\x12\x14\n" +
-	"\x05scope\x18\x06 \x01(\tR\x05scope\x12;\n" +
-	"\voccurred_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"occurredAt\x12%\n" +
-	"\x0ecorrelation_id\x18\b \x01(\tR\rcorrelationId\x12\x19\n" +
-	"\btrace_id\x18\t \x01(\tR\atraceId\x12g\n" +
+	"\x05scope\x18\x06 \x01(\tR\x05scope\x12g\n" +
 	"\n" +
 	"attributes\x18\n" +
 	" \x03(\v2G.byte.v.forge.contracts.observability.v1.HotStreamEvent.AttributesEntryR\n" +
 	"attributes\x1a=\n" +
 	"\x0fAttributesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf0\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\a\x10\bJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
+	"R\n" +
+	"event_typeR\x0esource_serviceR\voccurred_atR\x0ecorrelation_idR\btrace_id\"\xf0\x02\n" +
 	"\x15HotStreamControlEvent\x12Q\n" +
 	"\x04kind\x18\x01 \x01(\x0e2=.byte.v.forge.contracts.observability.v1.HotStreamControlKindR\x04kind\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12;\n" +
@@ -324,13 +280,14 @@ var file_byte_v_forge_contracts_observability_v1_hotstream_proto_goTypes = []any
 	(*HotStreamControlEvent)(nil), // 2: byte.v.forge.contracts.observability.v1.HotStreamControlEvent
 	nil,                           // 3: byte.v.forge.contracts.observability.v1.HotStreamEvent.AttributesEntry
 	nil,                           // 4: byte.v.forge.contracts.observability.v1.HotStreamControlEvent.AttributesEntry
-	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
+	(*v1.EventMetadata)(nil),      // 5: byte.v.forge.contracts.common.v1.EventMetadata
+	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
 }
 var file_byte_v_forge_contracts_observability_v1_hotstream_proto_depIdxs = []int32{
-	5, // 0: byte.v.forge.contracts.observability.v1.HotStreamEvent.occurred_at:type_name -> google.protobuf.Timestamp
+	5, // 0: byte.v.forge.contracts.observability.v1.HotStreamEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
 	3, // 1: byte.v.forge.contracts.observability.v1.HotStreamEvent.attributes:type_name -> byte.v.forge.contracts.observability.v1.HotStreamEvent.AttributesEntry
 	0, // 2: byte.v.forge.contracts.observability.v1.HotStreamControlEvent.kind:type_name -> byte.v.forge.contracts.observability.v1.HotStreamControlKind
-	5, // 3: byte.v.forge.contracts.observability.v1.HotStreamControlEvent.occurred_at:type_name -> google.protobuf.Timestamp
+	6, // 3: byte.v.forge.contracts.observability.v1.HotStreamControlEvent.occurred_at:type_name -> google.protobuf.Timestamp
 	4, // 4: byte.v.forge.contracts.observability.v1.HotStreamControlEvent.attributes:type_name -> byte.v.forge.contracts.observability.v1.HotStreamControlEvent.AttributesEntry
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type

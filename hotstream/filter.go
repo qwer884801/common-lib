@@ -19,8 +19,9 @@ func (f Filter) Match(event *observabilityv1.HotStreamEvent) bool {
 	if event == nil {
 		return false
 	}
-	return matchAny(f.EventTypes, event.GetEventType()) &&
-		matchAny(f.SourceServices, event.GetSourceService()) &&
+	metadata := event.GetMetadata()
+	return matchAny(f.EventTypes, metadata.GetType()) &&
+		matchAny(f.SourceServices, metadata.GetSource()) &&
 		matchAny(f.ResourceTypes, event.GetResourceType()) &&
 		matchAny(f.ResourceIDs, event.GetResourceId()) &&
 		matchAny(f.Scopes, event.GetScope()) &&

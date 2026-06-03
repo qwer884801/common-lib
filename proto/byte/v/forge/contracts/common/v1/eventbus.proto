@@ -12,12 +12,37 @@ option java_package = "com.bytevforge.contracts.common.v1";
 option php_namespace = "ByteVForge\\Contracts\\Common\\V1";
 
 message EventEnvelope {
-  EventContext context = 1;
+  EventMetadata metadata = 1;
   string subject = 2;
-  string proto_type = 3;
+  string payload_type = 3;
   bytes payload = 4;
-  string content_type = 5;
-  map<string, string> attributes = 6;
+  string data_content_type = 5;
+  map<string, string> extensions = 6;
+}
+
+enum EventKind {
+  EVENT_KIND_UNSPECIFIED = 0;
+  EVENT_KIND_FACT = 1;
+  EVENT_KIND_COMMAND = 2;
+}
+
+message EventDefinition {
+  string subject = 1;
+  string event_name = 2;
+  string event_version = 3;
+  EventKind kind = 4;
+  string payload_type = 5;
+  string owner_service = 6;
+  string consumer_durable = 7;
+  bool retryable = 8;
+  int32 max_deliveries = 9;
+  int32 retry_delay_seconds = 10;
+}
+
+message EventCatalog {
+  string stream_name = 1;
+  string stream_subject = 2;
+  repeated EventDefinition definitions = 3;
 }
 
 message EventPublishAck {
@@ -27,12 +52,12 @@ message EventPublishAck {
 }
 
 message DeadLetterEvent {
-  EventContext context = 1;
+  EventMetadata metadata = 1;
   string original_subject = 2;
   string original_event_id = 3;
-  string original_event_name = 4;
+  string original_event_type = 4;
   string original_event_version = 5;
-  string original_source_service = 6;
+  string original_source = 6;
   string consumer_durable = 7;
   int32 delivery_attempt = 8;
   string error_code = 9;

@@ -31,7 +31,7 @@ const (
 	ProxyRuntimeService_UpsertProxyFixedSource_FullMethodName        = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpsertProxyFixedSource"
 	ProxyRuntimeService_DeleteProxySource_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/DeleteProxySource"
 	ProxyRuntimeService_ListProxySourceNodes_FullMethodName          = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxySourceNodes"
-	ProxyRuntimeService_ResolveProxyChain_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ResolveProxyChain"
+	ProxyRuntimeService_ResolveEgressRoute_FullMethodName            = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ResolveEgressRoute"
 	ProxyRuntimeService_ListProxyDynamicLeases_FullMethodName        = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyDynamicLeases"
 	ProxyRuntimeService_AcquireProxyLease_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/AcquireProxyLease"
 	ProxyRuntimeService_ReleaseProxyLease_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ReleaseProxyLease"
@@ -61,7 +61,7 @@ type ProxyRuntimeServiceClient interface {
 	UpsertProxyFixedSource(ctx context.Context, in *UpsertProxyFixedSourceRequest, opts ...grpc.CallOption) (*UpsertProxyFixedSourceResponse, error)
 	DeleteProxySource(ctx context.Context, in *DeleteProxySourceRequest, opts ...grpc.CallOption) (*DeleteProxySourceResponse, error)
 	ListProxySourceNodes(ctx context.Context, in *ListProxySourceNodesRequest, opts ...grpc.CallOption) (*ListProxySourceNodesResponse, error)
-	ResolveProxyChain(ctx context.Context, in *ResolveProxyChainRequest, opts ...grpc.CallOption) (*ResolveProxyChainResponse, error)
+	ResolveEgressRoute(ctx context.Context, in *ResolveEgressRouteRequest, opts ...grpc.CallOption) (*ResolveEgressRouteResponse, error)
 	ListProxyDynamicLeases(ctx context.Context, in *ListProxyDynamicLeasesRequest, opts ...grpc.CallOption) (*ListProxyDynamicLeasesResponse, error)
 	AcquireProxyLease(ctx context.Context, in *AcquireProxyLeaseRequest, opts ...grpc.CallOption) (*AcquireProxyLeaseResponse, error)
 	ReleaseProxyLease(ctx context.Context, in *ReleaseProxyLeaseRequest, opts ...grpc.CallOption) (*ReleaseProxyLeaseResponse, error)
@@ -203,10 +203,10 @@ func (c *proxyRuntimeServiceClient) ListProxySourceNodes(ctx context.Context, in
 	return out, nil
 }
 
-func (c *proxyRuntimeServiceClient) ResolveProxyChain(ctx context.Context, in *ResolveProxyChainRequest, opts ...grpc.CallOption) (*ResolveProxyChainResponse, error) {
+func (c *proxyRuntimeServiceClient) ResolveEgressRoute(ctx context.Context, in *ResolveEgressRouteRequest, opts ...grpc.CallOption) (*ResolveEgressRouteResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ResolveProxyChainResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_ResolveProxyChain_FullMethodName, in, out, cOpts...)
+	out := new(ResolveEgressRouteResponse)
+	err := c.cc.Invoke(ctx, ProxyRuntimeService_ResolveEgressRoute_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -339,7 +339,7 @@ type ProxyRuntimeServiceServer interface {
 	UpsertProxyFixedSource(context.Context, *UpsertProxyFixedSourceRequest) (*UpsertProxyFixedSourceResponse, error)
 	DeleteProxySource(context.Context, *DeleteProxySourceRequest) (*DeleteProxySourceResponse, error)
 	ListProxySourceNodes(context.Context, *ListProxySourceNodesRequest) (*ListProxySourceNodesResponse, error)
-	ResolveProxyChain(context.Context, *ResolveProxyChainRequest) (*ResolveProxyChainResponse, error)
+	ResolveEgressRoute(context.Context, *ResolveEgressRouteRequest) (*ResolveEgressRouteResponse, error)
 	ListProxyDynamicLeases(context.Context, *ListProxyDynamicLeasesRequest) (*ListProxyDynamicLeasesResponse, error)
 	AcquireProxyLease(context.Context, *AcquireProxyLeaseRequest) (*AcquireProxyLeaseResponse, error)
 	ReleaseProxyLease(context.Context, *ReleaseProxyLeaseRequest) (*ReleaseProxyLeaseResponse, error)
@@ -397,8 +397,8 @@ func (UnimplementedProxyRuntimeServiceServer) DeleteProxySource(context.Context,
 func (UnimplementedProxyRuntimeServiceServer) ListProxySourceNodes(context.Context, *ListProxySourceNodesRequest) (*ListProxySourceNodesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListProxySourceNodes not implemented")
 }
-func (UnimplementedProxyRuntimeServiceServer) ResolveProxyChain(context.Context, *ResolveProxyChainRequest) (*ResolveProxyChainResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ResolveProxyChain not implemented")
+func (UnimplementedProxyRuntimeServiceServer) ResolveEgressRoute(context.Context, *ResolveEgressRouteRequest) (*ResolveEgressRouteResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResolveEgressRoute not implemented")
 }
 func (UnimplementedProxyRuntimeServiceServer) ListProxyDynamicLeases(context.Context, *ListProxyDynamicLeasesRequest) (*ListProxyDynamicLeasesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListProxyDynamicLeases not implemented")
@@ -670,20 +670,20 @@ func _ProxyRuntimeService_ListProxySourceNodes_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProxyRuntimeService_ResolveProxyChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResolveProxyChainRequest)
+func _ProxyRuntimeService_ResolveEgressRoute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveEgressRouteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).ResolveProxyChain(ctx, in)
+		return srv.(ProxyRuntimeServiceServer).ResolveEgressRoute(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ProxyRuntimeService_ResolveProxyChain_FullMethodName,
+		FullMethod: ProxyRuntimeService_ResolveEgressRoute_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).ResolveProxyChain(ctx, req.(*ResolveProxyChainRequest))
+		return srv.(ProxyRuntimeServiceServer).ResolveEgressRoute(ctx, req.(*ResolveEgressRouteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -942,8 +942,8 @@ var ProxyRuntimeService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProxyRuntimeService_ListProxySourceNodes_Handler,
 		},
 		{
-			MethodName: "ResolveProxyChain",
-			Handler:    _ProxyRuntimeService_ResolveProxyChain_Handler,
+			MethodName: "ResolveEgressRoute",
+			Handler:    _ProxyRuntimeService_ResolveEgressRoute_Handler,
 		},
 		{
 			MethodName: "ListProxyDynamicLeases",

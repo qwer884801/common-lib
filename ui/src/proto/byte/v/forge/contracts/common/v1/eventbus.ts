@@ -5,22 +5,48 @@
 // source: byte/v/forge/contracts/common/v1/eventbus.proto
 
 /* eslint-disable */
-import type { EventContext } from "./common";
+import type { EventMetadata } from "./common";
 
 export const protobufPackage = "byte.v.forge.contracts.common.v1";
 
-export interface EventEnvelope {
-  context: EventContext | undefined;
-  subject: string;
-  proto_type: string;
-  payload: Uint8Array;
-  content_type: string;
-  attributes: { [key: string]: string };
+export enum EventKind {
+  EVENT_KIND_UNSPECIFIED = "EVENT_KIND_UNSPECIFIED",
+  EVENT_KIND_FACT = "EVENT_KIND_FACT",
+  EVENT_KIND_COMMAND = "EVENT_KIND_COMMAND",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export interface EventEnvelope_AttributesEntry {
+export interface EventEnvelope {
+  metadata: EventMetadata | undefined;
+  subject: string;
+  payload_type: string;
+  payload: Uint8Array;
+  data_content_type: string;
+  extensions: { [key: string]: string };
+}
+
+export interface EventEnvelope_ExtensionsEntry {
   key: string;
   value: string;
+}
+
+export interface EventDefinition {
+  subject: string;
+  event_name: string;
+  event_version: string;
+  kind: EventKind;
+  payload_type: string;
+  owner_service: string;
+  consumer_durable: string;
+  retryable: boolean;
+  max_deliveries: number;
+  retry_delay_seconds: number;
+}
+
+export interface EventCatalog {
+  stream_name: string;
+  stream_subject: string;
+  definitions: EventDefinition[];
 }
 
 export interface EventPublishAck {
@@ -30,12 +56,12 @@ export interface EventPublishAck {
 }
 
 export interface DeadLetterEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   original_subject: string;
   original_event_id: string;
-  original_event_name: string;
+  original_event_type: string;
   original_event_version: string;
-  original_source_service: string;
+  original_source: string;
   consumer_durable: string;
   delivery_attempt: number;
   error_code: string;

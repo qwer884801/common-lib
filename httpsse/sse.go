@@ -114,7 +114,7 @@ func ServeHotStream(w http.ResponseWriter, r *http.Request, subscriber hotstream
 				}
 				return
 			}
-			sse.Event(event.GetEventId(), eventName, event)
+			sse.Event(event.GetMetadata().GetId(), eventName, event)
 		case <-ticker.C:
 			sse.Event("", controlName, control(observabilityv1.HotStreamControlKind_HOT_STREAM_CONTROL_KIND_HEARTBEAT, "heartbeat"))
 		}

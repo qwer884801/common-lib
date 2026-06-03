@@ -4,11 +4,13 @@ import (
 	"strings"
 	"time"
 
+	commonv1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
 	observabilityv1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/observability/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const SubjectPrefix = "byte.v.forge.hot"
+const DataContentType = "application/x-protobuf"
 
 type EventConfig struct {
 	EventID       string
@@ -29,16 +31,21 @@ func NewEvent(cfg EventConfig) *observabilityv1.HotStreamEvent {
 		occurredAt = time.Now()
 	}
 	return &observabilityv1.HotStreamEvent{
-		EventId:       strings.TrimSpace(cfg.EventID),
-		EventType:     strings.TrimSpace(cfg.EventType),
-		SourceService: strings.TrimSpace(cfg.SourceService),
-		ResourceType:  strings.TrimSpace(cfg.ResourceType),
-		ResourceId:    strings.TrimSpace(cfg.ResourceID),
-		Scope:         strings.TrimSpace(cfg.Scope),
-		OccurredAt:    timestamppb.New(occurredAt),
-		CorrelationId: strings.TrimSpace(cfg.CorrelationID),
-		TraceId:       strings.TrimSpace(cfg.TraceID),
-		Attributes:    CleanAttributes(cfg.Attributes),
+		Metadata: &commonv1.EventMetadata{
+			Id:              strings.TrimSpace(cfg.EventID),
+			Type:            strings.TrimSpace(cfg.EventType),
+			Version:         "v1",
+			Time:            timestamppb.New(occurredAt),
+			Source:          strings.TrimSpace(cfg.SourceService),
+			CorrelationId:   strings.TrimSpace(cfg.CorrelationID),
+			TraceId:         strings.TrimSpace(cfg.TraceID),
+			SpecVersion:     "1.0",
+			DataContentType: DataContentType,
+		},
+		ResourceType: strings.TrimSpace(cfg.ResourceType),
+		ResourceId:   strings.TrimSpace(cfg.ResourceID),
+		Scope:        strings.TrimSpace(cfg.Scope),
+		Attributes:   CleanAttributes(cfg.Attributes),
 	}
 }
 

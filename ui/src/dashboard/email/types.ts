@@ -30,7 +30,13 @@ import type {
   EmailMailbox
 } from '../../proto/byte/v/forge/contracts/mailbox/v1/mailbox';
 
-export { MailboxCredentialKind, MailboxProviderAction } from '../../proto/byte/v/forge/contracts/mailbox/v1/mailbox';
+export {
+  MailboxAuthStatus,
+  MailboxCredentialKind,
+  MailboxOperationAction,
+  MailboxOperationStatus,
+  MailboxProviderAction
+} from '../../proto/byte/v/forge/contracts/mailbox/v1/mailbox';
 export type {
   EmailInboxMessage,
   EmailMailbox,

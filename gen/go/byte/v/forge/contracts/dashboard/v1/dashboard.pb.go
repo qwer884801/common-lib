@@ -9,6 +9,7 @@ package dashboardv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -266,7 +267,7 @@ type DashboardServiceStatus struct {
 	Name          string                      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Status        DashboardServiceStatusState `protobuf:"varint,2,opt,name=status,proto3,enum=byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusState" json:"status,omitempty"`
 	Message       string                      `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
-	CheckedAtUnix int64                       `protobuf:"varint,4,opt,name=checked_at_unix,json=checkedAtUnix,proto3" json:"checked_at_unix,omitempty"`
+	CheckedAt     *timestamppb.Timestamp      `protobuf:"bytes,4,opt,name=checked_at,json=checkedAt,proto3" json:"checked_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -322,11 +323,11 @@ func (x *DashboardServiceStatus) GetMessage() string {
 	return ""
 }
 
-func (x *DashboardServiceStatus) GetCheckedAtUnix() int64 {
+func (x *DashboardServiceStatus) GetCheckedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.CheckedAtUnix
+		return x.CheckedAt
 	}
-	return 0
+	return nil
 }
 
 type DashboardServiceStatusResponse struct {
@@ -377,7 +378,7 @@ var File_byte_v_forge_contracts_dashboard_v1_dashboard_proto protoreflect.FileDe
 
 const file_byte_v_forge_contracts_dashboard_v1_dashboard_proto_rawDesc = "" +
 	"\n" +
-	"3byte/v/forge/contracts/dashboard/v1/dashboard.proto\x12#byte.v.forge.contracts.dashboard.v1\"s\n" +
+	"3byte/v/forge/contracts/dashboard/v1/dashboard.proto\x12#byte.v.forge.contracts.dashboard.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"s\n" +
 	"\x17DashboardModuleManifest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12H\n" +
 	"\x03nav\x18\x02 \x03(\v26.byte.v.forge.contracts.dashboard.v1.DashboardNavEntryR\x03nav\"\xe6\x01\n" +
@@ -387,12 +388,13 @@ const file_byte_v_forge_contracts_dashboard_v1_dashboard_proto_rawDesc = "" +
 	"\x04icon\x18\x03 \x01(\tR\x04icon\x12R\n" +
 	"\asection\x18\x04 \x01(\x0e28.byte.v.forge.contracts.dashboard.v1.DashboardNavSectionR\asection\x12+\n" +
 	"\x11required_services\x18\x05 \x03(\tR\x10requiredServices\x12\x14\n" +
-	"\x05order\x18\x06 \x01(\x05R\x05order\"\xc8\x01\n" +
+	"\x05order\x18\x06 \x01(\x05R\x05order\"\xdb\x01\n" +
 	"\x16DashboardServiceStatus\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12X\n" +
 	"\x06status\x18\x02 \x01(\x0e2@.byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusStateR\x06status\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage\x12&\n" +
-	"\x0fchecked_at_unix\x18\x04 \x01(\x03R\rcheckedAtUnix\"y\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x129\n" +
+	"\n" +
+	"checked_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcheckedAt\"y\n" +
 	"\x1eDashboardServiceStatusResponse\x12W\n" +
 	"\bservices\x18\x01 \x03(\v2;.byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusR\bservices*\xa5\x01\n" +
 	"\x13DashboardNavSection\x12%\n" +
@@ -428,17 +430,19 @@ var file_byte_v_forge_contracts_dashboard_v1_dashboard_proto_goTypes = []any{
 	(*DashboardNavEntry)(nil),              // 3: byte.v.forge.contracts.dashboard.v1.DashboardNavEntry
 	(*DashboardServiceStatus)(nil),         // 4: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatus
 	(*DashboardServiceStatusResponse)(nil), // 5: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusResponse
+	(*timestamppb.Timestamp)(nil),          // 6: google.protobuf.Timestamp
 }
 var file_byte_v_forge_contracts_dashboard_v1_dashboard_proto_depIdxs = []int32{
 	3, // 0: byte.v.forge.contracts.dashboard.v1.DashboardModuleManifest.nav:type_name -> byte.v.forge.contracts.dashboard.v1.DashboardNavEntry
 	0, // 1: byte.v.forge.contracts.dashboard.v1.DashboardNavEntry.section:type_name -> byte.v.forge.contracts.dashboard.v1.DashboardNavSection
 	1, // 2: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatus.status:type_name -> byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusState
-	4, // 3: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusResponse.services:type_name -> byte.v.forge.contracts.dashboard.v1.DashboardServiceStatus
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	6, // 3: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatus.checked_at:type_name -> google.protobuf.Timestamp
+	4, // 4: byte.v.forge.contracts.dashboard.v1.DashboardServiceStatusResponse.services:type_name -> byte.v.forge.contracts.dashboard.v1.DashboardServiceStatus
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_dashboard_v1_dashboard_proto_init() }

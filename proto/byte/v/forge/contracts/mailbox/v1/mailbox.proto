@@ -18,12 +18,12 @@ enum EmailSignalKind {
 
 message EmailSignal {
   EmailSignalKind kind = 1;
-  string code = 2;
+  byte.v.forge.contracts.common.v1.SecretRef secret_ref = 2;
   string label = 3;
   string profile = 4;
   string parser = 5;
   int32 confidence = 6;
-  string evidence = 7;
+  string evidence_preview = 7;
 }
 
 enum MailboxCredentialKind {
@@ -31,6 +31,33 @@ enum MailboxCredentialKind {
   MAILBOX_CREDENTIAL_KIND_PASSWORD = 1;
   MAILBOX_CREDENTIAL_KIND_OAUTH_REFRESH_TOKEN = 2;
   MAILBOX_CREDENTIAL_KIND_OAUTH_ACCESS_TOKEN = 3;
+}
+
+enum MailboxAuthStatus {
+  MAILBOX_AUTH_STATUS_UNSPECIFIED = 0;
+  MAILBOX_AUTH_STATUS_UNKNOWN = 1;
+  MAILBOX_AUTH_STATUS_OAUTH_PENDING = 2;
+  MAILBOX_AUTH_STATUS_AUTHORIZED = 3;
+  MAILBOX_AUTH_STATUS_AUTH_FAILED = 4;
+  MAILBOX_AUTH_STATUS_PASSWORD_ONLY = 5;
+  MAILBOX_AUTH_STATUS_WEBHOOK_ONLY = 6;
+  MAILBOX_AUTH_STATUS_DISABLED = 7;
+  MAILBOX_AUTH_STATUS_NEEDS_MANUAL_VERIFICATION = 8;
+}
+
+enum MailboxOperationAction {
+  MAILBOX_OPERATION_ACTION_UNSPECIFIED = 0;
+  MAILBOX_OPERATION_ACTION_REGISTER_MAILBOX = 1;
+  MAILBOX_OPERATION_ACTION_MAILBOX_OAUTH = 2;
+  MAILBOX_OPERATION_ACTION_FETCH_INBOXES = 3;
+}
+
+enum MailboxOperationStatus {
+  MAILBOX_OPERATION_STATUS_UNSPECIFIED = 0;
+  MAILBOX_OPERATION_STATUS_CREATED = 1;
+  MAILBOX_OPERATION_STATUS_RUNNING = 2;
+  MAILBOX_OPERATION_STATUS_SUCCEEDED = 3;
+  MAILBOX_OPERATION_STATUS_FAILED = 4;
 }
 
 message MailboxCredentialState {
@@ -46,7 +73,7 @@ message EmailMailbox {
   string last_error = 7;
   int64 created_at = 10;
   int64 updated_at = 11;
-  string auth_status = 15;
+  MailboxAuthStatus auth_status = 15;
   reserved 18;
   reserved "provider";
   EmailSignal latest_signal = 19;
@@ -66,8 +93,8 @@ message EmailInboxMessage {
   reserved 9;
   reserved "provider";
   string source_mailbox_email = 10;
-  string body_text = 12;
-  string html_body = 13;
+  byte.v.forge.contracts.common.v1.ArtifactRef body_artifact_ref = 12;
+  byte.v.forge.contracts.common.v1.ArtifactRef html_artifact_ref = 13;
   int64 raw_size = 14;
   repeated EmailSignal signals = 15;
   EmailSignal primary_signal = 16;
@@ -75,12 +102,12 @@ message EmailInboxMessage {
 }
 
 message MailboxEmailReceivedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   EmailInboxMessage message = 2;
 }
 
 message MailboxEmailSignalReceivedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   EmailInboxMessage message = 2;
   EmailSignal signal = 3;
 }
@@ -169,8 +196,8 @@ message StartMailboxOAuthResponse {
 
 message MailboxOperation {
   string operation_id = 1;
-  string action = 2;
-  string status = 3;
+  MailboxOperationAction action = 2;
+  MailboxOperationStatus status = 3;
   string email_address = 4;
   string last_step = 5;
   string error_message = 6;
@@ -196,8 +223,8 @@ message GetMailboxOperationResponse {
 
 message ListMailboxOperationsRequest {
   int32 limit = 1;
-  string status = 2;
-  string action = 3;
+  MailboxOperationStatus status = 2;
+  MailboxOperationAction action = 3;
   string email_address = 4;
 }
 
@@ -261,7 +288,7 @@ message MailboxMessageRetentionPolicy {
 message MailboxProviderActionCapability {
   MailboxProviderAction action = 1;
   repeated MailboxCredentialKind required_credentials = 2;
-  repeated string required_auth_statuses = 3;
+  repeated MailboxAuthStatus required_auth_statuses = 3;
   bool bulk_supported = 4;
 }
 

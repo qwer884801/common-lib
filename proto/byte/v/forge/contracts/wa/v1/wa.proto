@@ -20,7 +20,7 @@ enum WaOtpSource {
 }
 
 message WaOtpReceivedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   string workspace_id = 2;
   string e164_number = 3;
   WaOtpSource source = 4;

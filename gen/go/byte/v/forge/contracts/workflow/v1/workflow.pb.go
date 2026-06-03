@@ -10,6 +10,7 @@ import (
 	v1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -141,6 +142,64 @@ func (WorkflowRunStatus) EnumDescriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{1}
 }
 
+type WorkflowGraphElementStatus int32
+
+const (
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED WorkflowGraphElementStatus = 0
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_PENDING            WorkflowGraphElementStatus = 1
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_RUNNING            WorkflowGraphElementStatus = 2
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_SUCCEEDED          WorkflowGraphElementStatus = 3
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_FAILED             WorkflowGraphElementStatus = 4
+	WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_SKIPPED            WorkflowGraphElementStatus = 5
+)
+
+// Enum value maps for WorkflowGraphElementStatus.
+var (
+	WorkflowGraphElementStatus_name = map[int32]string{
+		0: "WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED",
+		1: "WORKFLOW_GRAPH_ELEMENT_PENDING",
+		2: "WORKFLOW_GRAPH_ELEMENT_RUNNING",
+		3: "WORKFLOW_GRAPH_ELEMENT_SUCCEEDED",
+		4: "WORKFLOW_GRAPH_ELEMENT_FAILED",
+		5: "WORKFLOW_GRAPH_ELEMENT_SKIPPED",
+	}
+	WorkflowGraphElementStatus_value = map[string]int32{
+		"WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED": 0,
+		"WORKFLOW_GRAPH_ELEMENT_PENDING":            1,
+		"WORKFLOW_GRAPH_ELEMENT_RUNNING":            2,
+		"WORKFLOW_GRAPH_ELEMENT_SUCCEEDED":          3,
+		"WORKFLOW_GRAPH_ELEMENT_FAILED":             4,
+		"WORKFLOW_GRAPH_ELEMENT_SKIPPED":            5,
+	}
+)
+
+func (x WorkflowGraphElementStatus) Enum() *WorkflowGraphElementStatus {
+	p := new(WorkflowGraphElementStatus)
+	*p = x
+	return p
+}
+
+func (x WorkflowGraphElementStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WorkflowGraphElementStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes[2].Descriptor()
+}
+
+func (WorkflowGraphElementStatus) Type() protoreflect.EnumType {
+	return &file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes[2]
+}
+
+func (x WorkflowGraphElementStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WorkflowGraphElementStatus.Descriptor instead.
+func (WorkflowGraphElementStatus) EnumDescriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{2}
+}
+
 type WorkflowRuntimeSummary struct {
 	state              protoimpl.MessageState   `protogen:"open.v1"`
 	EngineStatus       WorkflowRuntimeStatus    `protobuf:"varint,1,opt,name=engine_status,json=engineStatus,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus" json:"engine_status,omitempty"`
@@ -151,7 +210,7 @@ type WorkflowRuntimeSummary struct {
 	EditorUrl          string                   `protobuf:"bytes,6,opt,name=editor_url,json=editorUrl,proto3" json:"editor_url,omitempty"`
 	Workflows          []*WorkflowDefinition    `protobuf:"bytes,7,rep,name=workflows,proto3" json:"workflows,omitempty"`
 	Executions         []*WorkflowExecution     `protobuf:"bytes,8,rep,name=executions,proto3" json:"executions,omitempty"`
-	CheckedAtUnix      int64                    `protobuf:"varint,9,opt,name=checked_at_unix,json=checkedAtUnix,proto3" json:"checked_at_unix,omitempty"`
+	CheckedAt          *timestamppb.Timestamp   `protobuf:"bytes,9,opt,name=checked_at,json=checkedAt,proto3" json:"checked_at,omitempty"`
 	Runs               []*WorkflowRunProjection `protobuf:"bytes,10,rep,name=runs,proto3" json:"runs,omitempty"`
 	RunsPageInfo       *WorkflowRuntimePageInfo `protobuf:"bytes,11,opt,name=runs_page_info,json=runsPageInfo,proto3" json:"runs_page_info,omitempty"`
 	ExecutionsPageInfo *WorkflowRuntimePageInfo `protobuf:"bytes,12,opt,name=executions_page_info,json=executionsPageInfo,proto3" json:"executions_page_info,omitempty"`
@@ -245,11 +304,11 @@ func (x *WorkflowRuntimeSummary) GetExecutions() []*WorkflowExecution {
 	return nil
 }
 
-func (x *WorkflowRuntimeSummary) GetCheckedAtUnix() int64 {
+func (x *WorkflowRuntimeSummary) GetCheckedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.CheckedAtUnix
+		return x.CheckedAt
 	}
-	return 0
+	return nil
 }
 
 func (x *WorkflowRuntimeSummary) GetRuns() []*WorkflowRunProjection {
@@ -338,7 +397,7 @@ type WorkflowDefinition struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Active        bool                   `protobuf:"varint,3,opt,name=active,proto3" json:"active,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	Tags          []string               `protobuf:"bytes,5,rep,name=tags,proto3" json:"tags,omitempty"`
 	GraphNodes    []*WorkflowGraphNode   `protobuf:"bytes,6,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
 	GraphEdges    []*WorkflowGraphEdge   `protobuf:"bytes,7,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
@@ -397,11 +456,11 @@ func (x *WorkflowDefinition) GetActive() bool {
 	return false
 }
 
-func (x *WorkflowDefinition) GetUpdatedAt() string {
+func (x *WorkflowDefinition) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
-	return ""
+	return nil
 }
 
 func (x *WorkflowDefinition) GetTags() []string {
@@ -430,10 +489,10 @@ type WorkflowExecution struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	WorkflowId    string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
 	WorkflowName  string                 `protobuf:"bytes,3,opt,name=workflow_name,json=workflowName,proto3" json:"workflow_name,omitempty"`
-	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
+	Status        WorkflowRunStatus      `protobuf:"varint,4,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
 	Mode          string                 `protobuf:"bytes,5,opt,name=mode,proto3" json:"mode,omitempty"`
-	StartedAt     string                 `protobuf:"bytes,6,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
-	StoppedAt     string                 `protobuf:"bytes,7,opt,name=stopped_at,json=stoppedAt,proto3" json:"stopped_at,omitempty"`
+	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	StoppedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=stopped_at,json=stoppedAt,proto3" json:"stopped_at,omitempty"`
 	GraphNodes    []*WorkflowGraphNode   `protobuf:"bytes,8,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
 	GraphEdges    []*WorkflowGraphEdge   `protobuf:"bytes,9,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -491,11 +550,11 @@ func (x *WorkflowExecution) GetWorkflowName() string {
 	return ""
 }
 
-func (x *WorkflowExecution) GetStatus() string {
+func (x *WorkflowExecution) GetStatus() WorkflowRunStatus {
 	if x != nil {
 		return x.Status
 	}
-	return ""
+	return WorkflowRunStatus_WORKFLOW_RUN_STATUS_UNSPECIFIED
 }
 
 func (x *WorkflowExecution) GetMode() string {
@@ -505,18 +564,18 @@ func (x *WorkflowExecution) GetMode() string {
 	return ""
 }
 
-func (x *WorkflowExecution) GetStartedAt() string {
+func (x *WorkflowExecution) GetStartedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.StartedAt
 	}
-	return ""
+	return nil
 }
 
-func (x *WorkflowExecution) GetStoppedAt() string {
+func (x *WorkflowExecution) GetStoppedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.StoppedAt
 	}
-	return ""
+	return nil
 }
 
 func (x *WorkflowExecution) GetGraphNodes() []*WorkflowGraphNode {
@@ -534,19 +593,19 @@ func (x *WorkflowExecution) GetGraphEdges() []*WorkflowGraphEdge {
 }
 
 type WorkflowGraphNode struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Kind          string                 `protobuf:"bytes,3,opt,name=kind,proto3" json:"kind,omitempty"`
-	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
-	X             float64                `protobuf:"fixed64,5,opt,name=x,proto3" json:"x,omitempty"`
-	Y             float64                `protobuf:"fixed64,6,opt,name=y,proto3" json:"y,omitempty"`
-	TypeVersion   string                 `protobuf:"bytes,7,opt,name=type_version,json=typeVersion,proto3" json:"type_version,omitempty"`
-	Disabled      bool                   `protobuf:"varint,8,opt,name=disabled,proto3" json:"disabled,omitempty"`
-	StartedAtUnix int64                  `protobuf:"varint,9,opt,name=started_at_unix,json=startedAtUnix,proto3" json:"started_at_unix,omitempty"`
-	DurationMs    int64                  `protobuf:"varint,10,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
-	ErrorMessage  string                 `protobuf:"bytes,11,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	Iterations    int32                  `protobuf:"varint,12,opt,name=iterations,proto3" json:"iterations,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Id            string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                     `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Kind          string                     `protobuf:"bytes,3,opt,name=kind,proto3" json:"kind,omitempty"`
+	Status        WorkflowGraphElementStatus `protobuf:"varint,4,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatus" json:"status,omitempty"`
+	X             float64                    `protobuf:"fixed64,5,opt,name=x,proto3" json:"x,omitempty"`
+	Y             float64                    `protobuf:"fixed64,6,opt,name=y,proto3" json:"y,omitempty"`
+	TypeVersion   string                     `protobuf:"bytes,7,opt,name=type_version,json=typeVersion,proto3" json:"type_version,omitempty"`
+	Disabled      bool                       `protobuf:"varint,8,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	StartedAt     *timestamppb.Timestamp     `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	DurationMs    int64                      `protobuf:"varint,10,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
+	ErrorMessage  string                     `protobuf:"bytes,11,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	Iterations    int32                      `protobuf:"varint,12,opt,name=iterations,proto3" json:"iterations,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -602,11 +661,11 @@ func (x *WorkflowGraphNode) GetKind() string {
 	return ""
 }
 
-func (x *WorkflowGraphNode) GetStatus() string {
+func (x *WorkflowGraphNode) GetStatus() WorkflowGraphElementStatus {
 	if x != nil {
 		return x.Status
 	}
-	return ""
+	return WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED
 }
 
 func (x *WorkflowGraphNode) GetX() float64 {
@@ -637,11 +696,11 @@ func (x *WorkflowGraphNode) GetDisabled() bool {
 	return false
 }
 
-func (x *WorkflowGraphNode) GetStartedAtUnix() int64 {
+func (x *WorkflowGraphNode) GetStartedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.StartedAtUnix
+		return x.StartedAt
 	}
-	return 0
+	return nil
 }
 
 func (x *WorkflowGraphNode) GetDurationMs() int64 {
@@ -666,12 +725,12 @@ func (x *WorkflowGraphNode) GetIterations() int32 {
 }
 
 type WorkflowGraphEdge struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Source        string                 `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
-	Target        string                 `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
-	Label         string                 `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
-	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Id            string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Source        string                     `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
+	Target        string                     `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
+	Label         string                     `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	Status        WorkflowGraphElementStatus `protobuf:"varint,5,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatus" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -734,11 +793,11 @@ func (x *WorkflowGraphEdge) GetLabel() string {
 	return ""
 }
 
-func (x *WorkflowGraphEdge) GetStatus() string {
+func (x *WorkflowGraphEdge) GetStatus() WorkflowGraphElementStatus {
 	if x != nil {
 		return x.Status
 	}
-	return ""
+	return WorkflowGraphElementStatus_WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED
 }
 
 type WorkflowRunProjection struct {
@@ -751,9 +810,9 @@ type WorkflowRunProjection struct {
 	CurrentNodeId   string                 `protobuf:"bytes,6,opt,name=current_node_id,json=currentNodeId,proto3" json:"current_node_id,omitempty"`
 	CurrentNodeName string                 `protobuf:"bytes,7,opt,name=current_node_name,json=currentNodeName,proto3" json:"current_node_name,omitempty"`
 	ErrorMessage    string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	StartedAtUnix   int64                  `protobuf:"varint,9,opt,name=started_at_unix,json=startedAtUnix,proto3" json:"started_at_unix,omitempty"`
-	CompletedAtUnix int64                  `protobuf:"varint,10,opt,name=completed_at_unix,json=completedAtUnix,proto3" json:"completed_at_unix,omitempty"`
-	UpdatedAtUnix   int64                  `protobuf:"varint,11,opt,name=updated_at_unix,json=updatedAtUnix,proto3" json:"updated_at_unix,omitempty"`
+	StartedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	CompletedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	GraphNodes      []*WorkflowGraphNode   `protobuf:"bytes,12,rep,name=graph_nodes,json=graphNodes,proto3" json:"graph_nodes,omitempty"`
 	GraphEdges      []*WorkflowGraphEdge   `protobuf:"bytes,13,rep,name=graph_edges,json=graphEdges,proto3" json:"graph_edges,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -846,25 +905,25 @@ func (x *WorkflowRunProjection) GetErrorMessage() string {
 	return ""
 }
 
-func (x *WorkflowRunProjection) GetStartedAtUnix() int64 {
+func (x *WorkflowRunProjection) GetStartedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.StartedAtUnix
+		return x.StartedAt
 	}
-	return 0
+	return nil
 }
 
-func (x *WorkflowRunProjection) GetCompletedAtUnix() int64 {
+func (x *WorkflowRunProjection) GetCompletedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.CompletedAtUnix
+		return x.CompletedAt
 	}
-	return 0
+	return nil
 }
 
-func (x *WorkflowRunProjection) GetUpdatedAtUnix() int64 {
+func (x *WorkflowRunProjection) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.UpdatedAtUnix
+		return x.UpdatedAt
 	}
-	return 0
+	return nil
 }
 
 func (x *WorkflowRunProjection) GetGraphNodes() []*WorkflowGraphNode {
@@ -882,19 +941,19 @@ func (x *WorkflowRunProjection) GetGraphEdges() []*WorkflowGraphEdge {
 }
 
 type WorkflowStepUpdateRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	RunId          string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
-	WorkflowId     string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
-	WorkflowName   string                 `protobuf:"bytes,3,opt,name=workflow_name,json=workflowName,proto3" json:"workflow_name,omitempty"`
-	ExecutionId    string                 `protobuf:"bytes,4,opt,name=execution_id,json=executionId,proto3" json:"execution_id,omitempty"`
-	NodeId         string                 `protobuf:"bytes,5,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
-	NodeName       string                 `protobuf:"bytes,6,opt,name=node_name,json=nodeName,proto3" json:"node_name,omitempty"`
-	Status         WorkflowRunStatus      `protobuf:"varint,7,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
-	ErrorMessage   string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	OccurredAtUnix int64                  `protobuf:"varint,9,opt,name=occurred_at_unix,json=occurredAtUnix,proto3" json:"occurred_at_unix,omitempty"`
-	Context        *v1.EventContext       `protobuf:"bytes,10,opt,name=context,proto3" json:"context,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RunId         string                 `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	WorkflowId    string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
+	WorkflowName  string                 `protobuf:"bytes,3,opt,name=workflow_name,json=workflowName,proto3" json:"workflow_name,omitempty"`
+	ExecutionId   string                 `protobuf:"bytes,4,opt,name=execution_id,json=executionId,proto3" json:"execution_id,omitempty"`
+	NodeId        string                 `protobuf:"bytes,5,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	NodeName      string                 `protobuf:"bytes,6,opt,name=node_name,json=nodeName,proto3" json:"node_name,omitempty"`
+	Status        WorkflowRunStatus      `protobuf:"varint,7,opt,name=status,proto3,enum=byte.v.forge.contracts.workflow.v1.WorkflowRunStatus" json:"status,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	OccurredAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
+	Metadata      *v1.EventMetadata      `protobuf:"bytes,10,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkflowStepUpdateRequest) Reset() {
@@ -983,16 +1042,16 @@ func (x *WorkflowStepUpdateRequest) GetErrorMessage() string {
 	return ""
 }
 
-func (x *WorkflowStepUpdateRequest) GetOccurredAtUnix() int64 {
+func (x *WorkflowStepUpdateRequest) GetOccurredAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.OccurredAtUnix
+		return x.OccurredAt
 	}
-	return 0
+	return nil
 }
 
-func (x *WorkflowStepUpdateRequest) GetContext() *v1.EventContext {
+func (x *WorkflowStepUpdateRequest) GetMetadata() *v1.EventMetadata {
 	if x != nil {
-		return x.Context
+		return x.Metadata
 	}
 	return nil
 }
@@ -1049,11 +1108,211 @@ func (x *WorkflowStepUpdateResponse) GetDuplicate() bool {
 	return false
 }
 
+type GetWorkflowRuntimeSummaryRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	RunsPageSize        int32                  `protobuf:"varint,1,opt,name=runs_page_size,json=runsPageSize,proto3" json:"runs_page_size,omitempty"`
+	RunsPageToken       string                 `protobuf:"bytes,2,opt,name=runs_page_token,json=runsPageToken,proto3" json:"runs_page_token,omitempty"`
+	ExecutionsPageSize  int32                  `protobuf:"varint,3,opt,name=executions_page_size,json=executionsPageSize,proto3" json:"executions_page_size,omitempty"`
+	ExecutionsPageToken string                 `protobuf:"bytes,4,opt,name=executions_page_token,json=executionsPageToken,proto3" json:"executions_page_token,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) Reset() {
+	*x = GetWorkflowRuntimeSummaryRequest{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWorkflowRuntimeSummaryRequest) ProtoMessage() {}
+
+func (x *GetWorkflowRuntimeSummaryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWorkflowRuntimeSummaryRequest.ProtoReflect.Descriptor instead.
+func (*GetWorkflowRuntimeSummaryRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) GetRunsPageSize() int32 {
+	if x != nil {
+		return x.RunsPageSize
+	}
+	return 0
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) GetRunsPageToken() string {
+	if x != nil {
+		return x.RunsPageToken
+	}
+	return ""
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) GetExecutionsPageSize() int32 {
+	if x != nil {
+		return x.ExecutionsPageSize
+	}
+	return 0
+}
+
+func (x *GetWorkflowRuntimeSummaryRequest) GetExecutionsPageToken() string {
+	if x != nil {
+		return x.ExecutionsPageToken
+	}
+	return ""
+}
+
+type GetWorkflowRuntimeSummaryResponse struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Summary       *WorkflowRuntimeSummary `protobuf:"bytes,1,opt,name=summary,proto3" json:"summary,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetWorkflowRuntimeSummaryResponse) Reset() {
+	*x = GetWorkflowRuntimeSummaryResponse{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetWorkflowRuntimeSummaryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetWorkflowRuntimeSummaryResponse) ProtoMessage() {}
+
+func (x *GetWorkflowRuntimeSummaryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetWorkflowRuntimeSummaryResponse.ProtoReflect.Descriptor instead.
+func (*GetWorkflowRuntimeSummaryResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetWorkflowRuntimeSummaryResponse) GetSummary() *WorkflowRuntimeSummary {
+	if x != nil {
+		return x.Summary
+	}
+	return nil
+}
+
+type StreamWorkflowRuntimeStateRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamWorkflowRuntimeStateRequest) Reset() {
+	*x = StreamWorkflowRuntimeStateRequest{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamWorkflowRuntimeStateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamWorkflowRuntimeStateRequest) ProtoMessage() {}
+
+func (x *StreamWorkflowRuntimeStateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamWorkflowRuntimeStateRequest.ProtoReflect.Descriptor instead.
+func (*StreamWorkflowRuntimeStateRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{11}
+}
+
+type WorkflowRuntimeStateEvent struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	EventType     string                  `protobuf:"bytes,1,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
+	Summary       *WorkflowRuntimeSummary `protobuf:"bytes,2,opt,name=summary,proto3" json:"summary,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowRuntimeStateEvent) Reset() {
+	*x = WorkflowRuntimeStateEvent{}
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowRuntimeStateEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowRuntimeStateEvent) ProtoMessage() {}
+
+func (x *WorkflowRuntimeStateEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowRuntimeStateEvent.ProtoReflect.Descriptor instead.
+func (*WorkflowRuntimeStateEvent) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *WorkflowRuntimeStateEvent) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
+}
+
+func (x *WorkflowRuntimeStateEvent) GetSummary() *WorkflowRuntimeSummary {
+	if x != nil {
+		return x.Summary
+	}
+	return nil
+}
+
 var File_byte_v_forge_contracts_workflow_v1_workflow_proto protoreflect.FileDescriptor
 
 const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\n" +
-	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\"\xd6\x06\n" +
+	"1byte/v/forge/contracts/workflow/v1/workflow.proto\x12\"byte.v.forge.contracts.workflow.v1\x1a-byte/v/forge/contracts/common/v1/common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe9\x06\n" +
 	"\x16WorkflowRuntimeSummary\x12^\n" +
 	"\rengine_status\x18\x01 \x01(\x0e29.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatusR\fengineStatus\x12%\n" +
 	"\x0eengine_message\x18\x02 \x01(\tR\rengineMessage\x12X\n" +
@@ -1067,8 +1326,9 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\tworkflows\x18\a \x03(\v26.byte.v.forge.contracts.workflow.v1.WorkflowDefinitionR\tworkflows\x12U\n" +
 	"\n" +
 	"executions\x18\b \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowExecutionR\n" +
-	"executions\x12&\n" +
-	"\x0fchecked_at_unix\x18\t \x01(\x03R\rcheckedAtUnix\x12M\n" +
+	"executions\x129\n" +
+	"\n" +
+	"checked_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcheckedAt\x12M\n" +
 	"\x04runs\x18\n" +
 	" \x03(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x04runs\x12a\n" +
 	"\x0eruns_page_info\x18\v \x01(\v2;.byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfoR\frunsPageInfo\x12m\n" +
@@ -1077,56 +1337,57 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
 	"\n" +
 	"item_count\x18\x02 \x01(\x05R\titemCount\x12&\n" +
-	"\x0fnext_page_token\x18\x03 \x01(\tR\rnextPageToken\"\xb3\x02\n" +
+	"\x0fnext_page_token\x18\x03 \x01(\tR\rnextPageToken\"\xcf\x02\n" +
 	"\x12WorkflowDefinition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
-	"\x06active\x18\x03 \x01(\bR\x06active\x12\x1d\n" +
+	"\x06active\x18\x03 \x01(\bR\x06active\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\tR\tupdatedAt\x12\x12\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12\x12\n" +
 	"\x04tags\x18\x05 \x03(\tR\x04tags\x12V\n" +
 	"\vgraph_nodes\x18\x06 \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
 	"graphNodes\x12V\n" +
 	"\vgraph_edges\x18\a \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
-	"graphEdges\"\x83\x03\n" +
+	"graphEdges\"\xf2\x03\n" +
 	"\x11WorkflowExecution\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
 	"workflowId\x12#\n" +
-	"\rworkflow_name\x18\x03 \x01(\tR\fworkflowName\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\tR\x06status\x12\x12\n" +
-	"\x04mode\x18\x05 \x01(\tR\x04mode\x12\x1d\n" +
+	"\rworkflow_name\x18\x03 \x01(\tR\fworkflowName\x12M\n" +
+	"\x06status\x18\x04 \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12\x12\n" +
+	"\x04mode\x18\x05 \x01(\tR\x04mode\x129\n" +
 	"\n" +
-	"started_at\x18\x06 \x01(\tR\tstartedAt\x12\x1d\n" +
+	"started_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x129\n" +
 	"\n" +
-	"stopped_at\x18\a \x01(\tR\tstoppedAt\x12V\n" +
+	"stopped_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tstoppedAt\x12V\n" +
 	"\vgraph_nodes\x18\b \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
 	"graphNodes\x12V\n" +
 	"\vgraph_edges\x18\t \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
-	"graphEdges\"\xcc\x02\n" +
+	"graphEdges\"\x9f\x03\n" +
 	"\x11WorkflowGraphNode\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
-	"\x04kind\x18\x03 \x01(\tR\x04kind\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\tR\x06status\x12\f\n" +
+	"\x04kind\x18\x03 \x01(\tR\x04kind\x12V\n" +
+	"\x06status\x18\x04 \x01(\x0e2>.byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatusR\x06status\x12\f\n" +
 	"\x01x\x18\x05 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x06 \x01(\x01R\x01y\x12!\n" +
 	"\ftype_version\x18\a \x01(\tR\vtypeVersion\x12\x1a\n" +
-	"\bdisabled\x18\b \x01(\bR\bdisabled\x12&\n" +
-	"\x0fstarted_at_unix\x18\t \x01(\x03R\rstartedAtUnix\x12\x1f\n" +
+	"\bdisabled\x18\b \x01(\bR\bdisabled\x129\n" +
+	"\n" +
+	"started_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12\x1f\n" +
 	"\vduration_ms\x18\n" +
 	" \x01(\x03R\n" +
 	"durationMs\x12#\n" +
 	"\rerror_message\x18\v \x01(\tR\ferrorMessage\x12\x1e\n" +
 	"\n" +
 	"iterations\x18\f \x01(\x05R\n" +
-	"iterations\"\x81\x01\n" +
+	"iterations\"\xc1\x01\n" +
 	"\x11WorkflowGraphEdge\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
 	"\x06source\x18\x02 \x01(\tR\x06source\x12\x16\n" +
 	"\x06target\x18\x03 \x01(\tR\x06target\x12\x14\n" +
-	"\x05label\x18\x04 \x01(\tR\x05label\x12\x16\n" +
-	"\x06status\x18\x05 \x01(\tR\x06status\"\x8b\x05\n" +
+	"\x05label\x18\x04 \x01(\tR\x05label\x12V\n" +
+	"\x06status\x18\x05 \x01(\x0e2>.byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatusR\x06status\"\xc4\x05\n" +
 	"\x15WorkflowRunProjection\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
@@ -1136,15 +1397,17 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\x06status\x18\x05 \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12&\n" +
 	"\x0fcurrent_node_id\x18\x06 \x01(\tR\rcurrentNodeId\x12*\n" +
 	"\x11current_node_name\x18\a \x01(\tR\x0fcurrentNodeName\x12#\n" +
-	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12&\n" +
-	"\x0fstarted_at_unix\x18\t \x01(\x03R\rstartedAtUnix\x12*\n" +
-	"\x11completed_at_unix\x18\n" +
-	" \x01(\x03R\x0fcompletedAtUnix\x12&\n" +
-	"\x0fupdated_at_unix\x18\v \x01(\x03R\rupdatedAtUnix\x12V\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x129\n" +
+	"\n" +
+	"started_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12=\n" +
+	"\fcompleted_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\vcompletedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12V\n" +
 	"\vgraph_nodes\x18\f \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphNodeR\n" +
 	"graphNodes\x12V\n" +
 	"\vgraph_edges\x18\r \x03(\v25.byte.v.forge.contracts.workflow.v1.WorkflowGraphEdgeR\n" +
-	"graphEdges\"\xb9\x03\n" +
+	"graphEdges\"\xcf\x03\n" +
 	"\x19WorkflowStepUpdateRequest\x12\x15\n" +
 	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
@@ -1154,13 +1417,26 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\anode_id\x18\x05 \x01(\tR\x06nodeId\x12\x1b\n" +
 	"\tnode_name\x18\x06 \x01(\tR\bnodeName\x12M\n" +
 	"\x06status\x18\a \x01(\x0e25.byte.v.forge.contracts.workflow.v1.WorkflowRunStatusR\x06status\x12#\n" +
-	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12(\n" +
-	"\x10occurred_at_unix\x18\t \x01(\x03R\x0eoccurredAtUnix\x12H\n" +
-	"\acontext\x18\n" +
-	" \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\"\x87\x01\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\x12;\n" +
+	"\voccurred_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"occurredAt\x12K\n" +
+	"\bmetadata\x18\n" +
+	" \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\"\x87\x01\n" +
 	"\x1aWorkflowStepUpdateResponse\x12K\n" +
 	"\x03run\x18\x01 \x01(\v29.byte.v.forge.contracts.workflow.v1.WorkflowRunProjectionR\x03run\x12\x1c\n" +
-	"\tduplicate\x18\x02 \x01(\bR\tduplicate*\xc4\x01\n" +
+	"\tduplicate\x18\x02 \x01(\bR\tduplicate\"\xd6\x01\n" +
+	" GetWorkflowRuntimeSummaryRequest\x12$\n" +
+	"\x0eruns_page_size\x18\x01 \x01(\x05R\frunsPageSize\x12&\n" +
+	"\x0fruns_page_token\x18\x02 \x01(\tR\rrunsPageToken\x120\n" +
+	"\x14executions_page_size\x18\x03 \x01(\x05R\x12executionsPageSize\x122\n" +
+	"\x15executions_page_token\x18\x04 \x01(\tR\x13executionsPageToken\"y\n" +
+	"!GetWorkflowRuntimeSummaryResponse\x12T\n" +
+	"\asummary\x18\x01 \x01(\v2:.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummaryR\asummary\"#\n" +
+	"!StreamWorkflowRuntimeStateRequest\"\x90\x01\n" +
+	"\x19WorkflowRuntimeStateEvent\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\x01 \x01(\tR\teventType\x12T\n" +
+	"\asummary\x18\x02 \x01(\v2:.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummaryR\asummary*\xc4\x01\n" +
 	"\x15WorkflowRuntimeStatus\x12'\n" +
 	"#WORKFLOW_RUNTIME_STATUS_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aWORKFLOW_RUNTIME_AVAILABLE\x10\x01\x12\x1d\n" +
@@ -1175,7 +1451,18 @@ const file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc = "" +
 	"\x16WORKFLOW_RUN_SUCCEEDED\x10\x04\x12\x17\n" +
 	"\x13WORKFLOW_RUN_FAILED\x10\x05\x12\x19\n" +
 	"\x15WORKFLOW_RUN_CANCELED\x10\x06\x12\x18\n" +
-	"\x14WORKFLOW_RUN_SKIPPED\x10\aB\xd6\x01\n" +
+	"\x14WORKFLOW_RUN_SKIPPED\x10\a*\x80\x02\n" +
+	"\x1aWorkflowGraphElementStatus\x12-\n" +
+	")WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
+	"\x1eWORKFLOW_GRAPH_ELEMENT_PENDING\x10\x01\x12\"\n" +
+	"\x1eWORKFLOW_GRAPH_ELEMENT_RUNNING\x10\x02\x12$\n" +
+	" WORKFLOW_GRAPH_ELEMENT_SUCCEEDED\x10\x03\x12!\n" +
+	"\x1dWORKFLOW_GRAPH_ELEMENT_FAILED\x10\x04\x12\"\n" +
+	"\x1eWORKFLOW_GRAPH_ELEMENT_SKIPPED\x10\x052\x80\x04\n" +
+	"\x16WorkflowRuntimeService\x12\xa8\x01\n" +
+	"\x19GetWorkflowRuntimeSummary\x12D.byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryRequest\x1aE.byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryResponse\x12\x93\x01\n" +
+	"\x12UpdateWorkflowStep\x12=.byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest\x1a>.byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse\x12\xa4\x01\n" +
+	"\x1aStreamWorkflowRuntimeState\x12E.byte.v.forge.contracts.workflow.v1.StreamWorkflowRuntimeStateRequest\x1a=.byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStateEvent0\x01B\xd6\x01\n" +
 	"$com.bytevforge.contracts.workflow.v1B\rWorkflowProtoP\x01ZWgithub.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/workflow/v1;workflowv1\xaa\x02 ByteVForge.Contracts.Workflow.V1\xca\x02 ByteVForge\\Contracts\\Workflow\\V1b\x06proto3"
 
 var (
@@ -1190,45 +1477,71 @@ func file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescGZIP() []byte
 	return file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDescData
 }
 
-var file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_byte_v_forge_contracts_workflow_v1_workflow_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_byte_v_forge_contracts_workflow_v1_workflow_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_byte_v_forge_contracts_workflow_v1_workflow_proto_goTypes = []any{
-	(WorkflowRuntimeStatus)(0),         // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
-	(WorkflowRunStatus)(0),             // 1: byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
-	(*WorkflowRuntimeSummary)(nil),     // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
-	(*WorkflowRuntimePageInfo)(nil),    // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
-	(*WorkflowDefinition)(nil),         // 4: byte.v.forge.contracts.workflow.v1.WorkflowDefinition
-	(*WorkflowExecution)(nil),          // 5: byte.v.forge.contracts.workflow.v1.WorkflowExecution
-	(*WorkflowGraphNode)(nil),          // 6: byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
-	(*WorkflowGraphEdge)(nil),          // 7: byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
-	(*WorkflowRunProjection)(nil),      // 8: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
-	(*WorkflowStepUpdateRequest)(nil),  // 9: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest
-	(*WorkflowStepUpdateResponse)(nil), // 10: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse
-	(*v1.EventContext)(nil),            // 11: byte.v.forge.contracts.common.v1.EventContext
+	(WorkflowRuntimeStatus)(0),                // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
+	(WorkflowRunStatus)(0),                    // 1: byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	(WorkflowGraphElementStatus)(0),           // 2: byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatus
+	(*WorkflowRuntimeSummary)(nil),            // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
+	(*WorkflowRuntimePageInfo)(nil),           // 4: byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	(*WorkflowDefinition)(nil),                // 5: byte.v.forge.contracts.workflow.v1.WorkflowDefinition
+	(*WorkflowExecution)(nil),                 // 6: byte.v.forge.contracts.workflow.v1.WorkflowExecution
+	(*WorkflowGraphNode)(nil),                 // 7: byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	(*WorkflowGraphEdge)(nil),                 // 8: byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	(*WorkflowRunProjection)(nil),             // 9: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	(*WorkflowStepUpdateRequest)(nil),         // 10: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest
+	(*WorkflowStepUpdateResponse)(nil),        // 11: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse
+	(*GetWorkflowRuntimeSummaryRequest)(nil),  // 12: byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryRequest
+	(*GetWorkflowRuntimeSummaryResponse)(nil), // 13: byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryResponse
+	(*StreamWorkflowRuntimeStateRequest)(nil), // 14: byte.v.forge.contracts.workflow.v1.StreamWorkflowRuntimeStateRequest
+	(*WorkflowRuntimeStateEvent)(nil),         // 15: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStateEvent
+	(*timestamppb.Timestamp)(nil),             // 16: google.protobuf.Timestamp
+	(*v1.EventMetadata)(nil),                  // 17: byte.v.forge.contracts.common.v1.EventMetadata
 }
 var file_byte_v_forge_contracts_workflow_v1_workflow_proto_depIdxs = []int32{
 	0,  // 0: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.engine_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
 	0,  // 1: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.api_status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStatus
-	4,  // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.workflows:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowDefinition
-	5,  // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowExecution
-	8,  // 4: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
-	3,  // 5: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
-	3,  // 6: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
-	6,  // 7: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
-	7,  // 8: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
-	6,  // 9: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
-	7,  // 10: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
-	1,  // 11: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
-	6,  // 12: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
-	7,  // 13: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
-	1,  // 14: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
-	11, // 15: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
-	8,  // 16: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse.run:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	5,  // 2: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.workflows:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowDefinition
+	6,  // 3: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowExecution
+	16, // 4: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.checked_at:type_name -> google.protobuf.Timestamp
+	9,  // 5: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	4,  // 6: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.runs_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	4,  // 7: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary.executions_page_info:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimePageInfo
+	16, // 8: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 9: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	8,  // 10: byte.v.forge.contracts.workflow.v1.WorkflowDefinition.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	1,  // 11: byte.v.forge.contracts.workflow.v1.WorkflowExecution.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	16, // 12: byte.v.forge.contracts.workflow.v1.WorkflowExecution.started_at:type_name -> google.protobuf.Timestamp
+	16, // 13: byte.v.forge.contracts.workflow.v1.WorkflowExecution.stopped_at:type_name -> google.protobuf.Timestamp
+	7,  // 14: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	8,  // 15: byte.v.forge.contracts.workflow.v1.WorkflowExecution.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	2,  // 16: byte.v.forge.contracts.workflow.v1.WorkflowGraphNode.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatus
+	16, // 17: byte.v.forge.contracts.workflow.v1.WorkflowGraphNode.started_at:type_name -> google.protobuf.Timestamp
+	2,  // 18: byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphElementStatus
+	1,  // 19: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	16, // 20: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.started_at:type_name -> google.protobuf.Timestamp
+	16, // 21: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.completed_at:type_name -> google.protobuf.Timestamp
+	16, // 22: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 23: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_nodes:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphNode
+	8,  // 24: byte.v.forge.contracts.workflow.v1.WorkflowRunProjection.graph_edges:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowGraphEdge
+	1,  // 25: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.status:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunStatus
+	16, // 26: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.occurred_at:type_name -> google.protobuf.Timestamp
+	17, // 27: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
+	9,  // 28: byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse.run:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRunProjection
+	3,  // 29: byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryResponse.summary:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
+	3,  // 30: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStateEvent.summary:type_name -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeSummary
+	12, // 31: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.GetWorkflowRuntimeSummary:input_type -> byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryRequest
+	10, // 32: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.UpdateWorkflowStep:input_type -> byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateRequest
+	14, // 33: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.StreamWorkflowRuntimeState:input_type -> byte.v.forge.contracts.workflow.v1.StreamWorkflowRuntimeStateRequest
+	13, // 34: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.GetWorkflowRuntimeSummary:output_type -> byte.v.forge.contracts.workflow.v1.GetWorkflowRuntimeSummaryResponse
+	11, // 35: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.UpdateWorkflowStep:output_type -> byte.v.forge.contracts.workflow.v1.WorkflowStepUpdateResponse
+	15, // 36: byte.v.forge.contracts.workflow.v1.WorkflowRuntimeService.StreamWorkflowRuntimeState:output_type -> byte.v.forge.contracts.workflow.v1.WorkflowRuntimeStateEvent
+	34, // [34:37] is the sub-list for method output_type
+	31, // [31:34] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_workflow_v1_workflow_proto_init() }
@@ -1241,10 +1554,10 @@ func file_byte_v_forge_contracts_workflow_v1_workflow_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc), len(file_byte_v_forge_contracts_workflow_v1_workflow_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   9,
+			NumEnums:      3,
+			NumMessages:   13,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_byte_v_forge_contracts_workflow_v1_workflow_proto_goTypes,
 		DependencyIndexes: file_byte_v_forge_contracts_workflow_v1_workflow_proto_depIdxs,

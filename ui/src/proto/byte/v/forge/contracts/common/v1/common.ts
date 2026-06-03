@@ -8,13 +8,40 @@
 
 export const protobufPackage = "byte.v.forge.contracts.common.v1";
 
-export interface EventContext {
-  event_id: string;
-  event_name: string;
-  event_version: string;
-  occurred_at: string | undefined;
-  source_service: string;
+export interface EventMetadata {
+  id: string;
+  type: string;
+  version: string;
+  time: string | undefined;
+  source: string;
   correlation_id: string;
   trace_id: string;
   idempotency_key: string;
+  subject: string;
+  spec_version: string;
+  data_content_type: string;
+  data_schema: string;
+}
+
+export interface SecretRef {
+  secret_id: string;
+  provider: string;
+  purpose: string;
+  expires_at: string | undefined;
+}
+
+export interface ArtifactRef {
+  artifact_id: string;
+  uri: string;
+  content_type: string;
+  size_bytes: number;
+  purpose: string;
+  expires_at: string | undefined;
+}
+
+export interface OperationError {
+  code: string;
+  message: string;
+  retryable: boolean;
+  retry_after: string | undefined;
 }

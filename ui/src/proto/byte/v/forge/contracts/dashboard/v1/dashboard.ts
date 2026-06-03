@@ -42,7 +42,7 @@ export interface DashboardServiceStatus {
   name: string;
   status: DashboardServiceStatusState;
   message: string;
-  checked_at_unix: number;
+  checked_at: string | undefined;
 }
 
 export interface DashboardServiceStatusResponse {

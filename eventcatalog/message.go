@@ -22,20 +22,20 @@ var (
 
 func (definition Definition) NewMessage(
 	event proto.Message,
-	eventCtx *commonv1.EventContext,
+	metadata *commonv1.EventMetadata,
 	attributes map[string]string,
 ) (eventbus.Message, error) {
 	if err := definition.ValidateEvent(event); err != nil {
 		return eventbus.Message{}, err
 	}
-	if err := definition.ValidateContext(eventCtx); err != nil {
+	if err := definition.ValidateMetadata(metadata); err != nil {
 		return eventbus.Message{}, err
 	}
 	return eventbus.Message{
 		Subject:    strings.TrimSpace(definition.Subject),
 		Event:      event,
-		Context:    eventCtx,
-		Attributes: attributes,
+		Metadata:   metadata,
+		Extensions: attributes,
 	}, nil
 }
 
@@ -56,21 +56,21 @@ func (definition Definition) ValidateEvent(event proto.Message) error {
 	return nil
 }
 
-func (definition Definition) ValidateContext(eventCtx *commonv1.EventContext) error {
+func (definition Definition) ValidateMetadata(metadata *commonv1.EventMetadata) error {
 	if strings.TrimSpace(definition.EventName) == "" {
 		return ErrEmptyDefinitionEventName
 	}
 	if strings.TrimSpace(definition.EventVersion) == "" {
 		return ErrEmptyDefinitionEventVersion
 	}
-	if err := eventbus.ValidateContext(eventCtx); err != nil {
+	if err := eventbus.ValidateMetadata(metadata); err != nil {
 		return err
 	}
-	if strings.TrimSpace(eventCtx.GetEventName()) != strings.TrimSpace(definition.EventName) {
-		return fmt.Errorf("%w: expected %s, got %s", ErrMismatchedEventName, definition.EventName, eventCtx.GetEventName())
+	if strings.TrimSpace(metadata.GetType()) != strings.TrimSpace(definition.EventName) {
+		return fmt.Errorf("%w: expected %s, got %s", ErrMismatchedEventName, definition.EventName, metadata.GetType())
 	}
-	if strings.TrimSpace(eventCtx.GetEventVersion()) != strings.TrimSpace(definition.EventVersion) {
-		return fmt.Errorf("%w: expected %s, got %s", ErrMismatchedEventVersion, definition.EventVersion, eventCtx.GetEventVersion())
+	if strings.TrimSpace(metadata.GetVersion()) != strings.TrimSpace(definition.EventVersion) {
+		return fmt.Errorf("%w: expected %s, got %s", ErrMismatchedEventVersion, definition.EventVersion, metadata.GetVersion())
 	}
 	return nil
 }

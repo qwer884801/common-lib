@@ -1128,7 +1128,7 @@ func (x *AccountActionCatalog) GetActions() []*AccountActionDefinition {
 
 type AccountChangedEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Context       *v1.EventContext       `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
+	Metadata      *v1.EventMetadata      `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	ChangeKind    AccountChangeKind      `protobuf:"varint,2,opt,name=change_kind,json=changeKind,proto3,enum=byte.v.forge.contracts.account.v1.AccountChangeKind" json:"change_kind,omitempty"`
 	Account       *Account               `protobuf:"bytes,3,opt,name=account,proto3" json:"account,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1165,9 +1165,9 @@ func (*AccountChangedEvent) Descriptor() ([]byte, []int) {
 	return file_byte_v_forge_contracts_account_v1_account_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *AccountChangedEvent) GetContext() *v1.EventContext {
+func (x *AccountChangedEvent) GetMetadata() *v1.EventMetadata {
 	if x != nil {
-		return x.Context
+		return x.Metadata
 	}
 	return nil
 }
@@ -1275,9 +1275,9 @@ const file_byte_v_forge_contracts_account_v1_account_proto_rawDesc = "" +
 	"\n" +
 	"ui_buttons\x18\r \x03(\v26.byte.v.forge.contracts.account.v1.AccountActionButtonR\tuiButtons\"l\n" +
 	"\x14AccountActionCatalog\x12T\n" +
-	"\aactions\x18\x01 \x03(\v2:.byte.v.forge.contracts.account.v1.AccountActionDefinitionR\aactions\"\xfc\x01\n" +
-	"\x13AccountChangedEvent\x12H\n" +
-	"\acontext\x18\x01 \x01(\v2..byte.v.forge.contracts.common.v1.EventContextR\acontext\x12U\n" +
+	"\aactions\x18\x01 \x03(\v2:.byte.v.forge.contracts.account.v1.AccountActionDefinitionR\aactions\"\xff\x01\n" +
+	"\x13AccountChangedEvent\x12K\n" +
+	"\bmetadata\x18\x01 \x01(\v2/.byte.v.forge.contracts.common.v1.EventMetadataR\bmetadata\x12U\n" +
 	"\vchange_kind\x18\x02 \x01(\x0e24.byte.v.forge.contracts.account.v1.AccountChangeKindR\n" +
 	"changeKind\x12D\n" +
 	"\aaccount\x18\x03 \x01(\v2*.byte.v.forge.contracts.account.v1.AccountR\aaccount*\x9a\x01\n" +
@@ -1334,7 +1334,7 @@ var file_byte_v_forge_contracts_account_v1_account_proto_goTypes = []any{
 	(*AccountActionCatalog)(nil),            // 14: byte.v.forge.contracts.account.v1.AccountActionCatalog
 	(*AccountChangedEvent)(nil),             // 15: byte.v.forge.contracts.account.v1.AccountChangedEvent
 	(*timestamppb.Timestamp)(nil),           // 16: google.protobuf.Timestamp
-	(*v1.EventContext)(nil),                 // 17: byte.v.forge.contracts.common.v1.EventContext
+	(*v1.EventMetadata)(nil),                // 17: byte.v.forge.contracts.common.v1.EventMetadata
 }
 var file_byte_v_forge_contracts_account_v1_account_proto_depIdxs = []int32{
 	6,  // 0: byte.v.forge.contracts.account.v1.AccountStatus.error:type_name -> byte.v.forge.contracts.account.v1.AccountError
@@ -1352,7 +1352,7 @@ var file_byte_v_forge_contracts_account_v1_account_proto_depIdxs = []int32{
 	12, // 12: byte.v.forge.contracts.account.v1.AccountActionDefinition.workflow:type_name -> byte.v.forge.contracts.account.v1.AccountActionWorkflowDefinition
 	11, // 13: byte.v.forge.contracts.account.v1.AccountActionDefinition.ui_buttons:type_name -> byte.v.forge.contracts.account.v1.AccountActionButton
 	13, // 14: byte.v.forge.contracts.account.v1.AccountActionCatalog.actions:type_name -> byte.v.forge.contracts.account.v1.AccountActionDefinition
-	17, // 15: byte.v.forge.contracts.account.v1.AccountChangedEvent.context:type_name -> byte.v.forge.contracts.common.v1.EventContext
+	17, // 15: byte.v.forge.contracts.account.v1.AccountChangedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
 	3,  // 16: byte.v.forge.contracts.account.v1.AccountChangedEvent.change_kind:type_name -> byte.v.forge.contracts.account.v1.AccountChangeKind
 	9,  // 17: byte.v.forge.contracts.account.v1.AccountChangedEvent.account:type_name -> byte.v.forge.contracts.account.v1.Account
 	18, // [18:18] is the sub-list for method output_type

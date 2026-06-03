@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/sms/v1/sms.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { EventMetadata, SecretRef } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.sms.v1";
 
@@ -74,10 +74,14 @@ export interface SmsTarget {
   country_calling_code: string;
 }
 
+export interface SmsOfferRef {
+  offer_id: string;
+  provider_key: string;
+  target: SmsTarget | undefined;
+}
+
 export interface SmsNumberAcquireParams {
-  five_sim?: FiveSimAcquireParams | undefined;
-  sms_bower?: SmsBowerAcquireParams | undefined;
-  hero_sms?: HeroSmsAcquireParams | undefined;
+  offer_ref: SmsOfferRef | undefined;
   application_key: string;
   country_iso2: string;
   country_calling_code: string;
@@ -87,26 +91,8 @@ export interface SmsNumberAcquireParams {
   min_price: DecimalMoney | undefined;
 }
 
-export interface FiveSimAcquireParams {
-  product: string;
-  country: string;
-  operator: string;
-}
-
-export interface SmsBowerAcquireParams {
-  service: string;
-  country: string;
-  provider_id: string;
-}
-
-export interface HeroSmsAcquireParams {
-  service: string;
-  country: string;
-  operator: string;
-}
-
 export interface SmsCode {
-  value: string;
+  secret_ref: SecretRef | undefined;
   received_at: string | undefined;
 }
 
@@ -211,9 +197,7 @@ export interface SmsPriceOffer {
   supports_additional_code: boolean;
   requires_mark_message_sent: boolean;
   observed_at: string | undefined;
-  upstream_provider_id: string;
-  upstream_provider_name: string;
-  acquire_params: SmsNumberAcquireParams | undefined;
+  offer_ref: SmsOfferRef | undefined;
 }
 
 export interface SmsRoutePolicy {
@@ -296,18 +280,18 @@ export interface ListSmsPriceOffersResponse {
 }
 
 export interface SmsOrderAcquiredEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   order: SmsOrder | undefined;
 }
 
 export interface SmsCodeReceivedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   order_id: string;
   code: SmsCode | undefined;
 }
 
 export interface SmsOrderStatusChangedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   order_id: string;
   previous_status: SmsOrderStatus;
   current_status: SmsOrderStatus;

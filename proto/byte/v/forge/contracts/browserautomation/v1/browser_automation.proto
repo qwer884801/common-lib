@@ -149,20 +149,29 @@ message BrowserProfile {
   string user_agent = 4;
   BrowserViewport viewport = 5;
   string proxy_ref = 6;
-  string storage_state_secret_ref = 7;
+  byte.v.forge.contracts.common.v1.SecretRef storage_state_secret_ref = 7;
   map<string, string> extra_http_headers = 8;
   repeated string init_scripts = 9;
-  map<string, string> labels = 20;
+  reserved 20;
+  reserved "labels";
 }
 
 message BrowserArtifact {
   string artifact_id = 1;
   BrowserArtifactKind kind = 2;
-  string uri = 3;
+  byte.v.forge.contracts.common.v1.ArtifactRef ref = 3;
   string content_type = 4;
   int64 size_bytes = 5;
   map<string, string> labels = 20;
   google.protobuf.Timestamp created_at = 30;
+}
+
+message BrowserSecurityPolicy {
+  repeated string allowed_hosts = 1;
+  bool allow_file_upload = 2;
+  bool allow_cookie_read = 3;
+  bool allow_storage_state_read = 4;
+  bool allow_main_world_eval = 5;
 }
 
 message BrowserSelector {
@@ -398,7 +407,7 @@ message ScreenshotCommand {
 
 message UploadFileCommand {
   BrowserSelector selector = 1;
-  repeated string file_secret_refs = 2;
+  repeated byte.v.forge.contracts.common.v1.SecretRef file_secret_refs = 2;
   google.protobuf.Duration timeout = 3;
   BrowserSelectorGroup selector_group = 4;
 }
@@ -419,9 +428,10 @@ message SubmitFormCommand {
 }
 
 message EvaluateCommand {
-  string expression = 1;
+  string script_ref = 1;
   google.protobuf.Struct args = 2;
   google.protobuf.Duration timeout = 3;
+  string inline_expression = 4;
 }
 
 message GetCookiesCommand {
@@ -519,6 +529,8 @@ message BrowserCommandResult {
   bool visible = 13;
   BrowserRect bounding_box = 14;
   string title = 15;
+  byte.v.forge.contracts.common.v1.SecretRef secret_ref = 16;
+  byte.v.forge.contracts.common.v1.ArtifactRef artifact_ref = 17;
   google.protobuf.Timestamp completed_at = 30;
 }
 
@@ -544,6 +556,7 @@ message BrowserTaskInput {
   string target_url = 4;
   google.protobuf.Duration timeout = 5;
   repeated BrowserCommand commands = 6;
+  BrowserSecurityPolicy security_policy = 7;
   map<string, string> labels = 20;
 }
 
@@ -577,6 +590,8 @@ message StartBrowserSessionRequest {
   string request_id = 1;
   BrowserProfile profile = 2;
   google.protobuf.Duration ttl = 3;
+  BrowserSecurityPolicy security_policy = 4;
+  map<string, string> labels = 20;
 }
 
 message StartBrowserSessionResponse {
@@ -646,19 +661,19 @@ message ListBrowserTasksResponse {
 }
 
 message BrowserSessionStartedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   BrowserSession session = 2;
 }
 
 message BrowserSessionStoppedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   string session_id = 2;
   BrowserSessionStatus status = 3;
   string reason = 4;
 }
 
 message BrowserTaskStatusChangedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   string task_id = 2;
   BrowserTaskStatus previous_status = 3;
   BrowserTaskStatus current_status = 4;

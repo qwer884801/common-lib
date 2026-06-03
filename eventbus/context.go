@@ -10,19 +10,22 @@ import (
 )
 
 const DefaultEventVersion = "v1"
+const DefaultEventSpecVersion = "1.0"
 
-type EventContextConfig struct {
+type EventMetadataConfig struct {
 	EventID        string
 	EventName      string
 	EventVersion   string
 	OccurredAt     time.Time
 	SourceService  string
+	Subject        string
 	CorrelationID  string
 	TraceID        string
 	IdempotencyKey string
+	DataSchema     string
 }
 
-func NewEventContext(cfg EventContextConfig) *commonv1.EventContext {
+func NewEventMetadata(cfg EventMetadataConfig) *commonv1.EventMetadata {
 	eventVersion := strings.TrimSpace(cfg.EventVersion)
 	if eventVersion == "" {
 		eventVersion = DefaultEventVersion
@@ -36,15 +39,19 @@ func NewEventContext(cfg EventContextConfig) *commonv1.EventContext {
 	if idempotencyKey == "" {
 		idempotencyKey = eventID
 	}
-	return &commonv1.EventContext{
-		EventId:        eventID,
-		EventName:      strings.TrimSpace(cfg.EventName),
-		EventVersion:   eventVersion,
-		OccurredAt:     timestamppb.New(occurredAt),
-		SourceService:  strings.TrimSpace(cfg.SourceService),
-		CorrelationId:  strings.TrimSpace(cfg.CorrelationID),
-		TraceId:        strings.TrimSpace(cfg.TraceID),
-		IdempotencyKey: idempotencyKey,
+	return &commonv1.EventMetadata{
+		Id:              eventID,
+		Type:            strings.TrimSpace(cfg.EventName),
+		Version:         eventVersion,
+		Time:            timestamppb.New(occurredAt),
+		Source:          strings.TrimSpace(cfg.SourceService),
+		CorrelationId:   strings.TrimSpace(cfg.CorrelationID),
+		TraceId:         strings.TrimSpace(cfg.TraceID),
+		IdempotencyKey:  idempotencyKey,
+		Subject:         strings.TrimSpace(cfg.Subject),
+		SpecVersion:     DefaultEventSpecVersion,
+		DataContentType: ProtobufContentType,
+		DataSchema:      strings.TrimSpace(cfg.DataSchema),
 	}
 }
 

@@ -87,10 +87,10 @@ func TermMessage(ctx context.Context, message ReceivedMessage, label string, log
 }
 
 func EventID(message ReceivedMessage) string {
-	if message.Envelope == nil || message.Envelope.GetContext() == nil {
+	if message.Envelope == nil || message.Envelope.GetMetadata() == nil {
 		return ""
 	}
-	return message.Envelope.GetContext().GetEventId()
+	return message.Envelope.GetMetadata().GetId()
 }
 
 func normalizeConsumerWorkerConfig(cfg ConsumerWorkerConfig) ConsumerWorkerConfig {

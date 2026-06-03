@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package byte.v.forge.contracts.proxyruntime.v1;
 
+import "byte/v/forge/contracts/common/v1/common.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -183,21 +184,6 @@ enum ProxySelectorStrategy {
   PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST = 5;
 }
 
-enum ProxyChainStrategy {
-  PROXY_CHAIN_STRATEGY_UNSPECIFIED = 0;
-  PROXY_CHAIN_STRATEGY_REGION_AWARE = 1;
-  PROXY_CHAIN_STRATEGY_LOWEST_LATENCY = 2;
-  PROXY_CHAIN_STRATEGY_STABLE_HASH = 3;
-}
-
-
-enum ProxyChainHopRole {
-  PROXY_CHAIN_HOP_ROLE_UNSPECIFIED = 0;
-  PROXY_CHAIN_HOP_ROLE_LINE_PROXY = 1;
-  PROXY_CHAIN_HOP_ROLE_DYNAMIC_GATEWAY = 2;
-  PROXY_CHAIN_HOP_ROLE_DYNAMIC_EXIT = 3;
-}
-
 enum EgressHopRole {
   EGRESS_HOP_ROLE_UNSPECIFIED = 0;
   EGRESS_HOP_ROLE_FORWARD = 1;
@@ -328,46 +314,25 @@ message ProxyDynamicGatewayCandidate {
   uint32 priority = 7;
 }
 
-message ProxyChainHop {
-  string hop_id = 1;
-  uint32 order = 2;
-  ProxyChainHopRole role = 3;
-  ProxySourceKind source_kind = 4;
-  string source_id = 5;
-  string source_display_name = 6;
-  string node_id = 7;
-  string node_display_name = 8;
-  string provider_account_id = 9;
-  string provider_id = 10;
-  string gateway_id = 11;
-  string gateway_display_name = 12;
-  string observed_ip = 13;
-  string country_code = 14;
-  string region = 15;
-  string city = 16;
-  ProxySourceNodeStatus status = 17;
-  uint32 delay_ms = 18;
-}
-
-message ProxyChainPolicy {
+message EgressRoutePolicy {
   string country_code = 1;
   string region = 2;
   string purpose = 3;
-  ProxyChainStrategy strategy = 4;
+  ProxySelectorStrategy strategy = 4;
   uint32 max_attempts = 5;
   bool require_dynamic_exit = 6;
   bool allow_direct_dynamic_gateway = 7;
   bool prefer_line_proxy = 8;
 }
 
-message ProxyChainPlan {
-  string chain_id = 1;
-  ProxyChainPolicy policy = 2;
+message EgressRoutePlan {
+  string route_id = 1;
+  EgressRoutePolicy policy = 2;
   ProxyLineCandidate line = 3;
   ProxyDynamicGatewayCandidate dynamic_gateway = 4;
   repeated string selection_reasons = 5;
   google.protobuf.Timestamp planned_at = 6;
-  repeated ProxyChainHop hops = 7;
+  EgressRoute route = 7;
 }
 
 message ProviderControlPlaneAccess {
@@ -430,7 +395,7 @@ message ProxyDynamicLease {
   google.protobuf.Timestamp acquired_at = 11;
   google.protobuf.Timestamp expires_at = 12;
   string error_message = 13;
-  ProxyChainPlan chain_plan = 14;
+  EgressRoutePlan route_plan = 14;
 }
 
 message ProxyExitGeo {
@@ -489,7 +454,7 @@ message ProxyEdgeAccessCheck {
 
 message ProxyEdgeCanarySettings {
   string url = 1;
-  string token = 2;
+  byte.v.forge.contracts.common.v1.SecretRef token_secret_ref = 2;
   bool clear_token = 3;
   bool enabled = 4;
 }
@@ -507,7 +472,7 @@ message ProxyIPFraudProviderSettings {
   reserved 4;
   reserved "url_template";
   bool anonymous = 5;
-  repeated string api_keys = 6;
+  repeated byte.v.forge.contracts.common.v1.SecretRef api_key_secret_refs = 6;
   bool clear_api_keys = 7;
 }
 
@@ -637,7 +602,7 @@ message UpsertProxyProviderAccountRequest {
   string display_name = 3;
   bool enabled = 4;
   string username = 12;
-  string password = 13;
+  byte.v.forge.contracts.common.v1.SecretRef password_secret_ref = 13;
   bool clear_password = 14;
 }
 message UpsertProxyProviderAccountResponse { ProxyProviderAccount account = 1; }
@@ -677,16 +642,16 @@ message DeleteProxySourceResponse {}
 message ListProxySourceNodesRequest { string source_id = 1; }
 message ListProxySourceNodesResponse { repeated ProxySourceNode nodes = 1; }
 
-message ResolveProxyChainRequest {
+message ResolveEgressRouteRequest {
   reserved 2;
   reserved "provider_account_id";
 
   string account_id = 1;
   ProxySessionPolicy session_policy = 3;
-  ProxyChainPolicy chain_policy = 4;
+  EgressRoutePolicy route_policy = 4;
 }
-message ResolveProxyChainResponse {
-  ProxyChainPlan plan = 1;
+message ResolveEgressRouteResponse {
+  EgressRoutePlan plan = 1;
   repeated ProxyLineCandidate line_candidates = 2;
   repeated ProxyDynamicGatewayCandidate dynamic_gateway_candidates = 3;
 }
@@ -701,15 +666,19 @@ message AcquireProxyLeaseRequest {
   string purpose = 2;
   ProxySessionPolicy policy = 4;
   bool force_new = 5;
-  ProxyChainPolicy chain_policy = 6;
+  EgressRoutePolicy route_policy = 6;
 }
 message AcquireProxyLeaseResponse {
   ProxyDynamicLease lease = 1;
   ProxyPoolSnapshot pool = 2;
   ProxyEndpoint egress = 3;
-  ProxyChainPlan chain_plan = 4;
+  EgressRoutePlan route_plan = 4;
 }
-message ReleaseProxyLeaseRequest { string account_id = 1; }
+message ReleaseProxyLeaseRequest {
+  string lease_id = 1;
+  string account_id = 2;
+  string purpose = 3;
+}
 message ReleaseProxyLeaseResponse { ProxyDynamicLease lease = 1; }
 
 message GetProxyExitIPRequest {
@@ -772,7 +741,7 @@ service ProxyRuntimeService {
   rpc UpsertProxyFixedSource(UpsertProxyFixedSourceRequest) returns (UpsertProxyFixedSourceResponse);
   rpc DeleteProxySource(DeleteProxySourceRequest) returns (DeleteProxySourceResponse);
   rpc ListProxySourceNodes(ListProxySourceNodesRequest) returns (ListProxySourceNodesResponse);
-  rpc ResolveProxyChain(ResolveProxyChainRequest) returns (ResolveProxyChainResponse);
+  rpc ResolveEgressRoute(ResolveEgressRouteRequest) returns (ResolveEgressRouteResponse);
   rpc ListProxyDynamicLeases(ListProxyDynamicLeasesRequest) returns (ListProxyDynamicLeasesResponse);
   rpc AcquireProxyLease(AcquireProxyLeaseRequest) returns (AcquireProxyLeaseResponse);
   rpc ReleaseProxyLease(ReleaseProxyLeaseRequest) returns (ReleaseProxyLeaseResponse);

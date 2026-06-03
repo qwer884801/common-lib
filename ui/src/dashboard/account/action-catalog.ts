@@ -168,12 +168,13 @@ function accountActionSubjectField(account: AccountActionSubjectLike, field: str
       return record?.subject?.email || record?.subject?.display;
     case 'status':
       return accountActionSubjectStatus(account);
-    default:
+    default: {
       const value = (account as Record<string, unknown>)[field];
       if (String(value ?? '').trim()) return value;
       const recordValue = (record as unknown as Record<string, unknown> | undefined)?.[field];
       if (String(recordValue ?? '').trim()) return recordValue;
       return record?.credential_states?.find((credential) => credential.kind.trim() === field && credential.present)?.status || '';
+    }
   }
 }
 

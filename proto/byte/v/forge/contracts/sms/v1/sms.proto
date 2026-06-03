@@ -86,12 +86,14 @@ message SmsTarget {
   string country_calling_code = 3;
 }
 
+message SmsOfferRef {
+  string offer_id = 1;
+  string provider_key = 2;
+  SmsTarget target = 3;
+}
+
 message SmsNumberAcquireParams {
-  oneof provider_params {
-    FiveSimAcquireParams five_sim = 1;
-    SmsBowerAcquireParams sms_bower = 2;
-    HeroSmsAcquireParams hero_sms = 3;
-  }
+  SmsOfferRef offer_ref = 1;
   string application_key = 10;
   string country_iso2 = 11;
   string country_calling_code = 12;
@@ -101,26 +103,8 @@ message SmsNumberAcquireParams {
   DecimalMoney min_price = 16;
 }
 
-message FiveSimAcquireParams {
-  string product = 1;
-  string country = 2;
-  string operator = 3;
-}
-
-message SmsBowerAcquireParams {
-  string service = 1;
-  string country = 2;
-  string provider_id = 3;
-}
-
-message HeroSmsAcquireParams {
-  string service = 1;
-  string country = 2;
-  string operator = 3;
-}
-
 message SmsCode {
-  string value = 1;
+  byte.v.forge.contracts.common.v1.SecretRef secret_ref = 1;
   google.protobuf.Timestamp received_at = 2;
 }
 
@@ -225,9 +209,9 @@ message SmsPriceOffer {
   bool supports_additional_code = 12;
   bool requires_mark_message_sent = 13;
   google.protobuf.Timestamp observed_at = 14;
-  string upstream_provider_id = 15;
-  string upstream_provider_name = 16;
-  SmsNumberAcquireParams acquire_params = 17;
+  reserved 15, 16;
+  reserved "upstream_provider_id", "upstream_provider_name";
+  SmsOfferRef offer_ref = 17;
 }
 
 enum SmsRouteStrategy {
@@ -316,18 +300,18 @@ message ListSmsPriceOffersResponse {
 }
 
 message SmsOrderAcquiredEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   SmsOrder order = 2;
 }
 
 message SmsCodeReceivedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   string order_id = 2;
   SmsCode code = 3;
 }
 
 message SmsOrderStatusChangedEvent {
-  byte.v.forge.contracts.common.v1.EventContext context = 1;
+  byte.v.forge.contracts.common.v1.EventMetadata metadata = 1;
   string order_id = 2;
   SmsOrderStatus previous_status = 3;
   SmsOrderStatus current_status = 4;

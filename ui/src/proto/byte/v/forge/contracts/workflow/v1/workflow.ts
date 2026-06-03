@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/workflow/v1/workflow.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { EventMetadata } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.workflow.v1";
 
@@ -30,6 +30,16 @@ export enum WorkflowRunStatus {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
+export enum WorkflowGraphElementStatus {
+  WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED = "WORKFLOW_GRAPH_ELEMENT_STATUS_UNSPECIFIED",
+  WORKFLOW_GRAPH_ELEMENT_PENDING = "WORKFLOW_GRAPH_ELEMENT_PENDING",
+  WORKFLOW_GRAPH_ELEMENT_RUNNING = "WORKFLOW_GRAPH_ELEMENT_RUNNING",
+  WORKFLOW_GRAPH_ELEMENT_SUCCEEDED = "WORKFLOW_GRAPH_ELEMENT_SUCCEEDED",
+  WORKFLOW_GRAPH_ELEMENT_FAILED = "WORKFLOW_GRAPH_ELEMENT_FAILED",
+  WORKFLOW_GRAPH_ELEMENT_SKIPPED = "WORKFLOW_GRAPH_ELEMENT_SKIPPED",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
 export interface WorkflowRuntimeSummary {
   engine_status: WorkflowRuntimeStatus;
   engine_message: string;
@@ -39,7 +49,7 @@ export interface WorkflowRuntimeSummary {
   editor_url: string;
   workflows: WorkflowDefinition[];
   executions: WorkflowExecution[];
-  checked_at_unix: number;
+  checked_at: string | undefined;
   runs: WorkflowRunProjection[];
   runs_page_info: WorkflowRuntimePageInfo | undefined;
   executions_page_info: WorkflowRuntimePageInfo | undefined;
@@ -55,7 +65,7 @@ export interface WorkflowDefinition {
   id: string;
   name: string;
   active: boolean;
-  updated_at: string;
+  updated_at: string | undefined;
   tags: string[];
   graph_nodes: WorkflowGraphNode[];
   graph_edges: WorkflowGraphEdge[];
@@ -65,10 +75,10 @@ export interface WorkflowExecution {
   id: string;
   workflow_id: string;
   workflow_name: string;
-  status: string;
+  status: WorkflowRunStatus;
   mode: string;
-  started_at: string;
-  stopped_at: string;
+  started_at: string | undefined;
+  stopped_at: string | undefined;
   graph_nodes: WorkflowGraphNode[];
   graph_edges: WorkflowGraphEdge[];
 }
@@ -77,12 +87,12 @@ export interface WorkflowGraphNode {
   id: string;
   name: string;
   kind: string;
-  status: string;
+  status: WorkflowGraphElementStatus;
   x: number;
   y: number;
   type_version: string;
   disabled: boolean;
-  started_at_unix: number;
+  started_at: string | undefined;
   duration_ms: number;
   error_message: string;
   iterations: number;
@@ -93,7 +103,7 @@ export interface WorkflowGraphEdge {
   source: string;
   target: string;
   label: string;
-  status: string;
+  status: WorkflowGraphElementStatus;
 }
 
 export interface WorkflowRunProjection {
@@ -105,9 +115,9 @@ export interface WorkflowRunProjection {
   current_node_id: string;
   current_node_name: string;
   error_message: string;
-  started_at_unix: number;
-  completed_at_unix: number;
-  updated_at_unix: number;
+  started_at: string | undefined;
+  completed_at: string | undefined;
+  updated_at: string | undefined;
   graph_nodes: WorkflowGraphNode[];
   graph_edges: WorkflowGraphEdge[];
 }
@@ -121,11 +131,30 @@ export interface WorkflowStepUpdateRequest {
   node_name: string;
   status: WorkflowRunStatus;
   error_message: string;
-  occurred_at_unix: number;
-  context: EventContext | undefined;
+  occurred_at: string | undefined;
+  metadata: EventMetadata | undefined;
 }
 
 export interface WorkflowStepUpdateResponse {
   run: WorkflowRunProjection | undefined;
   duplicate: boolean;
+}
+
+export interface GetWorkflowRuntimeSummaryRequest {
+  runs_page_size: number;
+  runs_page_token: string;
+  executions_page_size: number;
+  executions_page_token: string;
+}
+
+export interface GetWorkflowRuntimeSummaryResponse {
+  summary: WorkflowRuntimeSummary | undefined;
+}
+
+export interface StreamWorkflowRuntimeStateRequest {
+}
+
+export interface WorkflowRuntimeStateEvent {
+  event_type: string;
+  summary: WorkflowRuntimeSummary | undefined;
 }

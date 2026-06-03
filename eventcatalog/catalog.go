@@ -1,5 +1,7 @@
 package eventcatalog
 
+import commonv1 "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/common/v1"
+
 const (
 	StreamName      = "BYTE_V_FORGE_EVENTS"
 	StreamSubject   = "byte.v.forge.>"
@@ -27,6 +29,45 @@ type Definition struct {
 	RetryDelaySecond int
 }
 
+func (definition Definition) Proto() *commonv1.EventDefinition {
+	return &commonv1.EventDefinition{
+		Subject:           definition.Subject,
+		EventName:         definition.EventName,
+		EventVersion:      definition.EventVersion,
+		Kind:              protoKind(definition.Kind),
+		PayloadType:       definition.PayloadType,
+		OwnerService:      definition.OwnerService,
+		ConsumerDurable:   definition.ConsumerDurable,
+		Retryable:         definition.Retryable,
+		MaxDeliveries:     int32(definition.MaxDeliveries),
+		RetryDelaySeconds: int32(definition.RetryDelaySecond),
+	}
+}
+
+func Catalog() *commonv1.EventCatalog {
+	definitions := All()
+	out := make([]*commonv1.EventDefinition, 0, len(definitions))
+	for _, definition := range definitions {
+		out = append(out, definition.Proto())
+	}
+	return &commonv1.EventCatalog{
+		StreamName:    StreamName,
+		StreamSubject: StreamSubject,
+		Definitions:   out,
+	}
+}
+
+func protoKind(kind Kind) commonv1.EventKind {
+	switch kind {
+	case KindFact:
+		return commonv1.EventKind_EVENT_KIND_FACT
+	case KindCommand:
+		return commonv1.EventKind_EVENT_KIND_COMMAND
+	default:
+		return commonv1.EventKind_EVENT_KIND_UNSPECIFIED
+	}
+}
+
 var (
 	SMSOrderAcquired = Definition{
 		Subject:      "byte.v.forge.sms.order.acquired",
@@ -52,6 +93,42 @@ var (
 		PayloadType:  "byte.v.forge.contracts.sms.v1.SmsOrderStatusChangedEvent",
 		OwnerService: "sms-service",
 	}
+	SMSOrderAcquireRequested = Definition{
+		Subject:          "byte.v.forge.sms.order.acquire.requested",
+		EventName:        "sms.order.acquire_requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "byte.v.forge.sms.internal.v1.SmsOrderAcquireRequest",
+		OwnerService:     "sms-service",
+		ConsumerDurable:  "sms-order-acquire",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
+	SMSOrderPollRequested = Definition{
+		Subject:          "byte.v.forge.sms.order.poll.requested",
+		EventName:        "sms.order.poll_requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "byte.v.forge.sms.internal.v1.SmsOrderPollRequest",
+		OwnerService:     "sms-service",
+		ConsumerDurable:  "sms-order-poll",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
+	SMSOrderCancelRequested = Definition{
+		Subject:          "byte.v.forge.sms.order.cancel.requested",
+		EventName:        "sms.order.cancel_requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "byte.v.forge.sms.internal.v1.SmsOrderCancelRequest",
+		OwnerService:     "sms-service",
+		ConsumerDurable:  "sms-order-cancel",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
 
 	MailboxEmailPollRequested = Definition{
 		Subject:          "byte.v.forge.mailbox.email.poll.requested",
@@ -61,6 +138,42 @@ var (
 		PayloadType:      "byte.v.forge.contracts.mailbox.v1.MailboxEmailPollRequest",
 		OwnerService:     "mailbox-api",
 		ConsumerDurable:  "mailbox-email-poll",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
+	MailboxInboxFetchRequested = Definition{
+		Subject:          "byte.v.forge.mailbox.inbox.fetch.requested",
+		EventName:        "mailbox.inbox.fetch_requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "mailbox.MailboxInboxFetchRequest",
+		OwnerService:     "mailbox-api",
+		ConsumerDurable:  "mailbox-inbox-fetch",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
+	MailboxRegistrationRequested = Definition{
+		Subject:          "byte.v.forge.mailbox.registration.requested",
+		EventName:        "mailbox.registration.requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "mailbox.MailboxRegistrationOperationRequest",
+		OwnerService:     "mailbox-api",
+		ConsumerDurable:  "mailbox-registration",
+		Retryable:        true,
+		MaxDeliveries:    20,
+		RetryDelaySecond: 5,
+	}
+	MailboxOAuthRequested = Definition{
+		Subject:          "byte.v.forge.mailbox.oauth.requested",
+		EventName:        "mailbox.oauth.requested",
+		EventVersion:     EventVersionV1,
+		Kind:             KindCommand,
+		PayloadType:      "mailbox.MailboxOAuthOperationRequest",
+		OwnerService:     "mailbox-api",
+		ConsumerDurable:  "mailbox-oauth",
 		Retryable:        true,
 		MaxDeliveries:    20,
 		RetryDelaySecond: 5,
@@ -91,6 +204,14 @@ var (
 		PayloadType:  "byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent",
 		OwnerService: "mailbox-api",
 	}
+	MailboxEmailSignalReceived = Definition{
+		Subject:      "byte.v.forge.mailbox.email.signal.received",
+		EventName:    "mailbox.email.signal.received",
+		EventVersion: EventVersionV1,
+		Kind:         KindFact,
+		PayloadType:  "byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent",
+		OwnerService: "mailbox-api",
+	}
 	DeadLetter = Definition{
 		Subject:      DeadLetterTopic,
 		EventName:    "platform.dead_letter",
@@ -106,8 +227,15 @@ func All() []Definition {
 		SMSOrderAcquired,
 		SMSCodeReceived,
 		SMSOrderStatusChanged,
+		SMSOrderAcquireRequested,
+		SMSOrderPollRequested,
+		SMSOrderCancelRequested,
 		MailboxEmailPollRequested,
+		MailboxInboxFetchRequested,
+		MailboxRegistrationRequested,
+		MailboxOAuthRequested,
 		MailboxEmailReceived,
+		MailboxEmailSignalReceived,
 		AccountChanged,
 		WAOTPReceived,
 		DeadLetter,

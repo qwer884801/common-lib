@@ -60,8 +60,8 @@ func NewRecord(message eventbus.Message) (Record, error) {
 	if err != nil {
 		return Record{}, err
 	}
-	eventCtx := envelope.GetContext()
-	if eventCtx == nil || strings.TrimSpace(eventCtx.GetEventId()) == "" {
+	metadata := envelope.GetMetadata()
+	if metadata == nil || strings.TrimSpace(metadata.GetId()) == "" {
 		return Record{}, ErrMissingEventID
 	}
 	payload, err := proto.Marshal(envelope)
@@ -69,10 +69,10 @@ func NewRecord(message eventbus.Message) (Record, error) {
 		return Record{}, fmt.Errorf("marshal event outbox envelope: %w", err)
 	}
 	return Record{
-		EventID:        eventCtx.GetEventId(),
+		EventID:        metadata.GetId(),
 		Subject:        envelope.GetSubject(),
-		EventName:      eventCtx.GetEventName(),
-		IdempotencyKey: eventCtx.GetIdempotencyKey(),
+		EventName:      metadata.GetType(),
+		IdempotencyKey: metadata.GetIdempotencyKey(),
 		Envelope:       payload,
 	}, nil
 }
@@ -80,10 +80,10 @@ func NewRecord(message eventbus.Message) (Record, error) {
 func NewRecordFor(
 	definition eventcatalog.Definition,
 	event proto.Message,
-	eventCtx *commonv1.EventContext,
+	metadata *commonv1.EventMetadata,
 	attributes map[string]string,
 ) (Record, error) {
-	message, err := definition.NewMessage(event, eventCtx, attributes)
+	message, err := definition.NewMessage(event, metadata, attributes)
 	if err != nil {
 		return Record{}, err
 	}
@@ -134,19 +134,19 @@ func MessageFromEnvelope(payload []byte) (eventbus.Message, error) {
 	if err := proto.Unmarshal(payload, envelope); err != nil {
 		return eventbus.Message{}, fmt.Errorf("decode event outbox envelope: %w", err)
 	}
-	messageType, err := protoregistry.GlobalTypes.FindMessageByName(protoreflect.FullName(envelope.GetProtoType()))
+	messageType, err := protoregistry.GlobalTypes.FindMessageByName(protoreflect.FullName(envelope.GetPayloadType()))
 	if err != nil {
-		return eventbus.Message{}, fmt.Errorf("resolve event outbox proto type %s: %w", envelope.GetProtoType(), err)
+		return eventbus.Message{}, fmt.Errorf("resolve event outbox payload type %s: %w", envelope.GetPayloadType(), err)
 	}
 	message := messageType.New().Interface()
 	if err := proto.Unmarshal(envelope.GetPayload(), message); err != nil {
-		return eventbus.Message{}, fmt.Errorf("decode event outbox payload %s: %w", envelope.GetProtoType(), err)
+		return eventbus.Message{}, fmt.Errorf("decode event outbox payload %s: %w", envelope.GetPayloadType(), err)
 	}
 	return eventbus.Message{
 		Subject:    envelope.GetSubject(),
 		Event:      message,
-		Context:    envelope.GetContext(),
-		Attributes: envelope.GetAttributes(),
+		Metadata:   envelope.GetMetadata(),
+		Extensions: envelope.GetExtensions(),
 	}, nil
 }
 

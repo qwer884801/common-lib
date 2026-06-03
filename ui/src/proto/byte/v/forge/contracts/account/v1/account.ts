@@ -5,7 +5,7 @@
 // source: byte/v/forge/contracts/account/v1/account.proto
 
 /* eslint-disable */
-import type { EventContext } from "../../common/v1/common";
+import type { EventMetadata } from "../../common/v1/common";
 
 export const protobufPackage = "byte.v.forge.contracts.account.v1";
 
@@ -132,7 +132,7 @@ export interface AccountActionCatalog {
 }
 
 export interface AccountChangedEvent {
-  context: EventContext | undefined;
+  metadata: EventMetadata | undefined;
   change_kind: AccountChangeKind;
   account: Account | undefined;
 }

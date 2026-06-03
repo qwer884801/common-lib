@@ -69,21 +69,22 @@ func Message(kind accountv1.AccountChangeKind, account *accountv1.Account, sourc
 	}
 	metadata := accountmodel.ChangeMetadata(kind, account, sourceService, time.Time{})
 	eventID := eventbus.StableEventID("account-", metadata.EventIDParts()...)
-	context := eventbus.NewEventContext(eventbus.EventContextConfig{
+	eventMetadata := eventbus.NewEventMetadata(eventbus.EventMetadataConfig{
 		EventID:       eventID,
 		EventName:     eventcatalog.AccountChanged.EventName,
 		EventVersion:  eventcatalog.AccountChanged.EventVersion,
 		OccurredAt:    metadata.OccurredAt,
 		SourceService: metadata.SourceService,
+		Subject:       eventcatalog.AccountChanged.Subject,
 		CorrelationID: metadata.CorrelationID,
 	})
 	return eventcatalog.AccountChanged.NewMessage(
 		&accountv1.AccountChangedEvent{
-			Context:    context,
+			Metadata:   eventMetadata,
 			ChangeKind: metadata.Kind,
 			Account:    account,
 		},
-		context,
+		eventMetadata,
 		metadata.Attributes,
 	)
 }

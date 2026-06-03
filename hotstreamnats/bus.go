@@ -145,7 +145,7 @@ func (b *Bus) Publish(ctx context.Context, event *observabilityv1.HotStreamEvent
 	}
 	msg := &nats.Msg{Subject: b.subject, Header: nats.Header{}, Data: payload}
 	msg.Header.Set("Bvf-Hotstream-Node", b.nodeID)
-	msg.Header.Set("Bvf-Hotstream-Event-Type", event.GetEventType())
+	msg.Header.Set("Bvf-Hotstream-Event-Type", event.GetMetadata().GetType())
 	msg.Header.Set("Bvf-Hotstream-Resource-Type", event.GetResourceType())
 	msg.Header.Set("Bvf-Hotstream-Resource-Id", event.GetResourceId())
 	return b.conn.PublishMsg(msg)

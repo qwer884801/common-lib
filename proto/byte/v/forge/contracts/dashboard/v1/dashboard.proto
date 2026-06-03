@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package byte.v.forge.contracts.dashboard.v1;
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "ByteVForge.Contracts.Dashboard.V1";
 option go_package = "github.com/byte-v-forge/common-lib/gen/go/byte/v/forge/contracts/dashboard/v1;dashboardv1";
 option java_multiple_files = true;
@@ -41,7 +43,7 @@ message DashboardServiceStatus {
   string name = 1;
   DashboardServiceStatusState status = 2;
   string message = 3;
-  int64 checked_at_unix = 4;
+  google.protobuf.Timestamp checked_at = 4;
 }
 
 message DashboardServiceStatusResponse {

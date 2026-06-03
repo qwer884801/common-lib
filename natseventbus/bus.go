@@ -97,7 +97,7 @@ func (b *Bus) Publish(ctx context.Context, message eventbus.Message) (eventbus.P
 		Data:    payload,
 	}
 	opts := []nats.PubOpt{nats.Context(ctx)}
-	if idempotencyKey := strings.TrimSpace(envelope.GetContext().GetIdempotencyKey()); idempotencyKey != "" {
+	if idempotencyKey := strings.TrimSpace(envelope.GetMetadata().GetIdempotencyKey()); idempotencyKey != "" {
 		opts = append(opts, nats.MsgId(idempotencyKey))
 	}
 	ack, err := b.js.PublishMsg(msg, opts...)
@@ -222,7 +222,7 @@ func receivedMessage(bus *Bus, durable string, msg *nats.Msg) (eventbus.Received
 	return eventbus.ReceivedMessage{
 		Subject:    msg.Subject,
 		Envelope:   envelope,
-		Attributes: envelope.GetAttributes(),
+		Extensions: envelope.GetExtensions(),
 		Attempt:    attempt,
 		Ack: func(context.Context) error {
 			return msg.Ack()
@@ -257,7 +257,7 @@ func publishDeadLetter(ctx context.Context, bus *Bus, durable string, envelope *
 	if bus == nil || envelope == nil {
 		return nil
 	}
-	original := envelope.GetContext()
+	original := envelope.GetMetadata()
 	originalID := ""
 	originalName := ""
 	originalVersion := ""
@@ -265,37 +265,38 @@ func publishDeadLetter(ctx context.Context, bus *Bus, durable string, envelope *
 	correlationID := ""
 	traceID := ""
 	if original != nil {
-		originalID = original.GetEventId()
-		originalName = original.GetEventName()
-		originalVersion = original.GetEventVersion()
-		originalSource = original.GetSourceService()
+		originalID = original.GetId()
+		originalName = original.GetType()
+		originalVersion = original.GetVersion()
+		originalSource = original.GetSource()
 		correlationID = original.GetCorrelationId()
 		traceID = original.GetTraceId()
 	}
 	eventID := eventbus.StableEventID("dead-letter-", envelope.GetSubject(), originalID, durable, fmt.Sprintf("%d", attempt))
-	deadCtx := eventbus.NewEventContext(eventbus.EventContextConfig{
+	deadMetadata := eventbus.NewEventMetadata(eventbus.EventMetadataConfig{
 		EventID:       eventID,
 		EventName:     "platform.dead_letter",
 		EventVersion:  eventcatalog.EventVersionV1,
 		SourceService: "platform-eventbus",
+		Subject:       eventcatalog.DeadLetter.Subject,
 		CorrelationID: correlationID,
 		TraceID:       traceID,
 	})
 	message, err := eventcatalog.DeadLetter.NewMessage(
 		&commonv1.DeadLetterEvent{
-			Context:               deadCtx,
-			OriginalSubject:       envelope.GetSubject(),
-			OriginalEventId:       originalID,
-			OriginalEventName:     originalName,
-			OriginalEventVersion:  originalVersion,
-			OriginalSourceService: originalSource,
-			ConsumerDurable:       durable,
-			DeliveryAttempt:       attempt,
-			ErrorCode:             "terminated",
-			ErrorMessage:          reason,
-			CorrelationId:         correlationID,
+			Metadata:             deadMetadata,
+			OriginalSubject:      envelope.GetSubject(),
+			OriginalEventId:      originalID,
+			OriginalEventType:    originalName,
+			OriginalEventVersion: originalVersion,
+			OriginalSource:       originalSource,
+			ConsumerDurable:      durable,
+			DeliveryAttempt:      attempt,
+			ErrorCode:            "terminated",
+			ErrorMessage:         reason,
+			CorrelationId:        correlationID,
 		},
-		deadCtx,
+		deadMetadata,
 		eventbus.Attributes(
 			"original_subject", envelope.GetSubject(),
 			"original_event_id", originalID,
@@ -316,15 +317,15 @@ func envelopeHeaders(envelope *commonv1.EventEnvelope) nats.Header {
 		return headers
 	}
 	headers.Set("Bvf-Event-Subject", envelope.GetSubject())
-	headers.Set("Bvf-Event-Type", envelope.GetProtoType())
-	headers.Set("Content-Type", envelope.GetContentType())
-	if ctx := envelope.GetContext(); ctx != nil {
-		headers.Set("Bvf-Event-Id", ctx.GetEventId())
-		headers.Set("Bvf-Event-Name", ctx.GetEventName())
-		headers.Set("Bvf-Event-Version", ctx.GetEventVersion())
-		headers.Set("Bvf-Correlation-Id", ctx.GetCorrelationId())
-		headers.Set("Bvf-Trace-Id", ctx.GetTraceId())
-		headers.Set("Bvf-Idempotency-Key", ctx.GetIdempotencyKey())
+	headers.Set("Bvf-Event-Type", envelope.GetPayloadType())
+	headers.Set("Content-Type", envelope.GetDataContentType())
+	if metadata := envelope.GetMetadata(); metadata != nil {
+		headers.Set("Bvf-Event-Id", metadata.GetId())
+		headers.Set("Bvf-Event-Name", metadata.GetType())
+		headers.Set("Bvf-Event-Version", metadata.GetVersion())
+		headers.Set("Bvf-Correlation-Id", metadata.GetCorrelationId())
+		headers.Set("Bvf-Trace-Id", metadata.GetTraceId())
+		headers.Set("Bvf-Idempotency-Key", metadata.GetIdempotencyKey())
 	}
 	return headers
 }

@@ -42,7 +42,7 @@ export { ThemeProvider, useTheme } from './components/theme-provider';
 export * from './dashboard/email/sdk';
 export type { Account, AccountActionDescriptor, AccountCredentialState, AccountKey, AccountStatus, AccountSubject } from './proto/byte/v/forge/contracts/account/v1/account';
 export { AccountActionTone, AccountChangeKind } from './proto/byte/v/forge/contracts/account/v1/account';
-export type { EventContext } from './proto/byte/v/forge/contracts/common/v1/common';
+export type { ArtifactRef, EventMetadata, OperationError, SecretRef } from './proto/byte/v/forge/contracts/common/v1/common';
 export type { EventEnvelope, EventPublishAck } from './proto/byte/v/forge/contracts/common/v1/eventbus';
 export { HotStreamControlKind } from './proto/byte/v/forge/contracts/observability/v1/hotstream';
 export type { HotStreamControlEvent, HotStreamEvent } from './proto/byte/v/forge/contracts/observability/v1/hotstream';
