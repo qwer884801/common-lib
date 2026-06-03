@@ -98,6 +98,7 @@ export interface EmailMailbox {
   domain: string;
   credential_state: MailboxCredentialState | undefined;
   provider_key: string;
+  credentials: MailboxCredentialValue[];
 }
 
 export interface MailboxCredentialInput {
