@@ -12,6 +12,10 @@ export type {
   FetchMailboxInboxesResponse,
   GetMailboxOperationRequest,
   GetMailboxOperationResponse,
+  DeleteMailboxRequest,
+  DeleteMailboxResponse,
+  ListEmailMailboxesRequest,
+  ListEmailMailboxesResponse,
   InboxMessage,
   InboxResponse,
   InboxResult,
@@ -25,6 +29,8 @@ export type {
   ListMailboxProviderCapabilitiesRequest,
   ListMailboxProviderCapabilitiesResponse,
   Mailbox,
+  MailboxCredentialInput,
+  MailboxCredentialValue,
   MailboxDomain,
   MailboxOperation,
   MailboxProviderActionCapability,
@@ -36,6 +42,8 @@ export type {
   StartMailboxOAuthResponse,
   SyncMailboxDomainsRequest,
   SyncMailboxDomainsResponse,
+  UpsertEmailMailboxRequest,
+  UpsertEmailMailboxResponse,
   WaitForMailboxEmailRequest,
   WaitForMailboxEmailResponse
 } from './types';

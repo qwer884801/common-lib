@@ -64,6 +64,7 @@ message MailboxCredentialState {
   bool password_present = 1;
   bool oauth_refresh_token_present = 2;
   bool oauth_access_token_present = 3;
+  repeated MailboxCredentialKind present_credentials = 4;
 }
 
 message EmailMailbox {
@@ -80,6 +81,62 @@ message EmailMailbox {
   string domain = 20;
   MailboxCredentialState credential_state = 21;
   string provider_key = 22;
+}
+
+message MailboxCredentialInput {
+  string email_address = 1;
+  string provider_key = 2;
+  repeated MailboxCredentialValue credentials = 3;
+  MailboxAuthStatus auth_status = 6;
+  string last_error = 7;
+}
+
+message MailboxCredentialValue {
+  MailboxCredentialKind kind = 1;
+  string value = 2;
+}
+
+message MarkEmailAuthStatusRequest {
+  string email_address = 1;
+  MailboxAuthStatus auth_status = 2;
+  string last_error = 3;
+}
+
+message MarkEmailAuthStatusResponse {
+  EmailMailbox mailbox = 1;
+  string error_message = 2;
+}
+
+message UpsertEmailMailboxRequest {
+  MailboxCredentialInput mailbox = 1;
+}
+
+message UpsertEmailMailboxResponse {
+  EmailMailbox mailbox = 1;
+  string error_message = 2;
+}
+
+message ListEmailMailboxesRequest {
+  int32 limit = 1;
+  MailboxAuthStatus auth_status = 2;
+  string provider_key = 3;
+  string cursor = 4;
+  string email_address = 5;
+}
+
+message ListEmailMailboxesResponse {
+  repeated EmailMailbox mailboxes = 1;
+  string next_cursor = 2;
+  string error_message = 3;
+}
+
+message DeleteMailboxRequest {
+  string email_address = 1;
+}
+
+message DeleteMailboxResponse {
+  bool deleted = 1;
+  string error_message = 2;
 }
 
 message EmailInboxMessage {

@@ -497,10 +497,11 @@ func (x *EmailSignal) GetEvidencePreview() string {
 }
 
 type MailboxCredentialState struct {
-	state                    protoimpl.MessageState `protogen:"open.v1"`
-	PasswordPresent          bool                   `protobuf:"varint,1,opt,name=password_present,json=passwordPresent,proto3" json:"password_present,omitempty"`
-	OauthRefreshTokenPresent bool                   `protobuf:"varint,2,opt,name=oauth_refresh_token_present,json=oauthRefreshTokenPresent,proto3" json:"oauth_refresh_token_present,omitempty"`
-	OauthAccessTokenPresent  bool                   `protobuf:"varint,3,opt,name=oauth_access_token_present,json=oauthAccessTokenPresent,proto3" json:"oauth_access_token_present,omitempty"`
+	state                    protoimpl.MessageState  `protogen:"open.v1"`
+	PasswordPresent          bool                    `protobuf:"varint,1,opt,name=password_present,json=passwordPresent,proto3" json:"password_present,omitempty"`
+	OauthRefreshTokenPresent bool                    `protobuf:"varint,2,opt,name=oauth_refresh_token_present,json=oauthRefreshTokenPresent,proto3" json:"oauth_refresh_token_present,omitempty"`
+	OauthAccessTokenPresent  bool                    `protobuf:"varint,3,opt,name=oauth_access_token_present,json=oauthAccessTokenPresent,proto3" json:"oauth_access_token_present,omitempty"`
+	PresentCredentials       []MailboxCredentialKind `protobuf:"varint,4,rep,packed,name=present_credentials,json=presentCredentials,proto3,enum=byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind" json:"present_credentials,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -554,6 +555,13 @@ func (x *MailboxCredentialState) GetOauthAccessTokenPresent() bool {
 		return x.OauthAccessTokenPresent
 	}
 	return false
+}
+
+func (x *MailboxCredentialState) GetPresentCredentials() []MailboxCredentialKind {
+	if x != nil {
+		return x.PresentCredentials
+	}
+	return nil
 }
 
 type EmailMailbox struct {
@@ -664,6 +672,574 @@ func (x *EmailMailbox) GetProviderKey() string {
 	return ""
 }
 
+type MailboxCredentialInput struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	EmailAddress  string                    `protobuf:"bytes,1,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
+	ProviderKey   string                    `protobuf:"bytes,2,opt,name=provider_key,json=providerKey,proto3" json:"provider_key,omitempty"`
+	Credentials   []*MailboxCredentialValue `protobuf:"bytes,3,rep,name=credentials,proto3" json:"credentials,omitempty"`
+	AuthStatus    MailboxAuthStatus         `protobuf:"varint,6,opt,name=auth_status,json=authStatus,proto3,enum=byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus" json:"auth_status,omitempty"`
+	LastError     string                    `protobuf:"bytes,7,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MailboxCredentialInput) Reset() {
+	*x = MailboxCredentialInput{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MailboxCredentialInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MailboxCredentialInput) ProtoMessage() {}
+
+func (x *MailboxCredentialInput) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MailboxCredentialInput.ProtoReflect.Descriptor instead.
+func (*MailboxCredentialInput) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *MailboxCredentialInput) GetEmailAddress() string {
+	if x != nil {
+		return x.EmailAddress
+	}
+	return ""
+}
+
+func (x *MailboxCredentialInput) GetProviderKey() string {
+	if x != nil {
+		return x.ProviderKey
+	}
+	return ""
+}
+
+func (x *MailboxCredentialInput) GetCredentials() []*MailboxCredentialValue {
+	if x != nil {
+		return x.Credentials
+	}
+	return nil
+}
+
+func (x *MailboxCredentialInput) GetAuthStatus() MailboxAuthStatus {
+	if x != nil {
+		return x.AuthStatus
+	}
+	return MailboxAuthStatus_MAILBOX_AUTH_STATUS_UNSPECIFIED
+}
+
+func (x *MailboxCredentialInput) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+type MailboxCredentialValue struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Kind          MailboxCredentialKind  `protobuf:"varint,1,opt,name=kind,proto3,enum=byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind" json:"kind,omitempty"`
+	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MailboxCredentialValue) Reset() {
+	*x = MailboxCredentialValue{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MailboxCredentialValue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MailboxCredentialValue) ProtoMessage() {}
+
+func (x *MailboxCredentialValue) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MailboxCredentialValue.ProtoReflect.Descriptor instead.
+func (*MailboxCredentialValue) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *MailboxCredentialValue) GetKind() MailboxCredentialKind {
+	if x != nil {
+		return x.Kind
+	}
+	return MailboxCredentialKind_MAILBOX_CREDENTIAL_KIND_UNSPECIFIED
+}
+
+func (x *MailboxCredentialValue) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+type MarkEmailAuthStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	EmailAddress  string                 `protobuf:"bytes,1,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
+	AuthStatus    MailboxAuthStatus      `protobuf:"varint,2,opt,name=auth_status,json=authStatus,proto3,enum=byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus" json:"auth_status,omitempty"`
+	LastError     string                 `protobuf:"bytes,3,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkEmailAuthStatusRequest) Reset() {
+	*x = MarkEmailAuthStatusRequest{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkEmailAuthStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkEmailAuthStatusRequest) ProtoMessage() {}
+
+func (x *MarkEmailAuthStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkEmailAuthStatusRequest.ProtoReflect.Descriptor instead.
+func (*MarkEmailAuthStatusRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *MarkEmailAuthStatusRequest) GetEmailAddress() string {
+	if x != nil {
+		return x.EmailAddress
+	}
+	return ""
+}
+
+func (x *MarkEmailAuthStatusRequest) GetAuthStatus() MailboxAuthStatus {
+	if x != nil {
+		return x.AuthStatus
+	}
+	return MailboxAuthStatus_MAILBOX_AUTH_STATUS_UNSPECIFIED
+}
+
+func (x *MarkEmailAuthStatusRequest) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+type MarkEmailAuthStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Mailbox       *EmailMailbox          `protobuf:"bytes,1,opt,name=mailbox,proto3" json:"mailbox,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkEmailAuthStatusResponse) Reset() {
+	*x = MarkEmailAuthStatusResponse{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkEmailAuthStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkEmailAuthStatusResponse) ProtoMessage() {}
+
+func (x *MarkEmailAuthStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkEmailAuthStatusResponse.ProtoReflect.Descriptor instead.
+func (*MarkEmailAuthStatusResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *MarkEmailAuthStatusResponse) GetMailbox() *EmailMailbox {
+	if x != nil {
+		return x.Mailbox
+	}
+	return nil
+}
+
+func (x *MarkEmailAuthStatusResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type UpsertEmailMailboxRequest struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Mailbox       *MailboxCredentialInput `protobuf:"bytes,1,opt,name=mailbox,proto3" json:"mailbox,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpsertEmailMailboxRequest) Reset() {
+	*x = UpsertEmailMailboxRequest{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpsertEmailMailboxRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpsertEmailMailboxRequest) ProtoMessage() {}
+
+func (x *UpsertEmailMailboxRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpsertEmailMailboxRequest.ProtoReflect.Descriptor instead.
+func (*UpsertEmailMailboxRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpsertEmailMailboxRequest) GetMailbox() *MailboxCredentialInput {
+	if x != nil {
+		return x.Mailbox
+	}
+	return nil
+}
+
+type UpsertEmailMailboxResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Mailbox       *EmailMailbox          `protobuf:"bytes,1,opt,name=mailbox,proto3" json:"mailbox,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpsertEmailMailboxResponse) Reset() {
+	*x = UpsertEmailMailboxResponse{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpsertEmailMailboxResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpsertEmailMailboxResponse) ProtoMessage() {}
+
+func (x *UpsertEmailMailboxResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpsertEmailMailboxResponse.ProtoReflect.Descriptor instead.
+func (*UpsertEmailMailboxResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *UpsertEmailMailboxResponse) GetMailbox() *EmailMailbox {
+	if x != nil {
+		return x.Mailbox
+	}
+	return nil
+}
+
+func (x *UpsertEmailMailboxResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type ListEmailMailboxesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Limit         int32                  `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
+	AuthStatus    MailboxAuthStatus      `protobuf:"varint,2,opt,name=auth_status,json=authStatus,proto3,enum=byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus" json:"auth_status,omitempty"`
+	ProviderKey   string                 `protobuf:"bytes,3,opt,name=provider_key,json=providerKey,proto3" json:"provider_key,omitempty"`
+	Cursor        string                 `protobuf:"bytes,4,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	EmailAddress  string                 `protobuf:"bytes,5,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEmailMailboxesRequest) Reset() {
+	*x = ListEmailMailboxesRequest{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEmailMailboxesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEmailMailboxesRequest) ProtoMessage() {}
+
+func (x *ListEmailMailboxesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEmailMailboxesRequest.ProtoReflect.Descriptor instead.
+func (*ListEmailMailboxesRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListEmailMailboxesRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListEmailMailboxesRequest) GetAuthStatus() MailboxAuthStatus {
+	if x != nil {
+		return x.AuthStatus
+	}
+	return MailboxAuthStatus_MAILBOX_AUTH_STATUS_UNSPECIFIED
+}
+
+func (x *ListEmailMailboxesRequest) GetProviderKey() string {
+	if x != nil {
+		return x.ProviderKey
+	}
+	return ""
+}
+
+func (x *ListEmailMailboxesRequest) GetCursor() string {
+	if x != nil {
+		return x.Cursor
+	}
+	return ""
+}
+
+func (x *ListEmailMailboxesRequest) GetEmailAddress() string {
+	if x != nil {
+		return x.EmailAddress
+	}
+	return ""
+}
+
+type ListEmailMailboxesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Mailboxes     []*EmailMailbox        `protobuf:"bytes,1,rep,name=mailboxes,proto3" json:"mailboxes,omitempty"`
+	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEmailMailboxesResponse) Reset() {
+	*x = ListEmailMailboxesResponse{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEmailMailboxesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEmailMailboxesResponse) ProtoMessage() {}
+
+func (x *ListEmailMailboxesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEmailMailboxesResponse.ProtoReflect.Descriptor instead.
+func (*ListEmailMailboxesResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ListEmailMailboxesResponse) GetMailboxes() []*EmailMailbox {
+	if x != nil {
+		return x.Mailboxes
+	}
+	return nil
+}
+
+func (x *ListEmailMailboxesResponse) GetNextCursor() string {
+	if x != nil {
+		return x.NextCursor
+	}
+	return ""
+}
+
+func (x *ListEmailMailboxesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type DeleteMailboxRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	EmailAddress  string                 `protobuf:"bytes,1,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteMailboxRequest) Reset() {
+	*x = DeleteMailboxRequest{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteMailboxRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteMailboxRequest) ProtoMessage() {}
+
+func (x *DeleteMailboxRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteMailboxRequest.ProtoReflect.Descriptor instead.
+func (*DeleteMailboxRequest) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DeleteMailboxRequest) GetEmailAddress() string {
+	if x != nil {
+		return x.EmailAddress
+	}
+	return ""
+}
+
+type DeleteMailboxResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Deleted       bool                   `protobuf:"varint,1,opt,name=deleted,proto3" json:"deleted,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,2,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteMailboxResponse) Reset() {
+	*x = DeleteMailboxResponse{}
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteMailboxResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteMailboxResponse) ProtoMessage() {}
+
+func (x *DeleteMailboxResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteMailboxResponse.ProtoReflect.Descriptor instead.
+func (*DeleteMailboxResponse) Descriptor() ([]byte, []int) {
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeleteMailboxResponse) GetDeleted() bool {
+	if x != nil {
+		return x.Deleted
+	}
+	return false
+}
+
+func (x *DeleteMailboxResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 type EmailInboxMessage struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -686,7 +1262,7 @@ type EmailInboxMessage struct {
 
 func (x *EmailInboxMessage) Reset() {
 	*x = EmailInboxMessage{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[3]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -698,7 +1274,7 @@ func (x *EmailInboxMessage) String() string {
 func (*EmailInboxMessage) ProtoMessage() {}
 
 func (x *EmailInboxMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[3]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -711,7 +1287,7 @@ func (x *EmailInboxMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmailInboxMessage.ProtoReflect.Descriptor instead.
 func (*EmailInboxMessage) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{3}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *EmailInboxMessage) GetId() string {
@@ -822,7 +1398,7 @@ type MailboxEmailReceivedEvent struct {
 
 func (x *MailboxEmailReceivedEvent) Reset() {
 	*x = MailboxEmailReceivedEvent{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[4]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -834,7 +1410,7 @@ func (x *MailboxEmailReceivedEvent) String() string {
 func (*MailboxEmailReceivedEvent) ProtoMessage() {}
 
 func (x *MailboxEmailReceivedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[4]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -847,7 +1423,7 @@ func (x *MailboxEmailReceivedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxEmailReceivedEvent.ProtoReflect.Descriptor instead.
 func (*MailboxEmailReceivedEvent) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{4}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *MailboxEmailReceivedEvent) GetMetadata() *v1.EventMetadata {
@@ -875,7 +1451,7 @@ type MailboxEmailSignalReceivedEvent struct {
 
 func (x *MailboxEmailSignalReceivedEvent) Reset() {
 	*x = MailboxEmailSignalReceivedEvent{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[5]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -887,7 +1463,7 @@ func (x *MailboxEmailSignalReceivedEvent) String() string {
 func (*MailboxEmailSignalReceivedEvent) ProtoMessage() {}
 
 func (x *MailboxEmailSignalReceivedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[5]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -900,7 +1476,7 @@ func (x *MailboxEmailSignalReceivedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxEmailSignalReceivedEvent.ProtoReflect.Descriptor instead.
 func (*MailboxEmailSignalReceivedEvent) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{5}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *MailboxEmailSignalReceivedEvent) GetMetadata() *v1.EventMetadata {
@@ -935,7 +1511,7 @@ type FetchMailboxInboxResult struct {
 
 func (x *FetchMailboxInboxResult) Reset() {
 	*x = FetchMailboxInboxResult{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[6]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -947,7 +1523,7 @@ func (x *FetchMailboxInboxResult) String() string {
 func (*FetchMailboxInboxResult) ProtoMessage() {}
 
 func (x *FetchMailboxInboxResult) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[6]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -960,7 +1536,7 @@ func (x *FetchMailboxInboxResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchMailboxInboxResult.ProtoReflect.Descriptor instead.
 func (*FetchMailboxInboxResult) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{6}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *FetchMailboxInboxResult) GetMailbox() *EmailMailbox {
@@ -997,7 +1573,7 @@ type FetchMailboxInboxesRequest struct {
 
 func (x *FetchMailboxInboxesRequest) Reset() {
 	*x = FetchMailboxInboxesRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[7]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1009,7 +1585,7 @@ func (x *FetchMailboxInboxesRequest) String() string {
 func (*FetchMailboxInboxesRequest) ProtoMessage() {}
 
 func (x *FetchMailboxInboxesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[7]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1022,7 +1598,7 @@ func (x *FetchMailboxInboxesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchMailboxInboxesRequest.ProtoReflect.Descriptor instead.
 func (*FetchMailboxInboxesRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{7}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *FetchMailboxInboxesRequest) GetLimitPerMailbox() int32 {
@@ -1074,7 +1650,7 @@ type WaitForMailboxEmailRequest struct {
 
 func (x *WaitForMailboxEmailRequest) Reset() {
 	*x = WaitForMailboxEmailRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[8]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1086,7 +1662,7 @@ func (x *WaitForMailboxEmailRequest) String() string {
 func (*WaitForMailboxEmailRequest) ProtoMessage() {}
 
 func (x *WaitForMailboxEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[8]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1099,7 +1675,7 @@ func (x *WaitForMailboxEmailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitForMailboxEmailRequest.ProtoReflect.Descriptor instead.
 func (*WaitForMailboxEmailRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{8}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *WaitForMailboxEmailRequest) GetEmailAddress() string {
@@ -1154,7 +1730,7 @@ type WaitForMailboxEmailResponse struct {
 
 func (x *WaitForMailboxEmailResponse) Reset() {
 	*x = WaitForMailboxEmailResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[9]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1166,7 +1742,7 @@ func (x *WaitForMailboxEmailResponse) String() string {
 func (*WaitForMailboxEmailResponse) ProtoMessage() {}
 
 func (x *WaitForMailboxEmailResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[9]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1179,7 +1755,7 @@ func (x *WaitForMailboxEmailResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitForMailboxEmailResponse.ProtoReflect.Descriptor instead.
 func (*WaitForMailboxEmailResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{9}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *WaitForMailboxEmailResponse) GetFound() bool {
@@ -1211,7 +1787,7 @@ type MailboxEmailPollRequest struct {
 
 func (x *MailboxEmailPollRequest) Reset() {
 	*x = MailboxEmailPollRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[10]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1223,7 +1799,7 @@ func (x *MailboxEmailPollRequest) String() string {
 func (*MailboxEmailPollRequest) ProtoMessage() {}
 
 func (x *MailboxEmailPollRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[10]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1236,7 +1812,7 @@ func (x *MailboxEmailPollRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxEmailPollRequest.ProtoReflect.Descriptor instead.
 func (*MailboxEmailPollRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{10}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *MailboxEmailPollRequest) GetEmailAddress() string {
@@ -1299,7 +1875,7 @@ type ListMailboxInboxRequest struct {
 
 func (x *ListMailboxInboxRequest) Reset() {
 	*x = ListMailboxInboxRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[11]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1311,7 +1887,7 @@ func (x *ListMailboxInboxRequest) String() string {
 func (*ListMailboxInboxRequest) ProtoMessage() {}
 
 func (x *ListMailboxInboxRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[11]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1324,7 +1900,7 @@ func (x *ListMailboxInboxRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxInboxRequest.ProtoReflect.Descriptor instead.
 func (*ListMailboxInboxRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{11}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ListMailboxInboxRequest) GetEmailAddress() string {
@@ -1358,7 +1934,7 @@ type ListMailboxInboxResponse struct {
 
 func (x *ListMailboxInboxResponse) Reset() {
 	*x = ListMailboxInboxResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[12]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1370,7 +1946,7 @@ func (x *ListMailboxInboxResponse) String() string {
 func (*ListMailboxInboxResponse) ProtoMessage() {}
 
 func (x *ListMailboxInboxResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[12]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1383,7 +1959,7 @@ func (x *ListMailboxInboxResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxInboxResponse.ProtoReflect.Descriptor instead.
 func (*ListMailboxInboxResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{12}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListMailboxInboxResponse) GetResult() *FetchMailboxInboxResult {
@@ -1414,7 +1990,7 @@ type FetchMailboxInboxesResponse struct {
 
 func (x *FetchMailboxInboxesResponse) Reset() {
 	*x = FetchMailboxInboxesResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[13]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1426,7 +2002,7 @@ func (x *FetchMailboxInboxesResponse) String() string {
 func (*FetchMailboxInboxesResponse) ProtoMessage() {}
 
 func (x *FetchMailboxInboxesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[13]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1439,7 +2015,7 @@ func (x *FetchMailboxInboxesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FetchMailboxInboxesResponse.ProtoReflect.Descriptor instead.
 func (*FetchMailboxInboxesResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{13}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *FetchMailboxInboxesResponse) GetResults() []*FetchMailboxInboxResult {
@@ -1493,7 +2069,7 @@ type RegisterMailboxRequest struct {
 
 func (x *RegisterMailboxRequest) Reset() {
 	*x = RegisterMailboxRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[14]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1505,7 +2081,7 @@ func (x *RegisterMailboxRequest) String() string {
 func (*RegisterMailboxRequest) ProtoMessage() {}
 
 func (x *RegisterMailboxRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[14]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1518,7 +2094,7 @@ func (x *RegisterMailboxRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterMailboxRequest.ProtoReflect.Descriptor instead.
 func (*RegisterMailboxRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{14}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *RegisterMailboxRequest) GetImportOnly() bool {
@@ -1539,7 +2115,7 @@ type RegisterMailboxResponse struct {
 
 func (x *RegisterMailboxResponse) Reset() {
 	*x = RegisterMailboxResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[15]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1551,7 +2127,7 @@ func (x *RegisterMailboxResponse) String() string {
 func (*RegisterMailboxResponse) ProtoMessage() {}
 
 func (x *RegisterMailboxResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[15]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1564,7 +2140,7 @@ func (x *RegisterMailboxResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterMailboxResponse.ProtoReflect.Descriptor instead.
 func (*RegisterMailboxResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{15}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *RegisterMailboxResponse) GetOperationId() string {
@@ -1599,7 +2175,7 @@ type StartMailboxOAuthRequest struct {
 
 func (x *StartMailboxOAuthRequest) Reset() {
 	*x = StartMailboxOAuthRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[16]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1611,7 +2187,7 @@ func (x *StartMailboxOAuthRequest) String() string {
 func (*StartMailboxOAuthRequest) ProtoMessage() {}
 
 func (x *StartMailboxOAuthRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[16]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1624,7 +2200,7 @@ func (x *StartMailboxOAuthRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartMailboxOAuthRequest.ProtoReflect.Descriptor instead.
 func (*StartMailboxOAuthRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{16}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *StartMailboxOAuthRequest) GetEmailAddress() string {
@@ -1659,7 +2235,7 @@ type StartMailboxOAuthResponse struct {
 
 func (x *StartMailboxOAuthResponse) Reset() {
 	*x = StartMailboxOAuthResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[17]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1671,7 +2247,7 @@ func (x *StartMailboxOAuthResponse) String() string {
 func (*StartMailboxOAuthResponse) ProtoMessage() {}
 
 func (x *StartMailboxOAuthResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[17]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1684,7 +2260,7 @@ func (x *StartMailboxOAuthResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartMailboxOAuthResponse.ProtoReflect.Descriptor instead.
 func (*StartMailboxOAuthResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{17}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *StartMailboxOAuthResponse) GetOperationId() string {
@@ -1729,7 +2305,7 @@ type MailboxOperation struct {
 
 func (x *MailboxOperation) Reset() {
 	*x = MailboxOperation{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[18]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1741,7 +2317,7 @@ func (x *MailboxOperation) String() string {
 func (*MailboxOperation) ProtoMessage() {}
 
 func (x *MailboxOperation) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[18]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1754,7 +2330,7 @@ func (x *MailboxOperation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxOperation.ProtoReflect.Descriptor instead.
 func (*MailboxOperation) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{18}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *MailboxOperation) GetOperationId() string {
@@ -1857,7 +2433,7 @@ type GetMailboxOperationRequest struct {
 
 func (x *GetMailboxOperationRequest) Reset() {
 	*x = GetMailboxOperationRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[19]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1869,7 +2445,7 @@ func (x *GetMailboxOperationRequest) String() string {
 func (*GetMailboxOperationRequest) ProtoMessage() {}
 
 func (x *GetMailboxOperationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[19]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1882,7 +2458,7 @@ func (x *GetMailboxOperationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMailboxOperationRequest.ProtoReflect.Descriptor instead.
 func (*GetMailboxOperationRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{19}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *GetMailboxOperationRequest) GetOperationId() string {
@@ -1902,7 +2478,7 @@ type GetMailboxOperationResponse struct {
 
 func (x *GetMailboxOperationResponse) Reset() {
 	*x = GetMailboxOperationResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[20]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1914,7 +2490,7 @@ func (x *GetMailboxOperationResponse) String() string {
 func (*GetMailboxOperationResponse) ProtoMessage() {}
 
 func (x *GetMailboxOperationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[20]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1927,7 +2503,7 @@ func (x *GetMailboxOperationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMailboxOperationResponse.ProtoReflect.Descriptor instead.
 func (*GetMailboxOperationResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{20}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *GetMailboxOperationResponse) GetOperation() *MailboxOperation {
@@ -1956,7 +2532,7 @@ type ListMailboxOperationsRequest struct {
 
 func (x *ListMailboxOperationsRequest) Reset() {
 	*x = ListMailboxOperationsRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[21]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1968,7 +2544,7 @@ func (x *ListMailboxOperationsRequest) String() string {
 func (*ListMailboxOperationsRequest) ProtoMessage() {}
 
 func (x *ListMailboxOperationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[21]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1981,7 +2557,7 @@ func (x *ListMailboxOperationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxOperationsRequest.ProtoReflect.Descriptor instead.
 func (*ListMailboxOperationsRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{21}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ListMailboxOperationsRequest) GetLimit() int32 {
@@ -2022,7 +2598,7 @@ type ListMailboxOperationsResponse struct {
 
 func (x *ListMailboxOperationsResponse) Reset() {
 	*x = ListMailboxOperationsResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[22]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2034,7 +2610,7 @@ func (x *ListMailboxOperationsResponse) String() string {
 func (*ListMailboxOperationsResponse) ProtoMessage() {}
 
 func (x *ListMailboxOperationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[22]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2047,7 +2623,7 @@ func (x *ListMailboxOperationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxOperationsResponse.ProtoReflect.Descriptor instead.
 func (*ListMailboxOperationsResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{22}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *ListMailboxOperationsResponse) GetOperations() []*MailboxOperation {
@@ -2075,7 +2651,7 @@ type MailboxDomain struct {
 
 func (x *MailboxDomain) Reset() {
 	*x = MailboxDomain{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[23]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2087,7 +2663,7 @@ func (x *MailboxDomain) String() string {
 func (*MailboxDomain) ProtoMessage() {}
 
 func (x *MailboxDomain) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[23]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2100,7 +2676,7 @@ func (x *MailboxDomain) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxDomain.ProtoReflect.Descriptor instead.
 func (*MailboxDomain) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{23}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *MailboxDomain) GetDomain() string {
@@ -2133,7 +2709,7 @@ type ListMailboxDomainsRequest struct {
 
 func (x *ListMailboxDomainsRequest) Reset() {
 	*x = ListMailboxDomainsRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[24]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2145,7 +2721,7 @@ func (x *ListMailboxDomainsRequest) String() string {
 func (*ListMailboxDomainsRequest) ProtoMessage() {}
 
 func (x *ListMailboxDomainsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[24]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2158,7 +2734,7 @@ func (x *ListMailboxDomainsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxDomainsRequest.ProtoReflect.Descriptor instead.
 func (*ListMailboxDomainsRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{24}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *ListMailboxDomainsRequest) GetProviderKey() string {
@@ -2178,7 +2754,7 @@ type ListMailboxDomainsResponse struct {
 
 func (x *ListMailboxDomainsResponse) Reset() {
 	*x = ListMailboxDomainsResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[25]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2190,7 +2766,7 @@ func (x *ListMailboxDomainsResponse) String() string {
 func (*ListMailboxDomainsResponse) ProtoMessage() {}
 
 func (x *ListMailboxDomainsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[25]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2203,7 +2779,7 @@ func (x *ListMailboxDomainsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMailboxDomainsResponse.ProtoReflect.Descriptor instead.
 func (*ListMailboxDomainsResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{25}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *ListMailboxDomainsResponse) GetDomains() []*MailboxDomain {
@@ -2229,7 +2805,7 @@ type SyncMailboxDomainsRequest struct {
 
 func (x *SyncMailboxDomainsRequest) Reset() {
 	*x = SyncMailboxDomainsRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[26]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2241,7 +2817,7 @@ func (x *SyncMailboxDomainsRequest) String() string {
 func (*SyncMailboxDomainsRequest) ProtoMessage() {}
 
 func (x *SyncMailboxDomainsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[26]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2254,7 +2830,7 @@ func (x *SyncMailboxDomainsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncMailboxDomainsRequest.ProtoReflect.Descriptor instead.
 func (*SyncMailboxDomainsRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{26}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *SyncMailboxDomainsRequest) GetProviderKey() string {
@@ -2275,7 +2851,7 @@ type SyncMailboxDomainsResponse struct {
 
 func (x *SyncMailboxDomainsResponse) Reset() {
 	*x = SyncMailboxDomainsResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[27]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2287,7 +2863,7 @@ func (x *SyncMailboxDomainsResponse) String() string {
 func (*SyncMailboxDomainsResponse) ProtoMessage() {}
 
 func (x *SyncMailboxDomainsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[27]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2300,7 +2876,7 @@ func (x *SyncMailboxDomainsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncMailboxDomainsResponse.ProtoReflect.Descriptor instead.
 func (*SyncMailboxDomainsResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{27}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *SyncMailboxDomainsResponse) GetDomains() []*MailboxDomain {
@@ -2334,7 +2910,7 @@ type MailboxMessageRetentionPolicy struct {
 
 func (x *MailboxMessageRetentionPolicy) Reset() {
 	*x = MailboxMessageRetentionPolicy{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[28]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2346,7 +2922,7 @@ func (x *MailboxMessageRetentionPolicy) String() string {
 func (*MailboxMessageRetentionPolicy) ProtoMessage() {}
 
 func (x *MailboxMessageRetentionPolicy) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[28]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2359,7 +2935,7 @@ func (x *MailboxMessageRetentionPolicy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxMessageRetentionPolicy.ProtoReflect.Descriptor instead.
 func (*MailboxMessageRetentionPolicy) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{28}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *MailboxMessageRetentionPolicy) GetScope() MailboxMessageRetentionScope {
@@ -2388,7 +2964,7 @@ type MailboxProviderActionCapability struct {
 
 func (x *MailboxProviderActionCapability) Reset() {
 	*x = MailboxProviderActionCapability{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[29]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2400,7 +2976,7 @@ func (x *MailboxProviderActionCapability) String() string {
 func (*MailboxProviderActionCapability) ProtoMessage() {}
 
 func (x *MailboxProviderActionCapability) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[29]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2413,7 +2989,7 @@ func (x *MailboxProviderActionCapability) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxProviderActionCapability.ProtoReflect.Descriptor instead.
 func (*MailboxProviderActionCapability) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{29}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *MailboxProviderActionCapability) GetAction() MailboxProviderAction {
@@ -2456,7 +3032,7 @@ type MailboxProviderCapabilities struct {
 
 func (x *MailboxProviderCapabilities) Reset() {
 	*x = MailboxProviderCapabilities{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[30]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2468,7 +3044,7 @@ func (x *MailboxProviderCapabilities) String() string {
 func (*MailboxProviderCapabilities) ProtoMessage() {}
 
 func (x *MailboxProviderCapabilities) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[30]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2481,7 +3057,7 @@ func (x *MailboxProviderCapabilities) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MailboxProviderCapabilities.ProtoReflect.Descriptor instead.
 func (*MailboxProviderCapabilities) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{30}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *MailboxProviderCapabilities) GetKey() string {
@@ -2521,7 +3097,7 @@ type ListMailboxProviderCapabilitiesRequest struct {
 
 func (x *ListMailboxProviderCapabilitiesRequest) Reset() {
 	*x = ListMailboxProviderCapabilitiesRequest{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[31]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2533,7 +3109,7 @@ func (x *ListMailboxProviderCapabilitiesRequest) String() string {
 func (*ListMailboxProviderCapabilitiesRequest) ProtoMessage() {}
 
 func (x *ListMailboxProviderCapabilitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[31]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2546,7 +3122,7 @@ func (x *ListMailboxProviderCapabilitiesRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use ListMailboxProviderCapabilitiesRequest.ProtoReflect.Descriptor instead.
 func (*ListMailboxProviderCapabilitiesRequest) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{31}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *ListMailboxProviderCapabilitiesRequest) GetProviderKey() string {
@@ -2566,7 +3142,7 @@ type ListMailboxProviderCapabilitiesResponse struct {
 
 func (x *ListMailboxProviderCapabilitiesResponse) Reset() {
 	*x = ListMailboxProviderCapabilitiesResponse{}
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[32]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2578,7 +3154,7 @@ func (x *ListMailboxProviderCapabilitiesResponse) String() string {
 func (*ListMailboxProviderCapabilitiesResponse) ProtoMessage() {}
 
 func (x *ListMailboxProviderCapabilitiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[32]
+	mi := &file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2591,7 +3167,7 @@ func (x *ListMailboxProviderCapabilitiesResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use ListMailboxProviderCapabilitiesResponse.ProtoReflect.Descriptor instead.
 func (*ListMailboxProviderCapabilitiesResponse) Descriptor() ([]byte, []int) {
-	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{32}
+	return file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *ListMailboxProviderCapabilitiesResponse) GetProviders() []*MailboxProviderCapabilities {
@@ -2623,11 +3199,12 @@ const file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDesc = "" +
 	"\n" +
 	"confidence\x18\x06 \x01(\x05R\n" +
 	"confidence\x12)\n" +
-	"\x10evidence_preview\x18\a \x01(\tR\x0fevidencePreview\"\xbf\x01\n" +
+	"\x10evidence_preview\x18\a \x01(\tR\x0fevidencePreview\"\xaa\x02\n" +
 	"\x16MailboxCredentialState\x12)\n" +
 	"\x10password_present\x18\x01 \x01(\bR\x0fpasswordPresent\x12=\n" +
 	"\x1boauth_refresh_token_present\x18\x02 \x01(\bR\x18oauthRefreshTokenPresent\x12;\n" +
-	"\x1aoauth_access_token_present\x18\x03 \x01(\bR\x17oauthAccessTokenPresent\"\x9a\x04\n" +
+	"\x1aoauth_access_token_present\x18\x03 \x01(\bR\x17oauthAccessTokenPresent\x12i\n" +
+	"\x13present_credentials\x18\x04 \x03(\x0e28.byte.v.forge.contracts.mailbox.v1.MailboxCredentialKindR\x12presentCredentials\"\x9a\x04\n" +
 	"\fEmailMailbox\x12#\n" +
 	"\remail_address\x18\x01 \x01(\tR\femailAddress\x12\x1d\n" +
 	"\n" +
@@ -2642,7 +3219,49 @@ const file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDesc = "" +
 	"\rlatest_signal\x18\x13 \x01(\v2..byte.v.forge.contracts.mailbox.v1.EmailSignalR\flatestSignal\x12\x16\n" +
 	"\x06domain\x18\x14 \x01(\tR\x06domain\x12d\n" +
 	"\x10credential_state\x18\x15 \x01(\v29.byte.v.forge.contracts.mailbox.v1.MailboxCredentialStateR\x0fcredentialState\x12!\n" +
-	"\fprovider_key\x18\x16 \x01(\tR\vproviderKeyJ\x04\b\x02\x10\x05J\x04\b\x12\x10\x13R\bpasswordR\rrefresh_tokenR\faccess_tokenR\bprovider\"\xc9\x05\n" +
+	"\fprovider_key\x18\x16 \x01(\tR\vproviderKeyJ\x04\b\x02\x10\x05J\x04\b\x12\x10\x13R\bpasswordR\rrefresh_tokenR\faccess_tokenR\bprovider\"\xb3\x02\n" +
+	"\x16MailboxCredentialInput\x12#\n" +
+	"\remail_address\x18\x01 \x01(\tR\femailAddress\x12!\n" +
+	"\fprovider_key\x18\x02 \x01(\tR\vproviderKey\x12[\n" +
+	"\vcredentials\x18\x03 \x03(\v29.byte.v.forge.contracts.mailbox.v1.MailboxCredentialValueR\vcredentials\x12U\n" +
+	"\vauth_status\x18\x06 \x01(\x0e24.byte.v.forge.contracts.mailbox.v1.MailboxAuthStatusR\n" +
+	"authStatus\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\a \x01(\tR\tlastError\"|\n" +
+	"\x16MailboxCredentialValue\x12L\n" +
+	"\x04kind\x18\x01 \x01(\x0e28.byte.v.forge.contracts.mailbox.v1.MailboxCredentialKindR\x04kind\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\xb7\x01\n" +
+	"\x1aMarkEmailAuthStatusRequest\x12#\n" +
+	"\remail_address\x18\x01 \x01(\tR\femailAddress\x12U\n" +
+	"\vauth_status\x18\x02 \x01(\x0e24.byte.v.forge.contracts.mailbox.v1.MailboxAuthStatusR\n" +
+	"authStatus\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\x03 \x01(\tR\tlastError\"\x8d\x01\n" +
+	"\x1bMarkEmailAuthStatusResponse\x12I\n" +
+	"\amailbox\x18\x01 \x01(\v2/.byte.v.forge.contracts.mailbox.v1.EmailMailboxR\amailbox\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\"p\n" +
+	"\x19UpsertEmailMailboxRequest\x12S\n" +
+	"\amailbox\x18\x01 \x01(\v29.byte.v.forge.contracts.mailbox.v1.MailboxCredentialInputR\amailbox\"\x8c\x01\n" +
+	"\x1aUpsertEmailMailboxResponse\x12I\n" +
+	"\amailbox\x18\x01 \x01(\v2/.byte.v.forge.contracts.mailbox.v1.EmailMailboxR\amailbox\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\"\xe8\x01\n" +
+	"\x19ListEmailMailboxesRequest\x12\x14\n" +
+	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12U\n" +
+	"\vauth_status\x18\x02 \x01(\x0e24.byte.v.forge.contracts.mailbox.v1.MailboxAuthStatusR\n" +
+	"authStatus\x12!\n" +
+	"\fprovider_key\x18\x03 \x01(\tR\vproviderKey\x12\x16\n" +
+	"\x06cursor\x18\x04 \x01(\tR\x06cursor\x12#\n" +
+	"\remail_address\x18\x05 \x01(\tR\femailAddress\"\xb1\x01\n" +
+	"\x1aListEmailMailboxesResponse\x12M\n" +
+	"\tmailboxes\x18\x01 \x03(\v2/.byte.v.forge.contracts.mailbox.v1.EmailMailboxR\tmailboxes\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\tR\n" +
+	"nextCursor\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\";\n" +
+	"\x14DeleteMailboxRequest\x12#\n" +
+	"\remail_address\x18\x01 \x01(\tR\femailAddress\"V\n" +
+	"\x15DeleteMailboxResponse\x12\x18\n" +
+	"\adeleted\x18\x01 \x01(\bR\adeleted\x12#\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\"\xc9\x05\n" +
 	"\x11EmailInboxMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rmailbox_email\x18\x02 \x01(\tR\fmailboxEmail\x12\x18\n" +
@@ -2849,7 +3468,7 @@ func file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDescGZIP() []byte {
 }
 
 var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
 var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_goTypes = []any{
 	(EmailSignalKind)(0),                            // 0: byte.v.forge.contracts.mailbox.v1.EmailSignalKind
 	(MailboxCredentialKind)(0),                      // 1: byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind
@@ -2861,82 +3480,102 @@ var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_goTypes = []any{
 	(*EmailSignal)(nil),                             // 7: byte.v.forge.contracts.mailbox.v1.EmailSignal
 	(*MailboxCredentialState)(nil),                  // 8: byte.v.forge.contracts.mailbox.v1.MailboxCredentialState
 	(*EmailMailbox)(nil),                            // 9: byte.v.forge.contracts.mailbox.v1.EmailMailbox
-	(*EmailInboxMessage)(nil),                       // 10: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
-	(*MailboxEmailReceivedEvent)(nil),               // 11: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent
-	(*MailboxEmailSignalReceivedEvent)(nil),         // 12: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent
-	(*FetchMailboxInboxResult)(nil),                 // 13: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
-	(*FetchMailboxInboxesRequest)(nil),              // 14: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesRequest
-	(*WaitForMailboxEmailRequest)(nil),              // 15: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailRequest
-	(*WaitForMailboxEmailResponse)(nil),             // 16: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailResponse
-	(*MailboxEmailPollRequest)(nil),                 // 17: byte.v.forge.contracts.mailbox.v1.MailboxEmailPollRequest
-	(*ListMailboxInboxRequest)(nil),                 // 18: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxRequest
-	(*ListMailboxInboxResponse)(nil),                // 19: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxResponse
-	(*FetchMailboxInboxesResponse)(nil),             // 20: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesResponse
-	(*RegisterMailboxRequest)(nil),                  // 21: byte.v.forge.contracts.mailbox.v1.RegisterMailboxRequest
-	(*RegisterMailboxResponse)(nil),                 // 22: byte.v.forge.contracts.mailbox.v1.RegisterMailboxResponse
-	(*StartMailboxOAuthRequest)(nil),                // 23: byte.v.forge.contracts.mailbox.v1.StartMailboxOAuthRequest
-	(*StartMailboxOAuthResponse)(nil),               // 24: byte.v.forge.contracts.mailbox.v1.StartMailboxOAuthResponse
-	(*MailboxOperation)(nil),                        // 25: byte.v.forge.contracts.mailbox.v1.MailboxOperation
-	(*GetMailboxOperationRequest)(nil),              // 26: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationRequest
-	(*GetMailboxOperationResponse)(nil),             // 27: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationResponse
-	(*ListMailboxOperationsRequest)(nil),            // 28: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest
-	(*ListMailboxOperationsResponse)(nil),           // 29: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsResponse
-	(*MailboxDomain)(nil),                           // 30: byte.v.forge.contracts.mailbox.v1.MailboxDomain
-	(*ListMailboxDomainsRequest)(nil),               // 31: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsRequest
-	(*ListMailboxDomainsResponse)(nil),              // 32: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsResponse
-	(*SyncMailboxDomainsRequest)(nil),               // 33: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsRequest
-	(*SyncMailboxDomainsResponse)(nil),              // 34: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsResponse
-	(*MailboxMessageRetentionPolicy)(nil),           // 35: byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy
-	(*MailboxProviderActionCapability)(nil),         // 36: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability
-	(*MailboxProviderCapabilities)(nil),             // 37: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities
-	(*ListMailboxProviderCapabilitiesRequest)(nil),  // 38: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesRequest
-	(*ListMailboxProviderCapabilitiesResponse)(nil), // 39: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesResponse
-	(*v1.SecretRef)(nil),                            // 40: byte.v.forge.contracts.common.v1.SecretRef
-	(*v1.ArtifactRef)(nil),                          // 41: byte.v.forge.contracts.common.v1.ArtifactRef
-	(*v1.EventMetadata)(nil),                        // 42: byte.v.forge.contracts.common.v1.EventMetadata
+	(*MailboxCredentialInput)(nil),                  // 10: byte.v.forge.contracts.mailbox.v1.MailboxCredentialInput
+	(*MailboxCredentialValue)(nil),                  // 11: byte.v.forge.contracts.mailbox.v1.MailboxCredentialValue
+	(*MarkEmailAuthStatusRequest)(nil),              // 12: byte.v.forge.contracts.mailbox.v1.MarkEmailAuthStatusRequest
+	(*MarkEmailAuthStatusResponse)(nil),             // 13: byte.v.forge.contracts.mailbox.v1.MarkEmailAuthStatusResponse
+	(*UpsertEmailMailboxRequest)(nil),               // 14: byte.v.forge.contracts.mailbox.v1.UpsertEmailMailboxRequest
+	(*UpsertEmailMailboxResponse)(nil),              // 15: byte.v.forge.contracts.mailbox.v1.UpsertEmailMailboxResponse
+	(*ListEmailMailboxesRequest)(nil),               // 16: byte.v.forge.contracts.mailbox.v1.ListEmailMailboxesRequest
+	(*ListEmailMailboxesResponse)(nil),              // 17: byte.v.forge.contracts.mailbox.v1.ListEmailMailboxesResponse
+	(*DeleteMailboxRequest)(nil),                    // 18: byte.v.forge.contracts.mailbox.v1.DeleteMailboxRequest
+	(*DeleteMailboxResponse)(nil),                   // 19: byte.v.forge.contracts.mailbox.v1.DeleteMailboxResponse
+	(*EmailInboxMessage)(nil),                       // 20: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
+	(*MailboxEmailReceivedEvent)(nil),               // 21: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent
+	(*MailboxEmailSignalReceivedEvent)(nil),         // 22: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent
+	(*FetchMailboxInboxResult)(nil),                 // 23: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
+	(*FetchMailboxInboxesRequest)(nil),              // 24: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesRequest
+	(*WaitForMailboxEmailRequest)(nil),              // 25: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailRequest
+	(*WaitForMailboxEmailResponse)(nil),             // 26: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailResponse
+	(*MailboxEmailPollRequest)(nil),                 // 27: byte.v.forge.contracts.mailbox.v1.MailboxEmailPollRequest
+	(*ListMailboxInboxRequest)(nil),                 // 28: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxRequest
+	(*ListMailboxInboxResponse)(nil),                // 29: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxResponse
+	(*FetchMailboxInboxesResponse)(nil),             // 30: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesResponse
+	(*RegisterMailboxRequest)(nil),                  // 31: byte.v.forge.contracts.mailbox.v1.RegisterMailboxRequest
+	(*RegisterMailboxResponse)(nil),                 // 32: byte.v.forge.contracts.mailbox.v1.RegisterMailboxResponse
+	(*StartMailboxOAuthRequest)(nil),                // 33: byte.v.forge.contracts.mailbox.v1.StartMailboxOAuthRequest
+	(*StartMailboxOAuthResponse)(nil),               // 34: byte.v.forge.contracts.mailbox.v1.StartMailboxOAuthResponse
+	(*MailboxOperation)(nil),                        // 35: byte.v.forge.contracts.mailbox.v1.MailboxOperation
+	(*GetMailboxOperationRequest)(nil),              // 36: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationRequest
+	(*GetMailboxOperationResponse)(nil),             // 37: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationResponse
+	(*ListMailboxOperationsRequest)(nil),            // 38: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest
+	(*ListMailboxOperationsResponse)(nil),           // 39: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsResponse
+	(*MailboxDomain)(nil),                           // 40: byte.v.forge.contracts.mailbox.v1.MailboxDomain
+	(*ListMailboxDomainsRequest)(nil),               // 41: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsRequest
+	(*ListMailboxDomainsResponse)(nil),              // 42: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsResponse
+	(*SyncMailboxDomainsRequest)(nil),               // 43: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsRequest
+	(*SyncMailboxDomainsResponse)(nil),              // 44: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsResponse
+	(*MailboxMessageRetentionPolicy)(nil),           // 45: byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy
+	(*MailboxProviderActionCapability)(nil),         // 46: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability
+	(*MailboxProviderCapabilities)(nil),             // 47: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities
+	(*ListMailboxProviderCapabilitiesRequest)(nil),  // 48: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesRequest
+	(*ListMailboxProviderCapabilitiesResponse)(nil), // 49: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesResponse
+	(*v1.SecretRef)(nil),                            // 50: byte.v.forge.contracts.common.v1.SecretRef
+	(*v1.ArtifactRef)(nil),                          // 51: byte.v.forge.contracts.common.v1.ArtifactRef
+	(*v1.EventMetadata)(nil),                        // 52: byte.v.forge.contracts.common.v1.EventMetadata
 }
 var file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_depIdxs = []int32{
 	0,  // 0: byte.v.forge.contracts.mailbox.v1.EmailSignal.kind:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignalKind
-	40, // 1: byte.v.forge.contracts.mailbox.v1.EmailSignal.secret_ref:type_name -> byte.v.forge.contracts.common.v1.SecretRef
-	2,  // 2: byte.v.forge.contracts.mailbox.v1.EmailMailbox.auth_status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
-	7,  // 3: byte.v.forge.contracts.mailbox.v1.EmailMailbox.latest_signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
-	8,  // 4: byte.v.forge.contracts.mailbox.v1.EmailMailbox.credential_state:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialState
-	41, // 5: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.body_artifact_ref:type_name -> byte.v.forge.contracts.common.v1.ArtifactRef
-	41, // 6: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.html_artifact_ref:type_name -> byte.v.forge.contracts.common.v1.ArtifactRef
-	7,  // 7: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.signals:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
-	7,  // 8: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.primary_signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
-	42, // 9: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
-	10, // 10: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
-	42, // 11: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
-	10, // 12: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
-	7,  // 13: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
-	9,  // 14: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult.mailbox:type_name -> byte.v.forge.contracts.mailbox.v1.EmailMailbox
-	10, // 15: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult.messages:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
-	0,  // 16: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailRequest.signal_kind:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignalKind
-	10, // 17: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailResponse.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
-	0,  // 18: byte.v.forge.contracts.mailbox.v1.MailboxEmailPollRequest.signal_kind:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignalKind
-	13, // 19: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxResponse.result:type_name -> byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
-	13, // 20: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesResponse.results:type_name -> byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
-	3,  // 21: byte.v.forge.contracts.mailbox.v1.MailboxOperation.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationAction
-	4,  // 22: byte.v.forge.contracts.mailbox.v1.MailboxOperation.status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationStatus
-	25, // 23: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationResponse.operation:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperation
-	4,  // 24: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest.status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationStatus
-	3,  // 25: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationAction
-	25, // 26: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsResponse.operations:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperation
-	30, // 27: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsResponse.domains:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxDomain
-	30, // 28: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsResponse.domains:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxDomain
-	5,  // 29: byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy.scope:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionScope
-	6,  // 30: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderAction
-	1,  // 31: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.required_credentials:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind
-	2,  // 32: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.required_auth_statuses:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
-	36, // 33: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities.actions:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability
-	35, // 34: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities.retention_policy:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy
-	37, // 35: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesResponse.providers:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities
-	36, // [36:36] is the sub-list for method output_type
-	36, // [36:36] is the sub-list for method input_type
-	36, // [36:36] is the sub-list for extension type_name
-	36, // [36:36] is the sub-list for extension extendee
-	0,  // [0:36] is the sub-list for field type_name
+	50, // 1: byte.v.forge.contracts.mailbox.v1.EmailSignal.secret_ref:type_name -> byte.v.forge.contracts.common.v1.SecretRef
+	1,  // 2: byte.v.forge.contracts.mailbox.v1.MailboxCredentialState.present_credentials:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind
+	2,  // 3: byte.v.forge.contracts.mailbox.v1.EmailMailbox.auth_status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
+	7,  // 4: byte.v.forge.contracts.mailbox.v1.EmailMailbox.latest_signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
+	8,  // 5: byte.v.forge.contracts.mailbox.v1.EmailMailbox.credential_state:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialState
+	11, // 6: byte.v.forge.contracts.mailbox.v1.MailboxCredentialInput.credentials:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialValue
+	2,  // 7: byte.v.forge.contracts.mailbox.v1.MailboxCredentialInput.auth_status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
+	1,  // 8: byte.v.forge.contracts.mailbox.v1.MailboxCredentialValue.kind:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind
+	2,  // 9: byte.v.forge.contracts.mailbox.v1.MarkEmailAuthStatusRequest.auth_status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
+	9,  // 10: byte.v.forge.contracts.mailbox.v1.MarkEmailAuthStatusResponse.mailbox:type_name -> byte.v.forge.contracts.mailbox.v1.EmailMailbox
+	10, // 11: byte.v.forge.contracts.mailbox.v1.UpsertEmailMailboxRequest.mailbox:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialInput
+	9,  // 12: byte.v.forge.contracts.mailbox.v1.UpsertEmailMailboxResponse.mailbox:type_name -> byte.v.forge.contracts.mailbox.v1.EmailMailbox
+	2,  // 13: byte.v.forge.contracts.mailbox.v1.ListEmailMailboxesRequest.auth_status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
+	9,  // 14: byte.v.forge.contracts.mailbox.v1.ListEmailMailboxesResponse.mailboxes:type_name -> byte.v.forge.contracts.mailbox.v1.EmailMailbox
+	51, // 15: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.body_artifact_ref:type_name -> byte.v.forge.contracts.common.v1.ArtifactRef
+	51, // 16: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.html_artifact_ref:type_name -> byte.v.forge.contracts.common.v1.ArtifactRef
+	7,  // 17: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.signals:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
+	7,  // 18: byte.v.forge.contracts.mailbox.v1.EmailInboxMessage.primary_signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
+	52, // 19: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
+	20, // 20: byte.v.forge.contracts.mailbox.v1.MailboxEmailReceivedEvent.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
+	52, // 21: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.metadata:type_name -> byte.v.forge.contracts.common.v1.EventMetadata
+	20, // 22: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
+	7,  // 23: byte.v.forge.contracts.mailbox.v1.MailboxEmailSignalReceivedEvent.signal:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignal
+	9,  // 24: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult.mailbox:type_name -> byte.v.forge.contracts.mailbox.v1.EmailMailbox
+	20, // 25: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult.messages:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
+	0,  // 26: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailRequest.signal_kind:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignalKind
+	20, // 27: byte.v.forge.contracts.mailbox.v1.WaitForMailboxEmailResponse.message:type_name -> byte.v.forge.contracts.mailbox.v1.EmailInboxMessage
+	0,  // 28: byte.v.forge.contracts.mailbox.v1.MailboxEmailPollRequest.signal_kind:type_name -> byte.v.forge.contracts.mailbox.v1.EmailSignalKind
+	23, // 29: byte.v.forge.contracts.mailbox.v1.ListMailboxInboxResponse.result:type_name -> byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
+	23, // 30: byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxesResponse.results:type_name -> byte.v.forge.contracts.mailbox.v1.FetchMailboxInboxResult
+	3,  // 31: byte.v.forge.contracts.mailbox.v1.MailboxOperation.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationAction
+	4,  // 32: byte.v.forge.contracts.mailbox.v1.MailboxOperation.status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationStatus
+	35, // 33: byte.v.forge.contracts.mailbox.v1.GetMailboxOperationResponse.operation:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperation
+	4,  // 34: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest.status:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationStatus
+	3,  // 35: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsRequest.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperationAction
+	35, // 36: byte.v.forge.contracts.mailbox.v1.ListMailboxOperationsResponse.operations:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxOperation
+	40, // 37: byte.v.forge.contracts.mailbox.v1.ListMailboxDomainsResponse.domains:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxDomain
+	40, // 38: byte.v.forge.contracts.mailbox.v1.SyncMailboxDomainsResponse.domains:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxDomain
+	5,  // 39: byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy.scope:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionScope
+	6,  // 40: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.action:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderAction
+	1,  // 41: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.required_credentials:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxCredentialKind
+	2,  // 42: byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability.required_auth_statuses:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxAuthStatus
+	46, // 43: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities.actions:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderActionCapability
+	45, // 44: byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities.retention_policy:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxMessageRetentionPolicy
+	47, // 45: byte.v.forge.contracts.mailbox.v1.ListMailboxProviderCapabilitiesResponse.providers:type_name -> byte.v.forge.contracts.mailbox.v1.MailboxProviderCapabilities
+	46, // [46:46] is the sub-list for method output_type
+	46, // [46:46] is the sub-list for method input_type
+	46, // [46:46] is the sub-list for extension type_name
+	46, // [46:46] is the sub-list for extension extendee
+	0,  // [0:46] is the sub-list for field type_name
 }
 
 func init() { file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_init() }
@@ -2950,7 +3589,7 @@ func file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDesc), len(file_byte_v_forge_contracts_mailbox_v1_mailbox_proto_rawDesc)),
 			NumEnums:      7,
-			NumMessages:   33,
+			NumMessages:   43,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

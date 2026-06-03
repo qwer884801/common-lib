@@ -85,6 +85,7 @@ export interface MailboxCredentialState {
   password_present: boolean;
   oauth_refresh_token_present: boolean;
   oauth_access_token_present: boolean;
+  present_credentials: MailboxCredentialKind[];
 }
 
 export interface EmailMailbox {
@@ -97,6 +98,62 @@ export interface EmailMailbox {
   domain: string;
   credential_state: MailboxCredentialState | undefined;
   provider_key: string;
+}
+
+export interface MailboxCredentialInput {
+  email_address: string;
+  provider_key: string;
+  credentials: MailboxCredentialValue[];
+  auth_status: MailboxAuthStatus;
+  last_error: string;
+}
+
+export interface MailboxCredentialValue {
+  kind: MailboxCredentialKind;
+  value: string;
+}
+
+export interface MarkEmailAuthStatusRequest {
+  email_address: string;
+  auth_status: MailboxAuthStatus;
+  last_error: string;
+}
+
+export interface MarkEmailAuthStatusResponse {
+  mailbox: EmailMailbox | undefined;
+  error_message: string;
+}
+
+export interface UpsertEmailMailboxRequest {
+  mailbox: MailboxCredentialInput | undefined;
+}
+
+export interface UpsertEmailMailboxResponse {
+  mailbox: EmailMailbox | undefined;
+  error_message: string;
+}
+
+export interface ListEmailMailboxesRequest {
+  limit: number;
+  auth_status: MailboxAuthStatus;
+  provider_key: string;
+  cursor: string;
+  email_address: string;
+}
+
+export interface ListEmailMailboxesResponse {
+  mailboxes: EmailMailbox[];
+  next_cursor: string;
+  error_message: string;
+}
+
+export interface DeleteMailboxRequest {
+  email_address: string;
+}
+
+export interface DeleteMailboxResponse {
+  deleted: boolean;
+  error_message: string;
 }
 
 export interface EmailInboxMessage {
