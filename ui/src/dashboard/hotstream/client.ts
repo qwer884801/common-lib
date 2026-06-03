@@ -114,7 +114,7 @@ function parseMessage<T>(message: Event): T | null {
 }
 
 function matchesRule(event: HotStreamEvent, rule: HotStreamInvalidationRule) {
-  return includes(rule.eventTypes, event.event_type) &&
+  return includes(rule.eventTypes, event.metadata?.type) &&
     includes(rule.resourceTypes, event.resource_type) &&
     includes(rule.resourceIds, event.resource_id) &&
     includes(rule.scopes, event.scope);
