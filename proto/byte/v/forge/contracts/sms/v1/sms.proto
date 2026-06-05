@@ -16,6 +16,7 @@ option php_namespace = "ByteVForge\\Contracts\\Sms\\V1";
 service SmsOrderService {
   rpc AcquireNumber(AcquireNumberRequest) returns (AcquireNumberResponse);
   rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+  rpc ResolveSmsCodeSecret(ResolveSmsCodeSecretRequest) returns (ResolveSmsCodeSecretResponse);
   rpc MarkMessageSent(MarkMessageSentRequest) returns (MarkMessageSentResponse);
   rpc RequestAdditionalCode(RequestAdditionalCodeRequest) returns (RequestAdditionalCodeResponse);
   rpc CompleteOrder(CompleteOrderRequest) returns (CompleteOrderResponse);
@@ -140,6 +141,16 @@ message GetOrderRequest {
 
 message GetOrderResponse {
   SmsOrder order = 1;
+  SmsError error = 2;
+}
+
+message ResolveSmsCodeSecretRequest {
+  string order_id = 1;
+  byte.v.forge.contracts.common.v1.SecretRef secret_ref = 2;
+}
+
+message ResolveSmsCodeSecretResponse {
+  string code_value = 1;
   SmsError error = 2;
 }
 

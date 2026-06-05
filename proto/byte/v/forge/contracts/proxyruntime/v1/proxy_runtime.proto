@@ -15,8 +15,10 @@ enum ProxyProtocol {
 }
 
 enum ProxyCapability {
+  reserved 1;
+  reserved "PROXY_CAPABILITY_CHAINING";
+
   PROXY_CAPABILITY_UNSPECIFIED = 0;
-  PROXY_CAPABILITY_CHAINING = 1;
   PROXY_CAPABILITY_POOL_REFRESH = 2;
   PROXY_CAPABILITY_API_POOL = 3;
   PROXY_CAPABILITY_STICKY_SESSION = 4;
@@ -48,6 +50,14 @@ enum ProxySourceKind {
   PROXY_SOURCE_KIND_DYNAMIC_IP = 4;
 }
 
+enum ProxyKind {
+  PROXY_KIND_UNSPECIFIED = 0;
+  PROXY_KIND_DYNAMIC_IP = 1;
+  PROXY_KIND_STATIC_IP = 2;
+  PROXY_KIND_SUBSCRIPTION = 3;
+  PROXY_KIND_FIXED_PROXY = 4;
+}
+
 enum ProxySourceNodeStatus {
   PROXY_SOURCE_NODE_STATUS_UNSPECIFIED = 0;
   PROXY_SOURCE_NODE_STATUS_UNKNOWN = 1;
@@ -66,6 +76,7 @@ enum ProxyRotationMode {
 enum ProxyRouteRuntimeKind {
   PROXY_ROUTE_RUNTIME_KIND_UNSPECIFIED = 0;
   PROXY_ROUTE_RUNTIME_KIND_GOST = 1;
+  PROXY_ROUTE_RUNTIME_KIND_MIHOMO = 2;
 }
 
 enum ProxySourceRuntimeKind {
@@ -182,6 +193,21 @@ enum ProxySelectorStrategy {
   PROXY_SELECTOR_STRATEGY_FIFO = 3;
   PROXY_SELECTOR_STRATEGY_HASH_CLIENT_IP = 4;
   PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST = 5;
+  PROXY_SELECTOR_STRATEGY_FALLBACK = 6;
+  PROXY_SELECTOR_STRATEGY_URL_TEST = 7;
+}
+
+enum EgressProfileLineKind {
+  EGRESS_PROFILE_LINE_KIND_UNSPECIFIED = 0;
+  EGRESS_PROFILE_LINE_KIND_DIRECT = 1;
+  EGRESS_PROFILE_LINE_KIND_SOURCE = 2;
+}
+
+enum EgressProfileExitKind {
+  EGRESS_PROFILE_EXIT_KIND_UNSPECIFIED = 0;
+  EGRESS_PROFILE_EXIT_KIND_DIRECT = 1;
+  EGRESS_PROFILE_EXIT_KIND_STATIC_IP = 2;
+  EGRESS_PROFILE_EXIT_KIND_DYNAMIC_IP = 3;
 }
 
 enum EgressHopRole {
@@ -228,15 +254,18 @@ message ProxyProviderAccount {
   bool credential_configured = 5;
   google.protobuf.Timestamp created_at = 13;
   google.protobuf.Timestamp updated_at = 14;
+  string username = 15;
+  string password_value = 16;
 }
 
 message ProxyFixedSourceDescriptor {
   uint32 endpoint_count = 1;
   repeated string region_codes = 2;
+  string uri = 3;
 }
 
 message ProxySubscriptionSourceDescriptor {
-  string url_redacted = 1;
+  string url = 1;
   google.protobuf.Duration interval = 2;
   string filter = 3;
   string exclude_filter = 4;
@@ -290,20 +319,6 @@ message ProxySourceNode {
   string error_message = 8;
 }
 
-message ProxyLineCandidate {
-  reserved 10 to 13;
-
-  string source_id = 1;
-  string node_id = 2;
-  string display_name = 3;
-  ProxySourceKind source_kind = 4;
-  ProxySourceNodeStatus status = 5;
-  uint32 delay_ms = 6;
-  repeated string region_codes = 7;
-  uint32 priority = 8;
-  string source_display_name = 9;
-}
-
 message ProxyDynamicGatewayCandidate {
   string provider_account_id = 1;
   string provider_id = 2;
@@ -315,6 +330,9 @@ message ProxyDynamicGatewayCandidate {
 }
 
 message EgressRoutePolicy {
+  reserved 8;
+  reserved "prefer_line_proxy";
+
   string country_code = 1;
   string region = 2;
   string purpose = 3;
@@ -322,13 +340,14 @@ message EgressRoutePolicy {
   uint32 max_attempts = 5;
   bool require_dynamic_exit = 6;
   bool allow_direct_dynamic_gateway = 7;
-  bool prefer_line_proxy = 8;
 }
 
 message EgressRoutePlan {
+  reserved 3;
+  reserved "line";
+
   string route_id = 1;
   EgressRoutePolicy policy = 2;
-  ProxyLineCandidate line = 3;
   ProxyDynamicGatewayCandidate dynamic_gateway = 4;
   repeated string selection_reasons = 5;
   google.protobuf.Timestamp planned_at = 6;
@@ -457,6 +476,7 @@ message ProxyEdgeCanarySettings {
   byte.v.forge.contracts.common.v1.SecretRef token_secret_ref = 2;
   bool clear_token = 3;
   bool enabled = 4;
+  string token_value = 5;
 }
 
 message ProxyEdgeCanarySettingsView {
@@ -474,6 +494,7 @@ message ProxyIPFraudProviderSettings {
   bool anonymous = 5;
   repeated byte.v.forge.contracts.common.v1.SecretRef api_key_secret_refs = 6;
   bool clear_api_keys = 7;
+  repeated string api_key_values = 8;
 }
 
 message ProxyIPFraudProviderSettingsView {
@@ -497,15 +518,16 @@ message ProxyIPFraudProviderDescriptor {
 }
 
 message ProxyDynamicIPGatewaySettings {
-  string gateway_id = 1;
-  string display_name = 2;
-  string addr = 3;
-  repeated string region_codes = 4;
-  repeated ProxyProtocol protocols = 5;
-  ProxyProtocol default_protocol = 6;
+  reserved 1 to 6;
+  reserved "gateway_id", "display_name", "addr", "region_codes", "protocols", "default_protocol";
+
+  string endpoint_url = 7;
 }
 
 message ProxyDynamicIPProviderSettings {
+  reserved 3;
+  reserved "line_proxy";
+
   string provider_id = 1;
   repeated ProxyDynamicIPGatewaySettings gateways = 2;
 }
@@ -514,11 +536,66 @@ message ProxyRuntimeCheckSettings {
   google.protobuf.Duration proxy_exit_ip_timeout = 1;
 }
 
+message EgressProfileSourceRef {
+  reserved 3;
+  reserved "node_filter";
+
+  string source_id = 1;
+  string node_id = 2;
+}
+
+message EgressProfileLineSettings {
+  reserved 3;
+  reserved "strategy";
+
+  EgressProfileLineKind kind = 1;
+  EgressProfileSourceRef source = 2;
+  string health_check_url = 4;
+  google.protobuf.Duration health_interval = 5;
+  google.protobuf.Duration health_timeout = 6;
+  uint32 expected_status = 7;
+}
+
+message EgressProfileExitSettings {
+  reserved 3;
+  reserved "strategy";
+
+  EgressProfileExitKind kind = 1;
+  EgressProfileSourceRef source = 2;
+  string health_check_url = 4;
+  google.protobuf.Duration health_interval = 5;
+  google.protobuf.Duration health_timeout = 6;
+  uint32 expected_status = 7;
+  string dynamic_provider_id = 8;
+}
+
+message EgressProfileSettings {
+  reserved 4;
+  reserved "hops";
+
+  string profile_id = 1;
+  string display_name = 2;
+  bool enabled = 3;
+  EgressProfileLineSettings line = 5;
+  EgressProfileExitSettings exit = 6;
+}
+
+message ProxyIngressRuleSettings {
+  string rule_id = 1;
+  string display_name = 2;
+  bool enabled = 3;
+  string username = 4;
+  string password_value = 5;
+  string profile_id = 6;
+}
+
 message ProxyRuntimeSettings {
   ProxyEdgeCanarySettingsView edge_canary = 1;
   repeated ProxyIPFraudProviderSettingsView ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
   ProxyRuntimeCheckSettings check_settings = 4;
+  repeated EgressProfileSettings egress_profiles = 5;
+  repeated ProxyIngressRuleSettings ingress_rules = 6;
 }
 
 message ProxyRuntimePersistentSettings {
@@ -526,6 +603,8 @@ message ProxyRuntimePersistentSettings {
   repeated ProxyIPFraudProviderSettings ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
   ProxyRuntimeCheckSettings check_settings = 4;
+  repeated EgressProfileSettings egress_profiles = 5;
+  repeated ProxyIngressRuleSettings ingress_rules = 6;
 }
 
 message ProxyRuntimeOverview {
@@ -604,6 +683,7 @@ message UpsertProxyProviderAccountRequest {
   string username = 12;
   byte.v.forge.contracts.common.v1.SecretRef password_secret_ref = 13;
   bool clear_password = 14;
+  string password_value = 15;
 }
 message UpsertProxyProviderAccountResponse { ProxyProviderAccount account = 1; }
 message DeleteProxyProviderAccountRequest { string account_id = 1; }
@@ -642,18 +722,54 @@ message DeleteProxySourceResponse {}
 message ListProxySourceNodesRequest { string source_id = 1; }
 message ListProxySourceNodesResponse { repeated ProxySourceNode nodes = 1; }
 
-message ResolveEgressRouteRequest {
-  reserved 2;
-  reserved "provider_account_id";
-
-  string account_id = 1;
-  ProxySessionPolicy session_policy = 3;
-  EgressRoutePolicy route_policy = 4;
+message ProxyResourceRef {
+  ProxyKind proxy_kind = 1;
+  string source_id = 2;
+  string node_id = 3;
+  string display_name = 4;
+  ProxySourceKind source_kind = 5;
+  repeated string region_codes = 6;
 }
-message ResolveEgressRouteResponse {
-  EgressRoutePlan plan = 1;
-  repeated ProxyLineCandidate line_candidates = 2;
-  repeated ProxyDynamicGatewayCandidate dynamic_gateway_candidates = 3;
+
+message ProxyNodeObservation {
+  ProxySourceNodeStatus status = 1;
+  uint32 delay_ms = 2;
+  string exit_ip = 3;
+  ProxyExitGeo exit_geo = 4;
+  ProxyIPFraudCheck ip_fraud_check = 5;
+  google.protobuf.Timestamp observed_at = 6;
+  google.protobuf.Timestamp expires_at = 7;
+  string error_message = 8;
+}
+
+message ResolveProxyRequest {
+  ProxyKind proxy_kind = 1;
+  string country_code = 2;
+  string region = 3;
+  string purpose = 4;
+  string target_host = 5;
+  uint32 target_port = 6;
+  string stickiness_key = 7;
+  google.protobuf.Duration ttl = 8;
+  bool force_new = 9;
+  ProxySelectorStrategy strategy = 10;
+}
+
+message ResolvedProxy {
+  string proxy_url = 1;
+  ProxyEndpoint endpoint = 2;
+  ProxyKind proxy_kind = 3;
+  ProxyResourceRef resource = 4;
+  string assignment_id = 5;
+  string lease_id = 6;
+  google.protobuf.Timestamp expires_at = 7;
+  ProxyNodeObservation observation = 8;
+  EgressRoutePlan route_plan = 9;
+}
+
+message ResolveProxyResponse {
+  ResolvedProxy proxy = 1;
+  repeated ProxyResourceRef candidates = 2;
 }
 
 message ListProxyDynamicLeasesRequest {}
@@ -725,8 +841,14 @@ message UpdateProxyRuntimeSettingsRequest {
   repeated ProxyIPFraudProviderSettings ip_fraud_providers = 2;
   repeated ProxyDynamicIPProviderSettings dynamic_ip_providers = 3;
   ProxyRuntimeCheckSettings check_settings = 4;
+  repeated EgressProfileSettings egress_profiles = 5;
+  repeated ProxyIngressRuleSettings ingress_rules = 6;
 }
 message UpdateProxyRuntimeSettingsResponse { ProxyRuntimeSettings settings = 1; }
+message UpdateProxyEgressProfilesRequest { repeated EgressProfileSettings egress_profiles = 1; }
+message UpdateProxyEgressProfilesResponse { ProxyRuntimeSettings settings = 1; }
+message UpdateProxyIngressRulesRequest { repeated ProxyIngressRuleSettings ingress_rules = 1; }
+message UpdateProxyIngressRulesResponse { ProxyRuntimeSettings settings = 1; }
 
 service ProxyRuntimeService {
   rpc ListProxyProviders(ListProxyProvidersRequest) returns (ListProxyProvidersResponse);
@@ -741,7 +863,7 @@ service ProxyRuntimeService {
   rpc UpsertProxyFixedSource(UpsertProxyFixedSourceRequest) returns (UpsertProxyFixedSourceResponse);
   rpc DeleteProxySource(DeleteProxySourceRequest) returns (DeleteProxySourceResponse);
   rpc ListProxySourceNodes(ListProxySourceNodesRequest) returns (ListProxySourceNodesResponse);
-  rpc ResolveEgressRoute(ResolveEgressRouteRequest) returns (ResolveEgressRouteResponse);
+  rpc ResolveProxy(ResolveProxyRequest) returns (ResolveProxyResponse);
   rpc ListProxyDynamicLeases(ListProxyDynamicLeasesRequest) returns (ListProxyDynamicLeasesResponse);
   rpc AcquireProxyLease(AcquireProxyLeaseRequest) returns (AcquireProxyLeaseResponse);
   rpc ReleaseProxyLease(ReleaseProxyLeaseRequest) returns (ReleaseProxyLeaseResponse);
@@ -753,4 +875,6 @@ service ProxyRuntimeService {
   rpc ListProxyIPFraudProviders(ListProxyIPFraudProvidersRequest) returns (ListProxyIPFraudProvidersResponse);
   rpc GetProxyRuntimeSettings(GetProxyRuntimeSettingsRequest) returns (GetProxyRuntimeSettingsResponse);
   rpc UpdateProxyRuntimeSettings(UpdateProxyRuntimeSettingsRequest) returns (UpdateProxyRuntimeSettingsResponse);
+  rpc UpdateProxyEgressProfiles(UpdateProxyEgressProfilesRequest) returns (UpdateProxyEgressProfilesResponse);
+  rpc UpdateProxyIngressRules(UpdateProxyIngressRulesRequest) returns (UpdateProxyIngressRulesResponse);
 }

@@ -131,6 +131,16 @@ export interface GetOrderResponse {
   error: SmsError | undefined;
 }
 
+export interface ResolveSmsCodeSecretRequest {
+  order_id: string;
+  secret_ref: SecretRef | undefined;
+}
+
+export interface ResolveSmsCodeSecretResponse {
+  code_value: string;
+  error: SmsError | undefined;
+}
+
 export interface MarkMessageSentRequest {
   order_id: string;
   request_id: string;

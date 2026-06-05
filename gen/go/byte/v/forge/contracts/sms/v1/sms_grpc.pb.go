@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	SmsOrderService_AcquireNumber_FullMethodName         = "/byte.v.forge.contracts.sms.v1.SmsOrderService/AcquireNumber"
 	SmsOrderService_GetOrder_FullMethodName              = "/byte.v.forge.contracts.sms.v1.SmsOrderService/GetOrder"
+	SmsOrderService_ResolveSmsCodeSecret_FullMethodName  = "/byte.v.forge.contracts.sms.v1.SmsOrderService/ResolveSmsCodeSecret"
 	SmsOrderService_MarkMessageSent_FullMethodName       = "/byte.v.forge.contracts.sms.v1.SmsOrderService/MarkMessageSent"
 	SmsOrderService_RequestAdditionalCode_FullMethodName = "/byte.v.forge.contracts.sms.v1.SmsOrderService/RequestAdditionalCode"
 	SmsOrderService_CompleteOrder_FullMethodName         = "/byte.v.forge.contracts.sms.v1.SmsOrderService/CompleteOrder"
@@ -33,6 +34,7 @@ const (
 type SmsOrderServiceClient interface {
 	AcquireNumber(ctx context.Context, in *AcquireNumberRequest, opts ...grpc.CallOption) (*AcquireNumberResponse, error)
 	GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error)
+	ResolveSmsCodeSecret(ctx context.Context, in *ResolveSmsCodeSecretRequest, opts ...grpc.CallOption) (*ResolveSmsCodeSecretResponse, error)
 	MarkMessageSent(ctx context.Context, in *MarkMessageSentRequest, opts ...grpc.CallOption) (*MarkMessageSentResponse, error)
 	RequestAdditionalCode(ctx context.Context, in *RequestAdditionalCodeRequest, opts ...grpc.CallOption) (*RequestAdditionalCodeResponse, error)
 	CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*CompleteOrderResponse, error)
@@ -61,6 +63,16 @@ func (c *smsOrderServiceClient) GetOrder(ctx context.Context, in *GetOrderReques
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetOrderResponse)
 	err := c.cc.Invoke(ctx, SmsOrderService_GetOrder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *smsOrderServiceClient) ResolveSmsCodeSecret(ctx context.Context, in *ResolveSmsCodeSecretRequest, opts ...grpc.CallOption) (*ResolveSmsCodeSecretResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResolveSmsCodeSecretResponse)
+	err := c.cc.Invoke(ctx, SmsOrderService_ResolveSmsCodeSecret_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,6 +125,7 @@ func (c *smsOrderServiceClient) CancelOrder(ctx context.Context, in *CancelOrder
 type SmsOrderServiceServer interface {
 	AcquireNumber(context.Context, *AcquireNumberRequest) (*AcquireNumberResponse, error)
 	GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error)
+	ResolveSmsCodeSecret(context.Context, *ResolveSmsCodeSecretRequest) (*ResolveSmsCodeSecretResponse, error)
 	MarkMessageSent(context.Context, *MarkMessageSentRequest) (*MarkMessageSentResponse, error)
 	RequestAdditionalCode(context.Context, *RequestAdditionalCodeRequest) (*RequestAdditionalCodeResponse, error)
 	CompleteOrder(context.Context, *CompleteOrderRequest) (*CompleteOrderResponse, error)
@@ -132,6 +145,9 @@ func (UnimplementedSmsOrderServiceServer) AcquireNumber(context.Context, *Acquir
 }
 func (UnimplementedSmsOrderServiceServer) GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetOrder not implemented")
+}
+func (UnimplementedSmsOrderServiceServer) ResolveSmsCodeSecret(context.Context, *ResolveSmsCodeSecretRequest) (*ResolveSmsCodeSecretResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResolveSmsCodeSecret not implemented")
 }
 func (UnimplementedSmsOrderServiceServer) MarkMessageSent(context.Context, *MarkMessageSentRequest) (*MarkMessageSentResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkMessageSent not implemented")
@@ -198,6 +214,24 @@ func _SmsOrderService_GetOrder_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SmsOrderServiceServer).GetOrder(ctx, req.(*GetOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SmsOrderService_ResolveSmsCodeSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveSmsCodeSecretRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SmsOrderServiceServer).ResolveSmsCodeSecret(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SmsOrderService_ResolveSmsCodeSecret_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SmsOrderServiceServer).ResolveSmsCodeSecret(ctx, req.(*ResolveSmsCodeSecretRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -288,6 +322,10 @@ var SmsOrderService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOrder",
 			Handler:    _SmsOrderService_GetOrder_Handler,
+		},
+		{
+			MethodName: "ResolveSmsCodeSecret",
+			Handler:    _SmsOrderService_ResolveSmsCodeSecret_Handler,
 		},
 		{
 			MethodName: "MarkMessageSent",

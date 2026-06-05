@@ -12,5 +12,7 @@ export function errorText(err: unknown) {
 function errorMessage(data: unknown) {
   if (!data || typeof data !== 'object') return '';
   const record = data as Record<string, unknown>;
-  return typeof record.error === 'string' ? record.error : '';
+  if (typeof record.message === 'string') return record.message;
+  if (typeof record.error === 'string') return record.error;
+  return '';
 }

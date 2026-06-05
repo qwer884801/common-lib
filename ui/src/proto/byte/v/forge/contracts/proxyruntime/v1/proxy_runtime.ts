@@ -18,7 +18,6 @@ export enum ProxyProtocol {
 
 export enum ProxyCapability {
   PROXY_CAPABILITY_UNSPECIFIED = "PROXY_CAPABILITY_UNSPECIFIED",
-  PROXY_CAPABILITY_CHAINING = "PROXY_CAPABILITY_CHAINING",
   PROXY_CAPABILITY_POOL_REFRESH = "PROXY_CAPABILITY_POOL_REFRESH",
   PROXY_CAPABILITY_API_POOL = "PROXY_CAPABILITY_API_POOL",
   PROXY_CAPABILITY_STICKY_SESSION = "PROXY_CAPABILITY_STICKY_SESSION",
@@ -54,6 +53,15 @@ export enum ProxySourceKind {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
+export enum ProxyKind {
+  PROXY_KIND_UNSPECIFIED = "PROXY_KIND_UNSPECIFIED",
+  PROXY_KIND_DYNAMIC_IP = "PROXY_KIND_DYNAMIC_IP",
+  PROXY_KIND_STATIC_IP = "PROXY_KIND_STATIC_IP",
+  PROXY_KIND_SUBSCRIPTION = "PROXY_KIND_SUBSCRIPTION",
+  PROXY_KIND_FIXED_PROXY = "PROXY_KIND_FIXED_PROXY",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
 export enum ProxySourceNodeStatus {
   PROXY_SOURCE_NODE_STATUS_UNSPECIFIED = "PROXY_SOURCE_NODE_STATUS_UNSPECIFIED",
   PROXY_SOURCE_NODE_STATUS_UNKNOWN = "PROXY_SOURCE_NODE_STATUS_UNKNOWN",
@@ -74,6 +82,7 @@ export enum ProxyRotationMode {
 export enum ProxyRouteRuntimeKind {
   PROXY_ROUTE_RUNTIME_KIND_UNSPECIFIED = "PROXY_ROUTE_RUNTIME_KIND_UNSPECIFIED",
   PROXY_ROUTE_RUNTIME_KIND_GOST = "PROXY_ROUTE_RUNTIME_KIND_GOST",
+  PROXY_ROUTE_RUNTIME_KIND_MIHOMO = "PROXY_ROUTE_RUNTIME_KIND_MIHOMO",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -199,6 +208,23 @@ export enum ProxySelectorStrategy {
   PROXY_SELECTOR_STRATEGY_FIFO = "PROXY_SELECTOR_STRATEGY_FIFO",
   PROXY_SELECTOR_STRATEGY_HASH_CLIENT_IP = "PROXY_SELECTOR_STRATEGY_HASH_CLIENT_IP",
   PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST = "PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST",
+  PROXY_SELECTOR_STRATEGY_FALLBACK = "PROXY_SELECTOR_STRATEGY_FALLBACK",
+  PROXY_SELECTOR_STRATEGY_URL_TEST = "PROXY_SELECTOR_STRATEGY_URL_TEST",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum EgressProfileLineKind {
+  EGRESS_PROFILE_LINE_KIND_UNSPECIFIED = "EGRESS_PROFILE_LINE_KIND_UNSPECIFIED",
+  EGRESS_PROFILE_LINE_KIND_DIRECT = "EGRESS_PROFILE_LINE_KIND_DIRECT",
+  EGRESS_PROFILE_LINE_KIND_SOURCE = "EGRESS_PROFILE_LINE_KIND_SOURCE",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export enum EgressProfileExitKind {
+  EGRESS_PROFILE_EXIT_KIND_UNSPECIFIED = "EGRESS_PROFILE_EXIT_KIND_UNSPECIFIED",
+  EGRESS_PROFILE_EXIT_KIND_DIRECT = "EGRESS_PROFILE_EXIT_KIND_DIRECT",
+  EGRESS_PROFILE_EXIT_KIND_STATIC_IP = "EGRESS_PROFILE_EXIT_KIND_STATIC_IP",
+  EGRESS_PROFILE_EXIT_KIND_DYNAMIC_IP = "EGRESS_PROFILE_EXIT_KIND_DYNAMIC_IP",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -243,15 +269,18 @@ export interface ProxyProviderAccount {
   credential_configured: boolean;
   created_at: string | undefined;
   updated_at: string | undefined;
+  username: string;
+  password_value: string;
 }
 
 export interface ProxyFixedSourceDescriptor {
   endpoint_count: number;
   region_codes: string[];
+  uri: string;
 }
 
 export interface ProxySubscriptionSourceDescriptor {
-  url_redacted: string;
+  url: string;
   interval: string | undefined;
   filter: string;
   exclude_filter: string;
@@ -300,18 +329,6 @@ export interface ProxySourceNode {
   error_message: string;
 }
 
-export interface ProxyLineCandidate {
-  source_id: string;
-  node_id: string;
-  display_name: string;
-  source_kind: ProxySourceKind;
-  status: ProxySourceNodeStatus;
-  delay_ms: number;
-  region_codes: string[];
-  priority: number;
-  source_display_name: string;
-}
-
 export interface ProxyDynamicGatewayCandidate {
   provider_account_id: string;
   provider_id: string;
@@ -330,13 +347,11 @@ export interface EgressRoutePolicy {
   max_attempts: number;
   require_dynamic_exit: boolean;
   allow_direct_dynamic_gateway: boolean;
-  prefer_line_proxy: boolean;
 }
 
 export interface EgressRoutePlan {
   route_id: string;
   policy: EgressRoutePolicy | undefined;
-  line: ProxyLineCandidate | undefined;
   dynamic_gateway: ProxyDynamicGatewayCandidate | undefined;
   selection_reasons: string[];
   planned_at: string | undefined;
@@ -476,6 +491,7 @@ export interface ProxyEdgeCanarySettings {
   token_secret_ref: SecretRef | undefined;
   clear_token: boolean;
   enabled: boolean;
+  token_value: string;
 }
 
 export interface ProxyEdgeCanarySettingsView {
@@ -491,6 +507,7 @@ export interface ProxyIPFraudProviderSettings {
   anonymous: boolean;
   api_key_secret_refs: SecretRef[];
   clear_api_keys: boolean;
+  api_key_values: string[];
 }
 
 export interface ProxyIPFraudProviderSettingsView {
@@ -512,12 +529,7 @@ export interface ProxyIPFraudProviderDescriptor {
 }
 
 export interface ProxyDynamicIPGatewaySettings {
-  gateway_id: string;
-  display_name: string;
-  addr: string;
-  region_codes: string[];
-  protocols: ProxyProtocol[];
-  default_protocol: ProxyProtocol;
+  endpoint_url: string;
 }
 
 export interface ProxyDynamicIPProviderSettings {
@@ -529,11 +541,54 @@ export interface ProxyRuntimeCheckSettings {
   proxy_exit_ip_timeout: string | undefined;
 }
 
+export interface EgressProfileSourceRef {
+  source_id: string;
+  node_id: string;
+}
+
+export interface EgressProfileLineSettings {
+  kind: EgressProfileLineKind;
+  source: EgressProfileSourceRef | undefined;
+  health_check_url: string;
+  health_interval: string | undefined;
+  health_timeout: string | undefined;
+  expected_status: number;
+}
+
+export interface EgressProfileExitSettings {
+  kind: EgressProfileExitKind;
+  source: EgressProfileSourceRef | undefined;
+  health_check_url: string;
+  health_interval: string | undefined;
+  health_timeout: string | undefined;
+  expected_status: number;
+  dynamic_provider_id: string;
+}
+
+export interface EgressProfileSettings {
+  profile_id: string;
+  display_name: string;
+  enabled: boolean;
+  line: EgressProfileLineSettings | undefined;
+  exit: EgressProfileExitSettings | undefined;
+}
+
+export interface ProxyIngressRuleSettings {
+  rule_id: string;
+  display_name: string;
+  enabled: boolean;
+  username: string;
+  password_value: string;
+  profile_id: string;
+}
+
 export interface ProxyRuntimeSettings {
   edge_canary: ProxyEdgeCanarySettingsView | undefined;
   ip_fraud_providers: ProxyIPFraudProviderSettingsView[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
   check_settings: ProxyRuntimeCheckSettings | undefined;
+  egress_profiles: EgressProfileSettings[];
+  ingress_rules: ProxyIngressRuleSettings[];
 }
 
 export interface ProxyRuntimePersistentSettings {
@@ -541,6 +596,8 @@ export interface ProxyRuntimePersistentSettings {
   ip_fraud_providers: ProxyIPFraudProviderSettings[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
   check_settings: ProxyRuntimeCheckSettings | undefined;
+  egress_profiles: EgressProfileSettings[];
+  ingress_rules: ProxyIngressRuleSettings[];
 }
 
 export interface ProxyRuntimeOverview {
@@ -648,6 +705,7 @@ export interface UpsertProxyProviderAccountRequest {
   username: string;
   password_secret_ref: SecretRef | undefined;
   clear_password: boolean;
+  password_value: string;
 }
 
 export interface UpsertProxyProviderAccountResponse {
@@ -717,16 +775,54 @@ export interface ListProxySourceNodesResponse {
   nodes: ProxySourceNode[];
 }
 
-export interface ResolveEgressRouteRequest {
-  account_id: string;
-  session_policy: ProxySessionPolicy | undefined;
-  route_policy: EgressRoutePolicy | undefined;
+export interface ProxyResourceRef {
+  proxy_kind: ProxyKind;
+  source_id: string;
+  node_id: string;
+  display_name: string;
+  source_kind: ProxySourceKind;
+  region_codes: string[];
 }
 
-export interface ResolveEgressRouteResponse {
-  plan: EgressRoutePlan | undefined;
-  line_candidates: ProxyLineCandidate[];
-  dynamic_gateway_candidates: ProxyDynamicGatewayCandidate[];
+export interface ProxyNodeObservation {
+  status: ProxySourceNodeStatus;
+  delay_ms: number;
+  exit_ip: string;
+  exit_geo: ProxyExitGeo | undefined;
+  ip_fraud_check: ProxyIPFraudCheck | undefined;
+  observed_at: string | undefined;
+  expires_at: string | undefined;
+  error_message: string;
+}
+
+export interface ResolveProxyRequest {
+  proxy_kind: ProxyKind;
+  country_code: string;
+  region: string;
+  purpose: string;
+  target_host: string;
+  target_port: number;
+  stickiness_key: string;
+  ttl: string | undefined;
+  force_new: boolean;
+  strategy: ProxySelectorStrategy;
+}
+
+export interface ResolvedProxy {
+  proxy_url: string;
+  endpoint: ProxyEndpoint | undefined;
+  proxy_kind: ProxyKind;
+  resource: ProxyResourceRef | undefined;
+  assignment_id: string;
+  lease_id: string;
+  expires_at: string | undefined;
+  observation: ProxyNodeObservation | undefined;
+  route_plan: EgressRoutePlan | undefined;
+}
+
+export interface ResolveProxyResponse {
+  proxy: ResolvedProxy | undefined;
+  candidates: ProxyResourceRef[];
 }
 
 export interface ListProxyDynamicLeasesRequest {
@@ -829,8 +925,26 @@ export interface UpdateProxyRuntimeSettingsRequest {
   ip_fraud_providers: ProxyIPFraudProviderSettings[];
   dynamic_ip_providers: ProxyDynamicIPProviderSettings[];
   check_settings: ProxyRuntimeCheckSettings | undefined;
+  egress_profiles: EgressProfileSettings[];
+  ingress_rules: ProxyIngressRuleSettings[];
 }
 
 export interface UpdateProxyRuntimeSettingsResponse {
+  settings: ProxyRuntimeSettings | undefined;
+}
+
+export interface UpdateProxyEgressProfilesRequest {
+  egress_profiles: EgressProfileSettings[];
+}
+
+export interface UpdateProxyEgressProfilesResponse {
+  settings: ProxyRuntimeSettings | undefined;
+}
+
+export interface UpdateProxyIngressRulesRequest {
+  ingress_rules: ProxyIngressRuleSettings[];
+}
+
+export interface UpdateProxyIngressRulesResponse {
   settings: ProxyRuntimeSettings | undefined;
 }
