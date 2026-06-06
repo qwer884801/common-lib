@@ -38,12 +38,8 @@ export type DashboardShellNavItem = {
 };
 
 export type DashboardShellSidebarProps = {
-  items: DashboardShellNavItem[];
-  activeKey: string;
-  onSelect: (key: string) => void;
-  infrastructureLabel?: string;
-  labLabel?: string;
-  brandMarkSrc?: string;
+  items: DashboardShellNavItem[]; activeKey: string; onSelect: (key: string) => void; footerActions?: ReactNode;
+  infrastructureLabel?: string; labLabel?: string; brandMarkSrc?: string;
 };
 
 const THEME_OPTIONS = [
@@ -56,6 +52,7 @@ export function DashboardShellSidebar({
   items,
   activeKey,
   onSelect,
+  footerActions,
   infrastructureLabel = '基础设施',
   labLabel = 'Lab',
   brandMarkSrc = '/favicon.svg'
@@ -80,10 +77,15 @@ export function DashboardShellSidebar({
           </>
         )}
       </SidebarContent>
-      {labItems.length > 0 && (
+      {(labItems.length > 0 || footerActions) && (
         <SidebarFooter className="dashboardSidebarLabFooter">
-          <SidebarSeparator />
-          <NavGroup label={labLabel} items={labItems} activeKey={activeKey} onSelect={onSelect} />
+          {labItems.length > 0 && (
+            <>
+              <SidebarSeparator />
+              <NavGroup label={labLabel} items={labItems} activeKey={activeKey} onSelect={onSelect} />
+            </>
+          )}
+          {footerActions}
         </SidebarFooter>
       )}
       <SidebarRail />
@@ -164,12 +166,7 @@ function SidebarThemeToggle() {
   );
 }
 
-function NavGroup({ label, items, activeKey, onSelect }: {
-  label?: string;
-  items: DashboardShellNavItem[];
-  activeKey: string;
-  onSelect: (key: string) => void;
-}) {
+function NavGroup({ label, items, activeKey, onSelect }: { label?: string; items: DashboardShellNavItem[]; activeKey: string; onSelect: (key: string) => void }) {
   if (items.length === 0) return null;
   return (
     <SidebarGroup>

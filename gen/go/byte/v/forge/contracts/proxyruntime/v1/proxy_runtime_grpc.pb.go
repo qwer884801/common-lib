@@ -19,32 +19,23 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ProxyRuntimeService_ListProxyProviders_FullMethodName            = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyProviders"
-	ProxyRuntimeService_GetEgressGateway_FullMethodName              = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetEgressGateway"
-	ProxyRuntimeService_GetProxyPool_FullMethodName                  = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyPool"
-	ProxyRuntimeService_RefreshProxyPool_FullMethodName              = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/RefreshProxyPool"
-	ProxyRuntimeService_ListProxyProviderAccounts_FullMethodName     = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyProviderAccounts"
-	ProxyRuntimeService_UpsertProxyProviderAccount_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpsertProxyProviderAccount"
-	ProxyRuntimeService_DeleteProxyProviderAccount_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/DeleteProxyProviderAccount"
-	ProxyRuntimeService_ListProxySources_FullMethodName              = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxySources"
-	ProxyRuntimeService_UpsertProxySubscriptionSource_FullMethodName = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpsertProxySubscriptionSource"
-	ProxyRuntimeService_UpsertProxyFixedSource_FullMethodName        = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpsertProxyFixedSource"
-	ProxyRuntimeService_DeleteProxySource_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/DeleteProxySource"
-	ProxyRuntimeService_ListProxySourceNodes_FullMethodName          = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxySourceNodes"
-	ProxyRuntimeService_ResolveProxy_FullMethodName                  = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ResolveProxy"
-	ProxyRuntimeService_ListProxyDynamicLeases_FullMethodName        = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyDynamicLeases"
-	ProxyRuntimeService_AcquireProxyLease_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/AcquireProxyLease"
-	ProxyRuntimeService_ReleaseProxyLease_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ReleaseProxyLease"
-	ProxyRuntimeService_GetProxyExitIP_FullMethodName                = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyExitIP"
-	ProxyRuntimeService_GetProxyExitGeo_FullMethodName               = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyExitGeo"
-	ProxyRuntimeService_CheckProxyIPFraud_FullMethodName             = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyIPFraud"
-	ProxyRuntimeService_CheckProxyEdgeAccess_FullMethodName          = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyEdgeAccess"
-	ProxyRuntimeService_CheckProxyTargetConnectivity_FullMethodName  = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyTargetConnectivity"
-	ProxyRuntimeService_ListProxyIPFraudProviders_FullMethodName     = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyIPFraudProviders"
-	ProxyRuntimeService_GetProxyRuntimeSettings_FullMethodName       = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyRuntimeSettings"
-	ProxyRuntimeService_UpdateProxyRuntimeSettings_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyRuntimeSettings"
-	ProxyRuntimeService_UpdateProxyEgressProfiles_FullMethodName     = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyEgressProfiles"
-	ProxyRuntimeService_UpdateProxyIngressRules_FullMethodName       = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyIngressRules"
+	ProxyRuntimeService_ListProxyProviders_FullMethodName           = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyProviders"
+	ProxyRuntimeService_ListProxyProviderAccounts_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyProviderAccounts"
+	ProxyRuntimeService_UpsertProxyProviderAccount_FullMethodName   = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpsertProxyProviderAccount"
+	ProxyRuntimeService_DeleteProxyProviderAccount_FullMethodName   = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/DeleteProxyProviderAccount"
+	ProxyRuntimeService_ListProxyDynamicLeases_FullMethodName       = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyDynamicLeases"
+	ProxyRuntimeService_AcquireProxyLease_FullMethodName            = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/AcquireProxyLease"
+	ProxyRuntimeService_ReleaseProxyLease_FullMethodName            = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ReleaseProxyLease"
+	ProxyRuntimeService_GetProxyExitIP_FullMethodName               = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyExitIP"
+	ProxyRuntimeService_GetProxyExitGeo_FullMethodName              = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyExitGeo"
+	ProxyRuntimeService_CheckProxyIPFraud_FullMethodName            = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyIPFraud"
+	ProxyRuntimeService_CheckProxyEdgeAccess_FullMethodName         = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyEdgeAccess"
+	ProxyRuntimeService_CheckProxyTargetConnectivity_FullMethodName = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/CheckProxyTargetConnectivity"
+	ProxyRuntimeService_ListProxyIPFraudProviders_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/ListProxyIPFraudProviders"
+	ProxyRuntimeService_GetProxyRuntimeSettings_FullMethodName      = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/GetProxyRuntimeSettings"
+	ProxyRuntimeService_UpdateProxyRuntimeSettings_FullMethodName   = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyRuntimeSettings"
+	ProxyRuntimeService_UpdateProxyEgressProfiles_FullMethodName    = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyEgressProfiles"
+	ProxyRuntimeService_UpdateProxyIngressRules_FullMethodName      = "/byte.v.forge.contracts.proxyruntime.v1.ProxyRuntimeService/UpdateProxyIngressRules"
 )
 
 // ProxyRuntimeServiceClient is the client API for ProxyRuntimeService service.
@@ -52,18 +43,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProxyRuntimeServiceClient interface {
 	ListProxyProviders(ctx context.Context, in *ListProxyProvidersRequest, opts ...grpc.CallOption) (*ListProxyProvidersResponse, error)
-	GetEgressGateway(ctx context.Context, in *GetEgressGatewayRequest, opts ...grpc.CallOption) (*GetEgressGatewayResponse, error)
-	GetProxyPool(ctx context.Context, in *GetProxyPoolRequest, opts ...grpc.CallOption) (*GetProxyPoolResponse, error)
-	RefreshProxyPool(ctx context.Context, in *RefreshProxyPoolRequest, opts ...grpc.CallOption) (*RefreshProxyPoolResponse, error)
 	ListProxyProviderAccounts(ctx context.Context, in *ListProxyProviderAccountsRequest, opts ...grpc.CallOption) (*ListProxyProviderAccountsResponse, error)
 	UpsertProxyProviderAccount(ctx context.Context, in *UpsertProxyProviderAccountRequest, opts ...grpc.CallOption) (*UpsertProxyProviderAccountResponse, error)
 	DeleteProxyProviderAccount(ctx context.Context, in *DeleteProxyProviderAccountRequest, opts ...grpc.CallOption) (*DeleteProxyProviderAccountResponse, error)
-	ListProxySources(ctx context.Context, in *ListProxySourcesRequest, opts ...grpc.CallOption) (*ListProxySourcesResponse, error)
-	UpsertProxySubscriptionSource(ctx context.Context, in *UpsertProxySubscriptionSourceRequest, opts ...grpc.CallOption) (*UpsertProxySubscriptionSourceResponse, error)
-	UpsertProxyFixedSource(ctx context.Context, in *UpsertProxyFixedSourceRequest, opts ...grpc.CallOption) (*UpsertProxyFixedSourceResponse, error)
-	DeleteProxySource(ctx context.Context, in *DeleteProxySourceRequest, opts ...grpc.CallOption) (*DeleteProxySourceResponse, error)
-	ListProxySourceNodes(ctx context.Context, in *ListProxySourceNodesRequest, opts ...grpc.CallOption) (*ListProxySourceNodesResponse, error)
-	ResolveProxy(ctx context.Context, in *ResolveProxyRequest, opts ...grpc.CallOption) (*ResolveProxyResponse, error)
 	ListProxyDynamicLeases(ctx context.Context, in *ListProxyDynamicLeasesRequest, opts ...grpc.CallOption) (*ListProxyDynamicLeasesResponse, error)
 	AcquireProxyLease(ctx context.Context, in *AcquireProxyLeaseRequest, opts ...grpc.CallOption) (*AcquireProxyLeaseResponse, error)
 	ReleaseProxyLease(ctx context.Context, in *ReleaseProxyLeaseRequest, opts ...grpc.CallOption) (*ReleaseProxyLeaseResponse, error)
@@ -97,36 +79,6 @@ func (c *proxyRuntimeServiceClient) ListProxyProviders(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *proxyRuntimeServiceClient) GetEgressGateway(ctx context.Context, in *GetEgressGatewayRequest, opts ...grpc.CallOption) (*GetEgressGatewayResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetEgressGatewayResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_GetEgressGateway_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) GetProxyPool(ctx context.Context, in *GetProxyPoolRequest, opts ...grpc.CallOption) (*GetProxyPoolResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetProxyPoolResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_GetProxyPool_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) RefreshProxyPool(ctx context.Context, in *RefreshProxyPoolRequest, opts ...grpc.CallOption) (*RefreshProxyPoolResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RefreshProxyPoolResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_RefreshProxyPool_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *proxyRuntimeServiceClient) ListProxyProviderAccounts(ctx context.Context, in *ListProxyProviderAccountsRequest, opts ...grpc.CallOption) (*ListProxyProviderAccountsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListProxyProviderAccountsResponse)
@@ -151,66 +103,6 @@ func (c *proxyRuntimeServiceClient) DeleteProxyProviderAccount(ctx context.Conte
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteProxyProviderAccountResponse)
 	err := c.cc.Invoke(ctx, ProxyRuntimeService_DeleteProxyProviderAccount_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) ListProxySources(ctx context.Context, in *ListProxySourcesRequest, opts ...grpc.CallOption) (*ListProxySourcesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListProxySourcesResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_ListProxySources_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) UpsertProxySubscriptionSource(ctx context.Context, in *UpsertProxySubscriptionSourceRequest, opts ...grpc.CallOption) (*UpsertProxySubscriptionSourceResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpsertProxySubscriptionSourceResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_UpsertProxySubscriptionSource_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) UpsertProxyFixedSource(ctx context.Context, in *UpsertProxyFixedSourceRequest, opts ...grpc.CallOption) (*UpsertProxyFixedSourceResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpsertProxyFixedSourceResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_UpsertProxyFixedSource_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) DeleteProxySource(ctx context.Context, in *DeleteProxySourceRequest, opts ...grpc.CallOption) (*DeleteProxySourceResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteProxySourceResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_DeleteProxySource_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) ListProxySourceNodes(ctx context.Context, in *ListProxySourceNodesRequest, opts ...grpc.CallOption) (*ListProxySourceNodesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListProxySourceNodesResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_ListProxySourceNodes_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *proxyRuntimeServiceClient) ResolveProxy(ctx context.Context, in *ResolveProxyRequest, opts ...grpc.CallOption) (*ResolveProxyResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ResolveProxyResponse)
-	err := c.cc.Invoke(ctx, ProxyRuntimeService_ResolveProxy_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -352,18 +244,9 @@ func (c *proxyRuntimeServiceClient) UpdateProxyIngressRules(ctx context.Context,
 // for forward compatibility.
 type ProxyRuntimeServiceServer interface {
 	ListProxyProviders(context.Context, *ListProxyProvidersRequest) (*ListProxyProvidersResponse, error)
-	GetEgressGateway(context.Context, *GetEgressGatewayRequest) (*GetEgressGatewayResponse, error)
-	GetProxyPool(context.Context, *GetProxyPoolRequest) (*GetProxyPoolResponse, error)
-	RefreshProxyPool(context.Context, *RefreshProxyPoolRequest) (*RefreshProxyPoolResponse, error)
 	ListProxyProviderAccounts(context.Context, *ListProxyProviderAccountsRequest) (*ListProxyProviderAccountsResponse, error)
 	UpsertProxyProviderAccount(context.Context, *UpsertProxyProviderAccountRequest) (*UpsertProxyProviderAccountResponse, error)
 	DeleteProxyProviderAccount(context.Context, *DeleteProxyProviderAccountRequest) (*DeleteProxyProviderAccountResponse, error)
-	ListProxySources(context.Context, *ListProxySourcesRequest) (*ListProxySourcesResponse, error)
-	UpsertProxySubscriptionSource(context.Context, *UpsertProxySubscriptionSourceRequest) (*UpsertProxySubscriptionSourceResponse, error)
-	UpsertProxyFixedSource(context.Context, *UpsertProxyFixedSourceRequest) (*UpsertProxyFixedSourceResponse, error)
-	DeleteProxySource(context.Context, *DeleteProxySourceRequest) (*DeleteProxySourceResponse, error)
-	ListProxySourceNodes(context.Context, *ListProxySourceNodesRequest) (*ListProxySourceNodesResponse, error)
-	ResolveProxy(context.Context, *ResolveProxyRequest) (*ResolveProxyResponse, error)
 	ListProxyDynamicLeases(context.Context, *ListProxyDynamicLeasesRequest) (*ListProxyDynamicLeasesResponse, error)
 	AcquireProxyLease(context.Context, *AcquireProxyLeaseRequest) (*AcquireProxyLeaseResponse, error)
 	ReleaseProxyLease(context.Context, *ReleaseProxyLeaseRequest) (*ReleaseProxyLeaseResponse, error)
@@ -390,15 +273,6 @@ type UnimplementedProxyRuntimeServiceServer struct{}
 func (UnimplementedProxyRuntimeServiceServer) ListProxyProviders(context.Context, *ListProxyProvidersRequest) (*ListProxyProvidersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListProxyProviders not implemented")
 }
-func (UnimplementedProxyRuntimeServiceServer) GetEgressGateway(context.Context, *GetEgressGatewayRequest) (*GetEgressGatewayResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetEgressGateway not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) GetProxyPool(context.Context, *GetProxyPoolRequest) (*GetProxyPoolResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetProxyPool not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) RefreshProxyPool(context.Context, *RefreshProxyPoolRequest) (*RefreshProxyPoolResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method RefreshProxyPool not implemented")
-}
 func (UnimplementedProxyRuntimeServiceServer) ListProxyProviderAccounts(context.Context, *ListProxyProviderAccountsRequest) (*ListProxyProviderAccountsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListProxyProviderAccounts not implemented")
 }
@@ -407,24 +281,6 @@ func (UnimplementedProxyRuntimeServiceServer) UpsertProxyProviderAccount(context
 }
 func (UnimplementedProxyRuntimeServiceServer) DeleteProxyProviderAccount(context.Context, *DeleteProxyProviderAccountRequest) (*DeleteProxyProviderAccountResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteProxyProviderAccount not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) ListProxySources(context.Context, *ListProxySourcesRequest) (*ListProxySourcesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListProxySources not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) UpsertProxySubscriptionSource(context.Context, *UpsertProxySubscriptionSourceRequest) (*UpsertProxySubscriptionSourceResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpsertProxySubscriptionSource not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) UpsertProxyFixedSource(context.Context, *UpsertProxyFixedSourceRequest) (*UpsertProxyFixedSourceResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpsertProxyFixedSource not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) DeleteProxySource(context.Context, *DeleteProxySourceRequest) (*DeleteProxySourceResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method DeleteProxySource not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) ListProxySourceNodes(context.Context, *ListProxySourceNodesRequest) (*ListProxySourceNodesResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListProxySourceNodes not implemented")
-}
-func (UnimplementedProxyRuntimeServiceServer) ResolveProxy(context.Context, *ResolveProxyRequest) (*ResolveProxyResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ResolveProxy not implemented")
 }
 func (UnimplementedProxyRuntimeServiceServer) ListProxyDynamicLeases(context.Context, *ListProxyDynamicLeasesRequest) (*ListProxyDynamicLeasesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListProxyDynamicLeases not implemented")
@@ -504,60 +360,6 @@ func _ProxyRuntimeService_ListProxyProviders_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProxyRuntimeService_GetEgressGateway_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetEgressGatewayRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).GetEgressGateway(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_GetEgressGateway_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).GetEgressGateway(ctx, req.(*GetEgressGatewayRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_GetProxyPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetProxyPoolRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).GetProxyPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_GetProxyPool_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).GetProxyPool(ctx, req.(*GetProxyPoolRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_RefreshProxyPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RefreshProxyPoolRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).RefreshProxyPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_RefreshProxyPool_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).RefreshProxyPool(ctx, req.(*RefreshProxyPoolRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ProxyRuntimeService_ListProxyProviderAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListProxyProviderAccountsRequest)
 	if err := dec(in); err != nil {
@@ -608,114 +410,6 @@ func _ProxyRuntimeService_DeleteProxyProviderAccount_Handler(srv interface{}, ct
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProxyRuntimeServiceServer).DeleteProxyProviderAccount(ctx, req.(*DeleteProxyProviderAccountRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_ListProxySources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListProxySourcesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).ListProxySources(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_ListProxySources_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).ListProxySources(ctx, req.(*ListProxySourcesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_UpsertProxySubscriptionSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertProxySubscriptionSourceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).UpsertProxySubscriptionSource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_UpsertProxySubscriptionSource_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).UpsertProxySubscriptionSource(ctx, req.(*UpsertProxySubscriptionSourceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_UpsertProxyFixedSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpsertProxyFixedSourceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).UpsertProxyFixedSource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_UpsertProxyFixedSource_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).UpsertProxyFixedSource(ctx, req.(*UpsertProxyFixedSourceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_DeleteProxySource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteProxySourceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).DeleteProxySource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_DeleteProxySource_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).DeleteProxySource(ctx, req.(*DeleteProxySourceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_ListProxySourceNodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListProxySourceNodesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).ListProxySourceNodes(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_ListProxySourceNodes_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).ListProxySourceNodes(ctx, req.(*ListProxySourceNodesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProxyRuntimeService_ResolveProxy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResolveProxyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyRuntimeServiceServer).ResolveProxy(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ProxyRuntimeService_ResolveProxy_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyRuntimeServiceServer).ResolveProxy(ctx, req.(*ResolveProxyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -966,18 +660,6 @@ var ProxyRuntimeService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProxyRuntimeService_ListProxyProviders_Handler,
 		},
 		{
-			MethodName: "GetEgressGateway",
-			Handler:    _ProxyRuntimeService_GetEgressGateway_Handler,
-		},
-		{
-			MethodName: "GetProxyPool",
-			Handler:    _ProxyRuntimeService_GetProxyPool_Handler,
-		},
-		{
-			MethodName: "RefreshProxyPool",
-			Handler:    _ProxyRuntimeService_RefreshProxyPool_Handler,
-		},
-		{
 			MethodName: "ListProxyProviderAccounts",
 			Handler:    _ProxyRuntimeService_ListProxyProviderAccounts_Handler,
 		},
@@ -988,30 +670,6 @@ var ProxyRuntimeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteProxyProviderAccount",
 			Handler:    _ProxyRuntimeService_DeleteProxyProviderAccount_Handler,
-		},
-		{
-			MethodName: "ListProxySources",
-			Handler:    _ProxyRuntimeService_ListProxySources_Handler,
-		},
-		{
-			MethodName: "UpsertProxySubscriptionSource",
-			Handler:    _ProxyRuntimeService_UpsertProxySubscriptionSource_Handler,
-		},
-		{
-			MethodName: "UpsertProxyFixedSource",
-			Handler:    _ProxyRuntimeService_UpsertProxyFixedSource_Handler,
-		},
-		{
-			MethodName: "DeleteProxySource",
-			Handler:    _ProxyRuntimeService_DeleteProxySource_Handler,
-		},
-		{
-			MethodName: "ListProxySourceNodes",
-			Handler:    _ProxyRuntimeService_ListProxySourceNodes_Handler,
-		},
-		{
-			MethodName: "ResolveProxy",
-			Handler:    _ProxyRuntimeService_ResolveProxy_Handler,
 		},
 		{
 			MethodName: "ListProxyDynamicLeases",

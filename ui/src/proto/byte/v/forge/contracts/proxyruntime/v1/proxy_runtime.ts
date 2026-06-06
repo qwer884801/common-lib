@@ -25,7 +25,6 @@ export enum ProxyCapability {
   PROXY_CAPABILITY_USERNAME_PARAMETER_SESSION = "PROXY_CAPABILITY_USERNAME_PARAMETER_SESSION",
   PROXY_CAPABILITY_UNIFIED_EGRESS_GATEWAY = "PROXY_CAPABILITY_UNIFIED_EGRESS_GATEWAY",
   PROXY_CAPABILITY_DYNAMIC_LEASE = "PROXY_CAPABILITY_DYNAMIC_LEASE",
-  PROXY_CAPABILITY_SUBSCRIPTION_PROVIDER = "PROXY_CAPABILITY_SUBSCRIPTION_PROVIDER",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -44,52 +43,12 @@ export enum ProxyUpstreamKind {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export enum ProxySourceKind {
-  PROXY_SOURCE_KIND_UNSPECIFIED = "PROXY_SOURCE_KIND_UNSPECIFIED",
-  PROXY_SOURCE_KIND_FIXED_PROXY = "PROXY_SOURCE_KIND_FIXED_PROXY",
-  PROXY_SOURCE_KIND_SUBSCRIPTION = "PROXY_SOURCE_KIND_SUBSCRIPTION",
-  PROXY_SOURCE_KIND_API_POOL = "PROXY_SOURCE_KIND_API_POOL",
-  PROXY_SOURCE_KIND_DYNAMIC_IP = "PROXY_SOURCE_KIND_DYNAMIC_IP",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export enum ProxyKind {
-  PROXY_KIND_UNSPECIFIED = "PROXY_KIND_UNSPECIFIED",
-  PROXY_KIND_DYNAMIC_IP = "PROXY_KIND_DYNAMIC_IP",
-  PROXY_KIND_STATIC_IP = "PROXY_KIND_STATIC_IP",
-  PROXY_KIND_SUBSCRIPTION = "PROXY_KIND_SUBSCRIPTION",
-  PROXY_KIND_FIXED_PROXY = "PROXY_KIND_FIXED_PROXY",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export enum ProxySourceNodeStatus {
-  PROXY_SOURCE_NODE_STATUS_UNSPECIFIED = "PROXY_SOURCE_NODE_STATUS_UNSPECIFIED",
-  PROXY_SOURCE_NODE_STATUS_UNKNOWN = "PROXY_SOURCE_NODE_STATUS_UNKNOWN",
-  PROXY_SOURCE_NODE_STATUS_AVAILABLE = "PROXY_SOURCE_NODE_STATUS_AVAILABLE",
-  PROXY_SOURCE_NODE_STATUS_UNAVAILABLE = "PROXY_SOURCE_NODE_STATUS_UNAVAILABLE",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
 export enum ProxyRotationMode {
   PROXY_ROTATION_MODE_UNSPECIFIED = "PROXY_ROTATION_MODE_UNSPECIFIED",
   PROXY_ROTATION_MODE_NONE = "PROXY_ROTATION_MODE_NONE",
   PROXY_ROTATION_MODE_PER_REQUEST = "PROXY_ROTATION_MODE_PER_REQUEST",
   PROXY_ROTATION_MODE_STICKY_SESSION = "PROXY_ROTATION_MODE_STICKY_SESSION",
   PROXY_ROTATION_MODE_SCHEDULED_POOL_REFRESH = "PROXY_ROTATION_MODE_SCHEDULED_POOL_REFRESH",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export enum ProxyRouteRuntimeKind {
-  PROXY_ROUTE_RUNTIME_KIND_UNSPECIFIED = "PROXY_ROUTE_RUNTIME_KIND_UNSPECIFIED",
-  PROXY_ROUTE_RUNTIME_KIND_GOST = "PROXY_ROUTE_RUNTIME_KIND_GOST",
-  PROXY_ROUTE_RUNTIME_KIND_MIHOMO = "PROXY_ROUTE_RUNTIME_KIND_MIHOMO",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export enum ProxySourceRuntimeKind {
-  PROXY_SOURCE_RUNTIME_KIND_UNSPECIFIED = "PROXY_SOURCE_RUNTIME_KIND_UNSPECIFIED",
-  PROXY_SOURCE_RUNTIME_KIND_NONE = "PROXY_SOURCE_RUNTIME_KIND_NONE",
-  PROXY_SOURCE_RUNTIME_KIND_MIHOMO = "PROXY_SOURCE_RUNTIME_KIND_MIHOMO",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -201,22 +160,10 @@ export enum ProxyEdgeAccessRiskSignal {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export enum ProxySelectorStrategy {
-  PROXY_SELECTOR_STRATEGY_UNSPECIFIED = "PROXY_SELECTOR_STRATEGY_UNSPECIFIED",
-  PROXY_SELECTOR_STRATEGY_ROUND_ROBIN = "PROXY_SELECTOR_STRATEGY_ROUND_ROBIN",
-  PROXY_SELECTOR_STRATEGY_RANDOM = "PROXY_SELECTOR_STRATEGY_RANDOM",
-  PROXY_SELECTOR_STRATEGY_FIFO = "PROXY_SELECTOR_STRATEGY_FIFO",
-  PROXY_SELECTOR_STRATEGY_HASH_CLIENT_IP = "PROXY_SELECTOR_STRATEGY_HASH_CLIENT_IP",
-  PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST = "PROXY_SELECTOR_STRATEGY_HASH_TARGET_HOST",
-  PROXY_SELECTOR_STRATEGY_FALLBACK = "PROXY_SELECTOR_STRATEGY_FALLBACK",
-  PROXY_SELECTOR_STRATEGY_URL_TEST = "PROXY_SELECTOR_STRATEGY_URL_TEST",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
 export enum EgressProfileLineKind {
   EGRESS_PROFILE_LINE_KIND_UNSPECIFIED = "EGRESS_PROFILE_LINE_KIND_UNSPECIFIED",
   EGRESS_PROFILE_LINE_KIND_DIRECT = "EGRESS_PROFILE_LINE_KIND_DIRECT",
-  EGRESS_PROFILE_LINE_KIND_SOURCE = "EGRESS_PROFILE_LINE_KIND_SOURCE",
+  EGRESS_PROFILE_LINE_KIND_MIHOMO_NODE = "EGRESS_PROFILE_LINE_KIND_MIHOMO_NODE",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
@@ -228,26 +175,12 @@ export enum EgressProfileExitKind {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export enum EgressHopRole {
-  EGRESS_HOP_ROLE_UNSPECIFIED = "EGRESS_HOP_ROLE_UNSPECIFIED",
-  EGRESS_HOP_ROLE_FORWARD = "EGRESS_HOP_ROLE_FORWARD",
-  EGRESS_HOP_ROLE_EXIT = "EGRESS_HOP_ROLE_EXIT",
-  EGRESS_HOP_ROLE_CONTROL_PLANE = "EGRESS_HOP_ROLE_CONTROL_PLANE",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
 export enum EgressListenerKind {
   EGRESS_LISTENER_KIND_UNSPECIFIED = "EGRESS_LISTENER_KIND_UNSPECIFIED",
   EGRESS_LISTENER_KIND_DIRECT = "EGRESS_LISTENER_KIND_DIRECT",
   EGRESS_LISTENER_KIND_PROVIDER_ROUTE = "EGRESS_LISTENER_KIND_PROVIDER_ROUTE",
   EGRESS_LISTENER_KIND_DYNAMIC_LEASE = "EGRESS_LISTENER_KIND_DYNAMIC_LEASE",
   UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export interface ProxySelectorPolicy {
-  strategy: ProxySelectorStrategy;
-  max_fails: number;
-  fail_timeout: string | undefined;
 }
 
 export interface ProxyProviderDescriptor {
@@ -271,97 +204,35 @@ export interface ProxyProviderAccount {
   updated_at: string | undefined;
   username: string;
   password_value: string;
+  dynamic_provider_id: string;
+  rotating_concurrency_limit: number;
+  sticky_concurrency_limit: number;
 }
 
-export interface ProxyFixedSourceDescriptor {
-  endpoint_count: number;
-  region_codes: string[];
-  uri: string;
-}
-
-export interface ProxySubscriptionSourceDescriptor {
-  url: string;
-  interval: string | undefined;
-  filter: string;
-  exclude_filter: string;
-  health_check_url: string;
-  health_interval: string | undefined;
-  health_timeout: string | undefined;
-  health_lazy: boolean;
-  expected_status: number;
-  region_codes: string[];
-}
-
-export interface ProxyAPIPoolSourceDescriptor {
-  provider_account_id: string;
-  endpoint_count: number;
-}
-
-export interface ProxyDynamicIPSourceDescriptor {
-  provider_account_id: string;
-  requires_account_lease: boolean;
-  min_sticky_ttl: string | undefined;
-  max_sticky_ttl: string | undefined;
-}
-
-export interface ProxySourceDescriptor {
-  source_id: string;
-  provider_id: string;
-  display_name: string;
-  kind: ProxySourceKind;
-  enabled: boolean;
-  capabilities: ProxyCapability[];
-  protocols: ProxyProtocol[];
-  fixed_proxy?: ProxyFixedSourceDescriptor | undefined;
-  subscription?: ProxySubscriptionSourceDescriptor | undefined;
-  api_pool?: ProxyAPIPoolSourceDescriptor | undefined;
-  dynamic_ip?: ProxyDynamicIPSourceDescriptor | undefined;
-}
-
-export interface ProxySourceNode {
-  source_id: string;
-  node_id: string;
-  display_name: string;
-  node_type: string;
-  status: ProxySourceNodeStatus;
-  delay_ms: number;
-  checked_at: string | undefined;
-  error_message: string;
-}
-
-export interface ProxyDynamicGatewayCandidate {
+export interface ProxyDynamicIPEndpointCandidate {
   provider_account_id: string;
   provider_id: string;
-  gateway_id: string;
-  display_name: string;
-  region_codes: string[];
+  endpoint_id: string;
+  endpoint_url: string;
+  geo_codes: string[];
   protocol: ProxyProtocol;
   priority: number;
+  dynamic_provider_id: string;
 }
 
-export interface EgressRoutePolicy {
+export interface ProxyDynamicIPSelectionPolicy {
   country_code: string;
   region: string;
   purpose: string;
-  strategy: ProxySelectorStrategy;
   max_attempts: number;
-  require_dynamic_exit: boolean;
-  allow_direct_dynamic_gateway: boolean;
 }
 
-export interface EgressRoutePlan {
-  route_id: string;
-  policy: EgressRoutePolicy | undefined;
-  dynamic_gateway: ProxyDynamicGatewayCandidate | undefined;
+export interface ProxyDynamicIPSelectionPlan {
+  selection_id: string;
+  policy: ProxyDynamicIPSelectionPolicy | undefined;
+  selected_endpoint: ProxyDynamicIPEndpointCandidate | undefined;
   selection_reasons: string[];
-  planned_at: string | undefined;
-  route: EgressRoute | undefined;
-}
-
-export interface ProviderControlPlaneAccess {
-  uses_proxy: boolean;
-  proxy_ref: string;
-  protocols: ProxyProtocol[];
+  selected_at: string | undefined;
 }
 
 export interface ProxySessionPolicy {
@@ -429,7 +300,7 @@ export interface ProxyDynamicLease {
   acquired_at: string | undefined;
   expires_at: string | undefined;
   error_message: string;
-  route_plan: EgressRoutePlan | undefined;
+  selection_plan: ProxyDynamicIPSelectionPlan | undefined;
 }
 
 export interface ProxyExitGeo {
@@ -528,27 +399,29 @@ export interface ProxyIPFraudProviderDescriptor {
   display_name: string;
 }
 
-export interface ProxyDynamicIPGatewaySettings {
+export interface ProxyDynamicIPEndpointSettings {
   endpoint_url: string;
 }
 
 export interface ProxyDynamicIPProviderSettings {
   provider_id: string;
-  gateways: ProxyDynamicIPGatewaySettings[];
+  endpoints: ProxyDynamicIPEndpointSettings[];
+  dynamic_provider_id: string;
+  display_name: string;
 }
 
 export interface ProxyRuntimeCheckSettings {
   proxy_exit_ip_timeout: string | undefined;
 }
 
-export interface EgressProfileSourceRef {
-  source_id: string;
+export interface EgressProfileMihomoNodeRef {
+  resource_id: string;
   node_id: string;
 }
 
 export interface EgressProfileLineSettings {
   kind: EgressProfileLineKind;
-  source: EgressProfileSourceRef | undefined;
+  mihomo_node: EgressProfileMihomoNodeRef | undefined;
   health_check_url: string;
   health_interval: string | undefined;
   health_timeout: string | undefined;
@@ -557,12 +430,13 @@ export interface EgressProfileLineSettings {
 
 export interface EgressProfileExitSettings {
   kind: EgressProfileExitKind;
-  source: EgressProfileSourceRef | undefined;
+  mihomo_node: EgressProfileMihomoNodeRef | undefined;
   health_check_url: string;
   health_interval: string | undefined;
   health_timeout: string | undefined;
   expected_status: number;
   dynamic_provider_id: string;
+  dynamic_ip_policy: ProxySessionPolicy | undefined;
 }
 
 export interface EgressProfileSettings {
@@ -600,26 +474,6 @@ export interface ProxyRuntimePersistentSettings {
   ingress_rules: ProxyIngressRuleSettings[];
 }
 
-export interface ProxyRuntimeOverview {
-  route_runtime: ProxyRouteRuntimeKind;
-  route_runtime_status: string;
-  provider_account_count: number;
-  source_count: number;
-  active_lease_count: number;
-  updated_at: string | undefined;
-  source_runtime: ProxySourceRuntimeKind;
-  source_runtime_status: string;
-}
-
-export interface ProxyPoolSnapshot {
-  pool_id: string;
-  provider_descriptor: ProxyProviderDescriptor | undefined;
-  endpoints: ProxyEndpoint[];
-  refreshed_at: string | undefined;
-  sources: ProxySourceDescriptor[];
-  dynamic_leases: ProxyDynamicLease[];
-}
-
 export interface EgressListener {
   listener_id: string;
   kind: EgressListenerKind;
@@ -635,59 +489,11 @@ export interface EgressListener_LabelsEntry {
   value: string;
 }
 
-export interface EgressHop {
-  hop_id: string;
-  order: number;
-  role: EgressHopRole;
-  selector: ProxySelectorPolicy | undefined;
-  endpoints: ProxyEndpoint[];
-}
-
-export interface EgressRoute {
-  route_id: string;
-  hops: EgressHop[];
-}
-
-export interface EgressGateway {
-  gateway_id: string;
-  listeners: EgressListener[];
-  pool: ProxyPoolSnapshot | undefined;
-  data_plane_route: EgressRoute | undefined;
-  control_plane_route: EgressRoute | undefined;
-  provider_control_plane: ProviderControlPlaneAccess | undefined;
-  updated_at: string | undefined;
-  overview: ProxyRuntimeOverview | undefined;
-}
-
 export interface ListProxyProvidersRequest {
 }
 
 export interface ListProxyProvidersResponse {
   providers: ProxyProviderDescriptor[];
-}
-
-export interface GetEgressGatewayRequest {
-  gateway_id: string;
-}
-
-export interface GetEgressGatewayResponse {
-  gateway: EgressGateway | undefined;
-}
-
-export interface GetProxyPoolRequest {
-  pool_id: string;
-}
-
-export interface GetProxyPoolResponse {
-  pool: ProxyPoolSnapshot | undefined;
-}
-
-export interface RefreshProxyPoolRequest {
-  pool_id: string;
-}
-
-export interface RefreshProxyPoolResponse {
-  pool: ProxyPoolSnapshot | undefined;
 }
 
 export interface ListProxyProviderAccountsRequest {
@@ -706,6 +512,9 @@ export interface UpsertProxyProviderAccountRequest {
   password_secret_ref: SecretRef | undefined;
   clear_password: boolean;
   password_value: string;
+  dynamic_provider_id: string;
+  rotating_concurrency_limit: number;
+  sticky_concurrency_limit: number;
 }
 
 export interface UpsertProxyProviderAccountResponse {
@@ -717,112 +526,6 @@ export interface DeleteProxyProviderAccountRequest {
 }
 
 export interface DeleteProxyProviderAccountResponse {
-}
-
-export interface ListProxySourcesRequest {
-}
-
-export interface ListProxySourcesResponse {
-  sources: ProxySourceDescriptor[];
-}
-
-export interface UpsertProxySubscriptionSourceRequest {
-  source_id: string;
-  display_name: string;
-  enabled: boolean;
-  url: string;
-  clear_url: boolean;
-  interval: string | undefined;
-  filter: string;
-  exclude_filter: string;
-  health_check_url: string;
-  health_interval: string | undefined;
-  health_timeout: string | undefined;
-  health_lazy: boolean;
-  expected_status: number;
-  region_codes: string[];
-}
-
-export interface UpsertProxySubscriptionSourceResponse {
-  source: ProxySourceDescriptor | undefined;
-}
-
-export interface UpsertProxyFixedSourceRequest {
-  source_id: string;
-  display_name: string;
-  enabled: boolean;
-  uri: string;
-  clear_uri: boolean;
-  region_codes: string[];
-}
-
-export interface UpsertProxyFixedSourceResponse {
-  source: ProxySourceDescriptor | undefined;
-}
-
-export interface DeleteProxySourceRequest {
-  source_id: string;
-}
-
-export interface DeleteProxySourceResponse {
-}
-
-export interface ListProxySourceNodesRequest {
-  source_id: string;
-}
-
-export interface ListProxySourceNodesResponse {
-  nodes: ProxySourceNode[];
-}
-
-export interface ProxyResourceRef {
-  proxy_kind: ProxyKind;
-  source_id: string;
-  node_id: string;
-  display_name: string;
-  source_kind: ProxySourceKind;
-  region_codes: string[];
-}
-
-export interface ProxyNodeObservation {
-  status: ProxySourceNodeStatus;
-  delay_ms: number;
-  exit_ip: string;
-  exit_geo: ProxyExitGeo | undefined;
-  ip_fraud_check: ProxyIPFraudCheck | undefined;
-  observed_at: string | undefined;
-  expires_at: string | undefined;
-  error_message: string;
-}
-
-export interface ResolveProxyRequest {
-  proxy_kind: ProxyKind;
-  country_code: string;
-  region: string;
-  purpose: string;
-  target_host: string;
-  target_port: number;
-  stickiness_key: string;
-  ttl: string | undefined;
-  force_new: boolean;
-  strategy: ProxySelectorStrategy;
-}
-
-export interface ResolvedProxy {
-  proxy_url: string;
-  endpoint: ProxyEndpoint | undefined;
-  proxy_kind: ProxyKind;
-  resource: ProxyResourceRef | undefined;
-  assignment_id: string;
-  lease_id: string;
-  expires_at: string | undefined;
-  observation: ProxyNodeObservation | undefined;
-  route_plan: EgressRoutePlan | undefined;
-}
-
-export interface ResolveProxyResponse {
-  proxy: ResolvedProxy | undefined;
-  candidates: ProxyResourceRef[];
 }
 
 export interface ListProxyDynamicLeasesRequest {
@@ -837,14 +540,13 @@ export interface AcquireProxyLeaseRequest {
   purpose: string;
   policy: ProxySessionPolicy | undefined;
   force_new: boolean;
-  route_policy: EgressRoutePolicy | undefined;
+  selection_policy: ProxyDynamicIPSelectionPolicy | undefined;
 }
 
 export interface AcquireProxyLeaseResponse {
   lease: ProxyDynamicLease | undefined;
-  pool: ProxyPoolSnapshot | undefined;
   egress: ProxyEndpoint | undefined;
-  route_plan: EgressRoutePlan | undefined;
+  selection_plan: ProxyDynamicIPSelectionPlan | undefined;
 }
 
 export interface ReleaseProxyLeaseRequest {
@@ -858,8 +560,6 @@ export interface ReleaseProxyLeaseResponse {
 }
 
 export interface GetProxyExitIPRequest {
-  pool_id: string;
-  provider_id: string;
   listener_id: string;
 }
 
@@ -884,8 +584,6 @@ export interface CheckProxyIPFraudResponse {
 }
 
 export interface CheckProxyEdgeAccessRequest {
-  pool_id: string;
-  provider_id: string;
   listener_id: string;
   expected_country_code: string;
   ip: string;
@@ -896,8 +594,6 @@ export interface CheckProxyEdgeAccessResponse {
 }
 
 export interface CheckProxyTargetConnectivityRequest {
-  pool_id: string;
-  provider_id: string;
   listener_id: string;
   target_url: string;
 }
